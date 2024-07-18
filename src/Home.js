@@ -3,7 +3,7 @@ import ContractList from "./contract/ContractList";
 import useFetch from "./useFetch";
 
 const Home = () => {
-  const { data: contracts, isPending, error } = useFetch('contract/');
+  const { data: contracts, isPending, error } = useFetch('contracts/');
 
   return (
     <div className="home">
