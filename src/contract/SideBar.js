@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Section = ({ title, date, name, status, comments, subtasks }) => (
-  <div className="section">
+const Section = ({ title, date, name, status, comments, subtasks, onClick  }) => (
+  <div className="section" onClick={onClick} style={{ cursor: 'pointer' }}>
     <div className="section-header">
       <h3>{title}</h3>
       <p className="date">{date}</p>
@@ -21,7 +21,9 @@ const Section = ({ title, date, name, status, comments, subtasks }) => (
   </div>
 );
 
-const Sidebar = () => {
+
+
+const Sidebar = ({ setSelectedStep }) => {
   return (
     <aside className="sidebar">
       <Section title="Wstępny plan" date="12.03.2024" name="Daniel" status="done" />
@@ -30,6 +32,7 @@ const Sidebar = () => {
         date="12.03.2024"
         name="Marcin"
         status="todo"
+        onClick={() => setSelectedStep('Details')} 
         subtasks={[
           { text: 'Wgranie zdjęć', status: 'done' },
           { text: 'Wskazano do geodety', status: 'done' },
@@ -41,6 +44,7 @@ const Sidebar = () => {
         title="Przygotowanie porozumień"
         date="12.05.2024"
         status="todo"
+        onClick={() => setSelectedStep('PreliminaryPlan')} 
         subtasks={[
           { text: 'Prośba o wypis gruntu', status: 'todo' },
           { text: 'Stworzenie porozumień', status: 'todo' }
@@ -50,6 +54,7 @@ const Sidebar = () => {
         title="Zebranie porozumień"
         date="12.06.2024"
         status="todo"
+        onClick={() => setSelectedStep('Wstępny plan')} 
         subtasks={[
           { text: 'Zaakceptowane wszystkie porozumienia 0/0', status: 'todo' },
           { text: 'Zaakceptowane wody polskie', status: 'todo' }

@@ -16,6 +16,11 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
+  transition: background-color 0.3s ease; 
+}
+
+.sidebar .section:hover {
+  background-color: #e7e7e7; 
 }
 
 .sidebar .section-header {
