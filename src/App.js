@@ -1,7 +1,7 @@
 import './App.css';
 import Home from './Home';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ContractDetails from './contract/ContractDetails';
+import Contract from './contract/Contract';
 import AddContract from './contract/AddContract';
 
 
@@ -11,7 +11,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/contract/:contractId" element={<ContractDetails />} />
+          <Route path="/contract/:contractId" element={<Contract />} />
           <Route path="/add" element={<AddContract />} />
         </Routes>
       </div>

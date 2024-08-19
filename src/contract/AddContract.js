@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDataFetching from '../useDataFetching';
 
-// Komponent do renderowania pola formularza
 const FormInput = ({ label, type = 'text', value, onChange, required = false, readOnly = false }) => (
   <div className="form-group">
     <label>{label}</label>

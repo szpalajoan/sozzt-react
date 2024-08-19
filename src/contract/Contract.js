@@ -1,12 +1,12 @@
 import { useParams, Link } from "react-router-dom";
-import './ContractDetails.css';
+import './Contract.css';
 import Sidebar from './SideBar';
-import PreliminaryPlan from './PreliminaryPlan';
+import PreliminaryPlan from './steps/PreliminaryPlan';
 import { useState } from 'react';
 import Details from './Details';
 
 
-const ContractDetails = () => {
+const Contract = () => {
   const { contractId } = useParams();
 
   const [selectedStep, setSelectedStep] = useState('Details');
@@ -44,4 +44,4 @@ const ContractDetails = () => {
   );
 };
 
-export default ContractDetails;
+export default Contract;

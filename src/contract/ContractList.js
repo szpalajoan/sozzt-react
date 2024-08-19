@@ -14,9 +14,9 @@ const ContractList = ({ contracts }) => {
       <button onClick={handleAddClick}>Dodaj nowy kontrakt</button>
       {contracts.map(contract => (
         <div className="blog-preview" key={contract.contractId} >
-          <h2>{contract.createdBy}</h2>
+    
           <Link to={`/contract/${contract.contractId}`}>
-            <p>{contract.contractId}</p>
+            <p>{contract.contractDetails.contractNumber}</p>
           </Link>
         </div>
       ))}
