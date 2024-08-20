@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDataFetching from '../useDataFetching';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const FormInput = ({ label, type = 'text', value, onChange, required = false, readOnly = false }) => (
   <div className="form-group">
@@ -33,6 +35,9 @@ const AddContract = () => {
   const navigate = useNavigate();
   const { fetchData, isPending, error } = useDataFetching('contracts/');
 
+  const [contractScan, setContractScan] = useState(null);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,7 +60,16 @@ const AddContract = () => {
     };
 
     try {
-      await fetchData('POST', newContract);
+      const response = await fetchData('contracts/', 'POST', newContract);
+    
+      if (response && response.contractId && contractScan) {
+        const formData = new FormData();
+        formData.append('file', contractScan);
+        formData.append('fileId', uuidv4());
+  
+        await fetchData(`contracts/${response.contractId}/contract-scan`, 'POST', formData);
+      }
+      
       navigate('/');
     } catch (error) {
       console.error('Błąd podczas dodawania kontraktu:', error);
@@ -83,14 +97,17 @@ const AddContract = () => {
         <FormInput label="Nr roboczy" value={workNumber} onChange={(e) => setWorkNumber(e.target.value)} required />
         <FormInput label="Numer kontraktu klienta" value={customerContractNumber} onChange={(e) => setCustomerContractNumber(e.target.value)} required />
         <FormInput label="Data zamówienia" type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
-        <button type="submit" disabled={isPending}>Dodaj kontrakt</button>
-        {isPending && <p>Trwa dodawanie kontraktu...</p>}
-        {error && <p>Błąd podczas dodawania kontraktu: {error}</p>}
-      </form>
-    </div>
+        <FormInput label="Numer faktury" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} required />
+          <input type="file" onChange={(e) => setContractScan(e.target.files[0])} />
 
+          <button type="submit" disabled={isPending}>Dodaj kontrakt</button>
+          {isPending && <p>Trwa dodawanie kontraktu...</p>}
+          {error && <p>Błąd podczas dodawania kontraktu: {error}</p>}
+        </form>
+      </div>
     </div>
   );
 };
+
 
 export default AddContract;
