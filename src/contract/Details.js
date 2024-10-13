@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { TextField, Button, Box, IconButton, List, ListItem, ListItemText, Typography, CircularProgress } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import Dropzone from 'react-dropzone';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,25 +20,26 @@ const FileLink = ({ contractId, fileId, fileName }) => {
 };
 
 const Details = ({ contractId }) => {
-  const { data: contract, isPending } = useFetch('contracts/' + contractId);
-  const { data: fetchedFiles, isPending: isFilesPending } = useFetch(`contracts/${contractId}/contract-scan`);
+  const { data: contract, isPending: isContractPending, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
+  const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/contract-scan`);
 
   const [files, setFiles] = useState([]);
   const [formState, setFormState] = useState({});
   const [newFiles, setNewFiles] = useState([]);
   const [deletedFiles, setDeletedFiles] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
 
-  const { fetchData, isPutPending, error } = useDataFetching('contracts/');
-
+  const { fetchData } = useDataFetching('contracts/');
 
   useEffect(() => {
     if (fetchedFiles) {
-      setFiles(fetchedFiles);
+      console.log("Pobrano pliki:", fetchedFiles); // Dodaj ten log
+
+      setFiles(fetchedFiles); // Ustawienie stanu plików
     }
   }, [fetchedFiles]);
 
-
-  if (isPending || isFilesPending) return <div>Loading...</div>;
+  if (isContractPending || isFilesPending) return <div>Loading...</div>;
   if (!contract) return <div>Nie znaleziono kontraktu</div>;
 
   const { contractDetails, location } = contract;
@@ -55,7 +56,6 @@ const Details = ({ contractId }) => {
     setDeletedFiles([...deletedFiles, fileId]);
     setFiles((prevFiles) => prevFiles.filter(file => file.fileId !== fileId));
   };
-
   const handleSave = async () => {
     const updatedContract = {
       ...contract,
@@ -76,6 +76,8 @@ const Details = ({ contractId }) => {
       },
     };
 
+    setLoading(true); // Start loading
+
     try {
       await fetchData(`contracts/${contractId}`, 'PUT', updatedContract);
 
@@ -89,23 +91,28 @@ const Details = ({ contractId }) => {
         setDeletedFiles([]); // Wyczyść stan usuniętych plików
       }
 
+      // Upload nowych plików
       if (newFiles.length > 0) {
         await Promise.all(
           newFiles.map(async (scan) => {
             const formData = new FormData();
             formData.append('file', scan);
             formData.append('fileId', uuidv4());
-  
+
             await fetchData(`contracts/${contractId}/contract-scan`, 'POST', formData);
           })
         );
         setNewFiles([]); // Wyczyść stan nowych plików
       }
 
-      
+      // Refetch the contract and files after everything is done
+
+      await refetchFiles(); // Refetch files data
 
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
+    } finally {
+      setLoading(false); // Zakończ ładowanie
     }
   };
 
@@ -199,7 +206,7 @@ const Details = ({ contractId }) => {
               </IconButton>
             }
           >
-           <FileLink key={file.fileId} contractId={contractId} fileId={file.fileId} fileName={file.fileName} />
+            <FileLink key={file.fileId} contractId={contractId} fileId={file.fileId} fileName={file.fileName} />
           </ListItem>
         ))}
         {newFiles.length > 0 && newFiles.map((file, index) => (
@@ -209,8 +216,7 @@ const Details = ({ contractId }) => {
         ))}
       </List>
 
-
-      <Dropzone onDrop={handleFileDrop} accept=".pdf,.jpg,.png">
+      <Dropzone onDrop={handleFileDrop}>
         {({ getRootProps, getInputProps }) => (
           <Box
             {...getRootProps()}
@@ -231,7 +237,9 @@ const Details = ({ contractId }) => {
       </Dropzone>
 
       <Box mt={3}>
-        <Button variant="contained" color="primary" onClick={handleSave}>Zapisz</Button>
+        <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
+          {loading ? <CircularProgress size={24} /> : 'Zapisz'}
+        </Button>
       </Box>
     </Box>
   );

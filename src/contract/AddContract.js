@@ -96,7 +96,7 @@ const AddContract = () => {
 
         <Box mb={2}>
           <Typography variant="h6">Skany zlecenia</Typography>
-          <Dropzone onDrop={handleDrop} accept=".pdf,.jpg,.png">
+          <Dropzone onDrop={handleDrop}>
             {({ getRootProps, getInputProps }) => (
               <Box
                 {...getRootProps()}

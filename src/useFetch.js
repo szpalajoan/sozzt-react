@@ -5,36 +5,43 @@ const useFetch = (url) => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const username = 'user';
-      const password = 'user';
-      const headers = new Headers();
-      headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+  // Funkcja do pobierania danych
+  const fetchData = async () => {
+    const username = 'user';
+    const password = 'user';
+    const headers = new Headers();
+    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
 
-      try {
-        const response = await fetch('http://localhost:8080/api/' + url, {
-          method: 'GET',
-          headers: headers,
-        });
+    try {
+      const response = await fetch('http://localhost:8080/api/' + url, {
+        method: 'GET',
+        headers: headers,
+      });
 
-        if (!response.ok) {
-          throw new Error('HTTP error! status: ' + response.status);
-        }
-
-        const data = await response.json();
-        setData(data);
-        setIsPending(false);
-      } catch (error) {
-        setError(error.message);
-        setIsPending(false);
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ' + response.status);
       }
-    };
 
+      const data = await response.json();
+      setData(data);
+      setIsPending(false);
+    } catch (error) {
+      setError(error.message);
+      setIsPending(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [url]);
 
-  return { data, isPending, error };
+  // Dodanie funkcji refetch
+  const refetch = () => {
+    setIsPending(true); // Ustawia status na ładowanie przed ponownym pobraniem
+    fetchData();
+  };
+
+  return { data, isPending, error, refetch }; // Zwracanie refetch
 };
 
 export default useFetch;

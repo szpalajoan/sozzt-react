@@ -5,7 +5,7 @@ const useDataFetching = (url) => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
-const fetchData = async (url, method, payload, customHeaders = {}) => {
+  const fetchData = async (url, method, payload, customHeaders = {}) => {
     const username = 'user';
     const password = 'user';
     const headers = new Headers(customHeaders);
@@ -24,7 +24,7 @@ const fetchData = async (url, method, payload, customHeaders = {}) => {
 
       if (payload instanceof FormData) {
         config.body = payload;
-        headers.delete('Content-Type'); 
+        headers.delete('Content-Type');
       } else if (payload) {
         headers.set('Content-Type', 'application/json');
         config.body = JSON.stringify(payload);
@@ -35,12 +35,19 @@ const fetchData = async (url, method, payload, customHeaders = {}) => {
       if (!response.ok) {
         throw new Error('HTTP error! status: ' + response.status);
       }
+      console.log(url + ' ' + method + ' ' + payload + ' ' + response.status);
 
-      const responseData = await response.json(); // Parse the response data
-      setIsPending(false);
-      console.log(responseData);
-      return responseData; // Return the data so it can be used later
-
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          const responseData = await response.json(); // Parsuj dane odpowiedzi
+          console.log(responseData);
+          return responseData; // Zwróć dane
+        } catch (error) {
+          console.error('Błąd podczas parsowania JSON:', error);
+          return null; // lub rzuć wyjątek
+        }
+      }
     } catch (error) {
       setError(error.message);
       setIsPending(false);
