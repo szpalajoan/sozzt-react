@@ -2,68 +2,60 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDataFetching from '../useDataFetching';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import { Delete, CloudUpload } from '@mui/icons-material';
+import { IconButton, List, ListItem, ListItemAvatar, ListItemText, Box, Button, Typography } from '@mui/material';
 import Dropzone from 'react-dropzone';
-import FormInput from './FormInput';
+import { formFields, renderTextFields } from './details/DetailsFields'; // Importujemy nasze helpery
 import './AddContract.css';
 
-const formatDateToISO = (date) => new Date(date).toISOString();
 
 
 const AddContract = () => {
-  const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [region, setRegion] = useState('');
-  const [district, setDistrict] = useState('');
-  const [city, setCity] = useState('');
-  const [transformerStationNumberWithCircuit, setTransformerStationNumberWithCircuit] = useState('');
-  const [fieldNumber, setFieldNumber] = useState('');
-  const [googleMapLink, setGoogleMapLink] = useState('');
-  const [contractNumber, setContractNumber] = useState('');
-  const [workNumber, setWorkNumber] = useState('');
-  const [customerContractNumber, setCustomerContractNumber] = useState('');
-  const [orderDate, setOrderDate] = useState('');
-
+  const [formState, setFormState] = useState({});
   const [contractScans, setContractScans] = useState([]);
   const navigate = useNavigate();
   const { fetchData, isPending, error } = useDataFetching('contracts/');
+
+  const handleInputChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newContract = {
-      invoiceNumber,
+      invoiceNumber: formState.invoiceNumber || '',
       location: {
-        region,
-        district,
-        city,
-        transformerStationNumberWithCircuit,
-        fieldNumber,
-        googleMapLink
+        region: formState.region || '',
+        district: formState.district || '',
+        city: formState.city || '',
+        transformerStationNumberWithCircuit: formState.transformerStationNumberWithCircuit || '',
+        fieldNumber: formState.fieldNumber || '',
+        googleMapLink: formState.googleMapLink || ''
       },
       contractDetailsDto: {
-        contractNumber,
-        workNumber,
-        customerContractNumber,
-        orderDate: formatDateToISO(orderDate)
+        contractNumber: formState.contractNumber || '',
+        workNumber: formState.workNumber || '',
+        customerContractNumber: formState.customerContractNumber || '',
+        orderDate: formState.orderDate ? new Date(formState.orderDate).toISOString() : formState.orderDate, // Zamiana formatu daty
       }
     };
 
     try {
       const response = await fetchData('contracts/', 'POST', newContract);
-    
+
       if (response && response.contractId && contractScans.length > 0) {
         await Promise.all(
           contractScans.map(async (scan) => {
             const formData = new FormData();
             formData.append('file', scan);
             formData.append('fileId', uuidv4());
-  
+
             await fetchData(`contracts/${response.contractId}/contract-scan`, 'POST', formData);
           })
         );
       }
-      
+
       navigate('/');
     } catch (error) {
       console.error('Błąd podczas dodawania kontraktu:', error);
@@ -78,21 +70,14 @@ const AddContract = () => {
     setContractScans(contractScans.filter(f => f !== file));
   };
 
+  // Używamy dynamicznego formularza z formFields
+  const fields = formFields({}, {});
+
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>Dodaj nowy kontrakt</Typography>
       <form onSubmit={handleSubmit}>
-        <FormInput label="Numer faktury" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} required />
-        <FormInput label="Region" value={region} onChange={(e) => setRegion(e.target.value)} required />
-        <FormInput label="Dzielnica" value={district} onChange={(e) => setDistrict(e.target.value)} />
-        <FormInput label="Miasto" value={city} onChange={(e) => setCity(e.target.value)} required />
-        <FormInput label="Numer stacji trafo i obwód" value={transformerStationNumberWithCircuit} onChange={(e) => setTransformerStationNumberWithCircuit(e.target.value)} required />
-        <FormInput label="Numer pola" value={fieldNumber} onChange={(e) => setFieldNumber(e.target.value)} />
-        <FormInput label="Link do mapy Google" value={googleMapLink} onChange={(e) => setGoogleMapLink(e.target.value)} />
-        <FormInput label="Numer umowy klienta" value={contractNumber} onChange={(e) => setContractNumber(e.target.value)} required />
-        <FormInput label="Nr roboczy" value={workNumber} onChange={(e) => setWorkNumber(e.target.value)} required />
-        <FormInput label="Numer kontraktu klienta" value={customerContractNumber} onChange={(e) => setCustomerContractNumber(e.target.value)} required />
-        <FormInput label="Data zamówienia" type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
+        {renderTextFields(fields, formState, handleInputChange)}
 
         <Box mb={2}>
           <Typography variant="h6">Skany zlecenia</Typography>

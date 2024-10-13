@@ -3,7 +3,7 @@ import './Contract.css';
 import Sidebar from './SideBar';
 import PreliminaryPlan from './steps/PreliminaryPlan';
 import { useState } from 'react';
-import Details from './Details';
+import Details from './details/Details';
 
 
 const Contract = () => {

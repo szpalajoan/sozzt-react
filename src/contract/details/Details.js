@@ -3,21 +3,11 @@ import { TextField, Button, Box, IconButton, List, ListItem, ListItemText, Typog
 import { Delete } from '@mui/icons-material';
 import Dropzone from 'react-dropzone';
 import { v4 as uuidv4 } from 'uuid';
-import useFetch from "../useFetch";
+import useFetch from "../../useFetch";
 import './Details.css';
-import useDataFetching from '../useDataFetching';
-
-const FileLink = ({ contractId, fileId, fileName }) => {
-  const fileUrl = `http://localhost:8080/api/contracts/${contractId}/${fileId}`;
-
-  return (
-    <div className="form-group">
-      <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-        {fileName}
-      </a>
-    </div>
-  );
-};
+import useDataFetching from '../../useDataFetching';
+import { formFields, renderTextFields } from './DetailsFields';
+import FileLink from './../FileLink';
 
 const Details = ({ contractId }) => {
   const { data: contract, isPending: isContractPending, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
@@ -27,15 +17,15 @@ const Details = ({ contractId }) => {
   const [formState, setFormState] = useState({});
   const [newFiles, setNewFiles] = useState([]);
   const [deletedFiles, setDeletedFiles] = useState([]);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   const { fetchData } = useDataFetching('contracts/');
 
   useEffect(() => {
     if (fetchedFiles) {
-      console.log("Pobrano pliki:", fetchedFiles); // Dodaj ten log
+      console.log("Pobrano pliki:", fetchedFiles);
 
-      setFiles(fetchedFiles); // Ustawienie stanu plików
+      setFiles(fetchedFiles);
     }
   }, [fetchedFiles]);
 
@@ -76,22 +66,20 @@ const Details = ({ contractId }) => {
       },
     };
 
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       await fetchData(`contracts/${contractId}`, 'PUT', updatedContract);
 
-      // Usuwanie plików
       if (deletedFiles.length > 0) {
         await Promise.all(
           deletedFiles.map(async (fileId) => {
             await fetchData(`contracts/${contractId}/${fileId}`, 'DELETE');
           })
         );
-        setDeletedFiles([]); // Wyczyść stan usuniętych plików
+        setDeletedFiles([]);
       }
 
-      // Upload nowych plików
       if (newFiles.length > 0) {
         await Promise.all(
           newFiles.map(async (scan) => {
@@ -102,12 +90,12 @@ const Details = ({ contractId }) => {
             await fetchData(`contracts/${contractId}/contract-scan`, 'POST', formData);
           })
         );
-        setNewFiles([]); // Wyczyść stan nowych plików
+        setNewFiles([]);
       }
 
-      // Refetch the contract and files after everything is done
 
-      await refetchFiles(); // Refetch files data
+      refetchContract();
+      refetchFiles(); 
 
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
@@ -116,84 +104,12 @@ const Details = ({ contractId }) => {
     }
   };
 
+  const fields = formFields(contractDetails, location);
+
+
   return (
     <Box>
-      <TextField
-        label="Numer umowy klienta"
-        name="contractNumber"
-        value={formState.contractNumber || contractDetails.contractNumber}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Nr roboczy"
-        name="workNumber"
-        value={formState.workNumber || contractDetails.workNumber}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Nr stacji trafo i obwód"
-        name="transformerStationNumberWithCircuit"
-        value={formState.transformerStationNumberWithCircuit || location.transformerStationNumberWithCircuit}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Region"
-        name="region"
-        value={formState.region || location.region}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Dzielnica"
-        name="district"
-        value={formState.district || location.district}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Miasto"
-        name="city"
-        value={formState.city || location.city}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Numer pola"
-        name="fieldNumber"
-        value={formState.fieldNumber || location.fieldNumber}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Numer kontraktu klienta"
-        name="customerContractNumber"
-        value={formState.customerContractNumber || contractDetails.customerContractNumber}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Data zamówienia"
-        name="orderDate"
-        type="date"
-        value={formState.orderDate || contractDetails.orderDate.split('T')[0]}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+      {renderTextFields(fields, formState, handleInputChange)}
 
       <Typography variant="h6" gutterBottom>Załączniki</Typography>
       <List>
