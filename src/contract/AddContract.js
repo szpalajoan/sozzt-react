@@ -2,22 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDataFetching from '../useDataFetching';
 import { v4 as uuidv4 } from 'uuid';
-
-
-const FormInput = ({ label, type = 'text', value, onChange, required = false, readOnly = false }) => (
-  <div className="form-group">
-    <label>{label}</label>
-    <input
-      type={type}
-      value={value}
-      onChange={onChange}
-      required={required}
-      readOnly={readOnly}
-    />
-  </div>
-);
+import { Box, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import { Delete, CloudUpload } from '@mui/icons-material';
+import Dropzone from 'react-dropzone';
+import FormInput from './FormInput';
+import './AddContract.css';
 
 const formatDateToISO = (date) => new Date(date).toISOString();
+
 
 const AddContract = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -32,11 +24,9 @@ const AddContract = () => {
   const [customerContractNumber, setCustomerContractNumber] = useState('');
   const [orderDate, setOrderDate] = useState('');
 
+  const [contractScans, setContractScans] = useState([]);
   const navigate = useNavigate();
   const { fetchData, isPending, error } = useDataFetching('contracts/');
-
-  const [contractScan, setContractScan] = useState(null);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,12 +52,16 @@ const AddContract = () => {
     try {
       const response = await fetchData('contracts/', 'POST', newContract);
     
-      if (response && response.contractId && contractScan) {
-        const formData = new FormData();
-        formData.append('file', contractScan);
-        formData.append('fileId', uuidv4());
+      if (response && response.contractId && contractScans.length > 0) {
+        await Promise.all(
+          contractScans.map(async (scan) => {
+            const formData = new FormData();
+            formData.append('file', scan);
+            formData.append('fileId', uuidv4());
   
-        await fetchData(`contracts/${response.contractId}/contract-scan`, 'POST', formData);
+            await fetchData(`contracts/${response.contractId}/contract-scan`, 'POST', formData);
+          })
+        );
       }
       
       navigate('/');
@@ -76,15 +70,17 @@ const AddContract = () => {
     }
   };
 
-  return (
-    <div className="container">
+  const handleDrop = (acceptedFiles) => {
+    setContractScans([...contractScans, ...acceptedFiles]);
+  };
 
-    <div>
-      <div className="header">
-      <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
-      <h2>Dodaj nowy kontrakt</h2>
-    </div>
-    
+  const handleRemoveFile = (file) => {
+    setContractScans(contractScans.filter(f => f !== file));
+  };
+
+  return (
+    <Box p={3}>
+      <Typography variant="h4" gutterBottom>Dodaj nowy kontrakt</Typography>
       <form onSubmit={handleSubmit}>
         <FormInput label="Numer faktury" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} required />
         <FormInput label="Region" value={region} onChange={(e) => setRegion(e.target.value)} required />
@@ -97,17 +93,47 @@ const AddContract = () => {
         <FormInput label="Nr roboczy" value={workNumber} onChange={(e) => setWorkNumber(e.target.value)} required />
         <FormInput label="Numer kontraktu klienta" value={customerContractNumber} onChange={(e) => setCustomerContractNumber(e.target.value)} required />
         <FormInput label="Data zamówienia" type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
-        <FormInput label="Numer faktury" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} required />
-          <input type="file" onChange={(e) => setContractScan(e.target.files[0])} />
 
-          <button type="submit" disabled={isPending}>Dodaj kontrakt</button>
-          {isPending && <p>Trwa dodawanie kontraktu...</p>}
-          {error && <p>Błąd podczas dodawania kontraktu: {error}</p>}
-        </form>
-      </div>
-    </div>
+        <Box mb={2}>
+          <Typography variant="h6">Skany zlecenia</Typography>
+          <Dropzone onDrop={handleDrop} accept=".pdf,.jpg,.png">
+            {({ getRootProps, getInputProps }) => (
+              <Box
+                {...getRootProps()}
+                className="dropzone-container"
+              >
+                <input {...getInputProps()} />
+                <CloudUpload className="upload-icon" />
+                <Typography>Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać</Typography>
+              </Box>
+            )}
+          </Dropzone>
+          <List>
+            {contractScans.map((file, index) => (
+              <ListItem
+                key={index}
+                className="list-item"
+              >
+                <ListItemAvatar>
+                  <img src="/path/to/pdf-icon.png" alt="file-icon" width="40" />
+                </ListItemAvatar>
+                <ListItemText primary={file.name} />
+                <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveFile(file)}>
+                  <Delete />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        <Button type="submit" variant="contained" color="primary" disabled={isPending}>
+          Dodaj kontrakt
+        </Button>
+        {isPending && <Typography>Trwa dodawanie kontraktu...</Typography>}
+        {error && <Typography color="error">Błąd podczas dodawania kontraktu: {error}</Typography>}
+      </form>
+    </Box>
   );
 };
-
 
 export default AddContract;
