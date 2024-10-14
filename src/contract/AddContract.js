@@ -5,9 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { Delete, CloudUpload } from '@mui/icons-material';
 import { IconButton, List, ListItem, ListItemAvatar, ListItemText, Box, Button, Typography } from '@mui/material';
 import Dropzone from 'react-dropzone';
-import { formFields, renderTextFields } from './details/DetailsFields'; // Importujemy nasze helpery
+import { formFields, renderTextFields } from './details/DetailsFields'; 
 import './AddContract.css';
-
+import FileUploadSection from './FileUploadSection';
+import useFileHandler from './useFileHandler';
 
 
 const AddContract = () => {
@@ -15,6 +16,15 @@ const AddContract = () => {
   const [contractScans, setContractScans] = useState([]);
   const navigate = useNavigate();
   const { fetchData, isPending, error } = useDataFetching('contracts/');
+
+  const {
+    files,
+    newFiles,
+    handleFileDrop,
+    handleFileDelete,
+    uploadFiles,
+    resetFiles
+  } = useFileHandler();
 
   const handleInputChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -44,33 +54,17 @@ const AddContract = () => {
     try {
       const response = await fetchData('contracts/', 'POST', newContract);
 
-      if (response && response.contractId && contractScans.length > 0) {
-        await Promise.all(
-          contractScans.map(async (scan) => {
-            const formData = new FormData();
-            formData.append('file', scan);
-            formData.append('fileId', uuidv4());
-
-            await fetchData(`contracts/${response.contractId}/contract-scan`, 'POST', formData);
-          })
-        );
+      if (response && response.contractId) {
+        await uploadFiles(response.contractId, fetchData); 
       }
 
       navigate('/');
+      resetFiles();
     } catch (error) {
       console.error('Błąd podczas dodawania kontraktu:', error);
     }
   };
 
-  const handleDrop = (acceptedFiles) => {
-    setContractScans([...contractScans, ...acceptedFiles]);
-  };
-
-  const handleRemoveFile = (file) => {
-    setContractScans(contractScans.filter(f => f !== file));
-  };
-
-  // Używamy dynamicznego formularza z formFields
   const fields = formFields({}, {});
 
   return (
@@ -79,37 +73,13 @@ const AddContract = () => {
       <form onSubmit={handleSubmit}>
         {renderTextFields(fields, formState, handleInputChange)}
 
-        <Box mb={2}>
-          <Typography variant="h6">Skany zlecenia</Typography>
-          <Dropzone onDrop={handleDrop}>
-            {({ getRootProps, getInputProps }) => (
-              <Box
-                {...getRootProps()}
-                className="dropzone-container"
-              >
-                <input {...getInputProps()} />
-                <CloudUpload className="upload-icon" />
-                <Typography>Przeciągnij i upuść pliki tutaj lub kliknij, aby wybrać</Typography>
-              </Box>
-            )}
-          </Dropzone>
-          <List>
-            {contractScans.map((file, index) => (
-              <ListItem
-                key={index}
-                className="list-item"
-              >
-                <ListItemAvatar>
-                  <img src="/path/to/pdf-icon.png" alt="file-icon" width="40" />
-                </ListItemAvatar>
-                <ListItemText primary={file.name} />
-                <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveFile(file)}>
-                  <Delete />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        <FileUploadSection
+          contractId={null}
+          files={files}
+          newFiles={newFiles}
+          handleFileDrop={handleFileDrop}
+          handleFileDelete={handleFileDelete}
+        />
 
         <Button type="submit" variant="contained" color="primary" disabled={isPending}>
           Dodaj kontrakt
