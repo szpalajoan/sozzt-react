@@ -3,13 +3,13 @@ import {  Button, Box,CircularProgress } from '@mui/material';
 import useFetch from "../../useFetch";
 import './Details.css';
 import useDataFetching from '../../useDataFetching';
-import { formFields, renderTextFields } from './DetailsFields';
+import { contractFields, renderTextFields } from './DetailsFields';
 import FileUploadSection from './../FileUploadSection';
 import useFileHandler from './../useFileHandler';
 
 const Details = ({ contractId }) => {
   const { data: contract, isPending: isContractPending, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
-  const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/contract-scan`);
+  const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/contract-scans`);
 
   const [formState, setFormState] = useState({});
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,22 @@ const Details = ({ contractId }) => {
     }
   }, [fetchedFiles]);
 
+  useEffect(() => {
+    if (contract) {
+      setFormState({
+        region: contract.location.region,
+        district: contract.location.district,
+        city: contract.location.city,
+        transformerStationNumberWithCircuit: contract.location.transformerStationNumberWithCircuit,
+        fieldNumber: contract.location.fieldNumber,
+        contractNumber: contract.contractDetails.contractNumber,
+        workNumber: contract.contractDetails.workNumber,
+        customerContractNumber: contract.contractDetails.customerContractNumber,
+        orderDate: contract.contractDetails.orderDate,
+      });
+    }
+  }, [contract]);
+
   if (isContractPending || isFilesPending) return <div>Loading...</div>;
   if (!contract) return <div>Nie znaleziono kontraktu</div>;
 
@@ -54,7 +70,7 @@ const Details = ({ contractId }) => {
         transformerStationNumberWithCircuit: formState.transformerStationNumberWithCircuit || location.transformerStationNumberWithCircuit,
         fieldNumber: formState.fieldNumber || location.fieldNumber,
       },
-      contractDetailsDto: {
+      contractDetails: {
         ...contractDetails,
         contractNumber: formState.contractNumber || contractDetails.contractNumber,
         workNumber: formState.workNumber || contractDetails.workNumber,
@@ -83,7 +99,7 @@ const Details = ({ contractId }) => {
     }
   };
 
-  const fields = formFields(contractDetails, location);
+  const fields = contractFields(contractDetails, location);
 
 
   return (

@@ -35,13 +35,13 @@ const useFetch = (url) => {
     fetchData();
   }, [url]);
 
-  // Dodanie funkcji refetch
+ 
   const refetch = () => {
-    setIsPending(true); // Ustawia status na ładowanie przed ponownym pobraniem
+    setIsPending(true); 
     fetchData();
   };
 
-  return { data, isPending, error, refetch }; // Zwracanie refetch
+  return { data, isPending, error, refetch }; 
 };
 
 export default useFetch;

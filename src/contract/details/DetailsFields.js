@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 
 
-const formFields = (contractDetails, location) => [
+const contractFields = (contractDetails, location) => [
   { label: "Numer umowy klienta", name: "contractNumber", value: contractDetails?.contractNumber || "", required: true },
   { label: "Nr roboczy", name: "workNumber", value: contractDetails?.workNumber || "", required: true },
   { label: "Nr stacji trafo i obwód", name: "transformerStationNumberWithCircuit", value: location?.transformerStationNumberWithCircuit || "" },
@@ -14,7 +14,7 @@ const formFields = (contractDetails, location) => [
   {
     label: "Data zamówienia",
     name: "orderDate",
-    value: contractDetails.orderDate ? contractDetails.orderDate.split('T')[0] : '', // Sprawdzenie czy orderDate istnieje
+    value: contractDetails.orderDate ? contractDetails.orderDate.split('T')[0] : '', 
     type: "date"
   },
 ];
@@ -36,4 +36,4 @@ const renderTextFields = (fields, formState, handleInputChange) => {
   ));
 };
 
-export { formFields, renderTextFields };
+export { contractFields, renderTextFields };

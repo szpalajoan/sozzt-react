@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDataFetching from '../useDataFetching';
-import { v4 as uuidv4 } from 'uuid';
-import { Delete, CloudUpload } from '@mui/icons-material';
-import { IconButton, List, ListItem, ListItemAvatar, ListItemText, Box, Button, Typography } from '@mui/material';
-import Dropzone from 'react-dropzone';
-import { formFields, renderTextFields } from './details/DetailsFields'; 
+import { Box, Button, Typography } from '@mui/material';
+import { contractFields, renderTextFields } from './details/DetailsFields'; 
 import './AddContract.css';
 import FileUploadSection from './FileUploadSection';
 import useFileHandler from './useFileHandler';
@@ -13,7 +10,6 @@ import useFileHandler from './useFileHandler';
 
 const AddContract = () => {
   const [formState, setFormState] = useState({});
-  const [contractScans, setContractScans] = useState([]);
   const navigate = useNavigate();
   const { fetchData, isPending, error } = useDataFetching('contracts/');
 
@@ -65,7 +61,7 @@ const AddContract = () => {
     }
   };
 
-  const fields = formFields({}, {});
+  const fields = contractFields({}, {});
 
   return (
     <Box p={3}>

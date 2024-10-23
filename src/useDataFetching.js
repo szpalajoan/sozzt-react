@@ -40,18 +40,18 @@ const useDataFetching = (url) => {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         try {
-          const responseData = await response.json(); // Parsuj dane odpowiedzi
+          const responseData = await response.json();
           console.log(responseData);
-          return responseData; // Zwróć dane
+          return responseData; 
         } catch (error) {
           console.error('Błąd podczas parsowania JSON:', error);
-          return null; // lub rzuć wyjątek
+          return null; 
         }
       }
     } catch (error) {
       setError(error.message);
       setIsPending(false);
-      throw error; // Re-throw the error to be handled in the calling function
+      throw error; 
     }
   };
 

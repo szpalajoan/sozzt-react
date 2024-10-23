@@ -27,7 +27,7 @@ const useFileHandler = () => {
           const formData = new FormData();
           formData.append('file', file);
           formData.append('fileId', uuidv4());
-          await fetchData(`contracts/${contractId}/contract-scan`, 'POST', formData);
+          await fetchData(`contracts/${contractId}/contract-scans`, 'POST', formData);
         })
       );
     }
