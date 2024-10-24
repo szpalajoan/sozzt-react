@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Section = ({ title, date, name, status, comments, subtasks, onClick }) => (
   <div className="section" onClick={onClick} style={{ cursor: 'pointer' }}>
@@ -21,9 +22,14 @@ const Section = ({ title, date, name, status, comments, subtasks, onClick }) => 
   </div>
 );
 
+const Sidebar = ({ contractId, setSelectedStep }) => {
+  const navigate = useNavigate();
 
+  const handleStepChange = (step) => {
+    setSelectedStep(step);  // Zmieniamy stan bez odświeżenia strony
+    navigate(`/contract/${contractId}/${step}`, { replace: true }); // Zmienia URL bez odświeżenia
+  };
 
-const Sidebar = ({ setSelectedStep }) => {
   return (
     <aside className="sidebar">
       <Section
@@ -31,31 +37,32 @@ const Sidebar = ({ setSelectedStep }) => {
         date="12.03.2024"
         name="Daniel"
         status="done"
-        onClick={() => setSelectedStep('PreliminaryPlan')}
-
-         />
+        onClick={() => handleStepChange('preliminary-plan')}
+      />
       <Section
         title="Wizja w terenie"
         date="12.03.2024"
         name="Marcin"
         status="todo"
-        onClick={() => setSelectedStep('notDone')}
-
+        onClick={() => handleStepChange('FieldVision')}
         subtasks={[
           { text: 'Wgranie zdjęć', status: 'done' },
           { text: 'Wskazano do geodety', status: 'done' },
           { text: 'Uwagi - 3/4', status: 'todo' }
         ]}
       />
-      <Section title="Przygotowanie trasy" date="12.03.2024" name="Daniel" 
-              onClick={() => setSelectedStep('notDone')}
-
-      status="actual" />
+      <Section
+        title="Przygotowanie trasy"
+        date="12.03.2024"
+        name="Daniel"
+        status="actual"
+        onClick={() => handleStepChange('RoutePreparation')}
+      />
       <Section
         title="Przygotowanie porozumień"
         date="12.05.2024"
-        onClick={() => setSelectedStep('notDone')}
         status="todo"
+        onClick={() => handleStepChange('AgreementPreparation')}
         subtasks={[
           { text: 'Prośba o wypis gruntu', status: 'todo' },
           { text: 'Stworzenie porozumień', status: 'todo' }
@@ -65,7 +72,7 @@ const Sidebar = ({ setSelectedStep }) => {
         title="Zebranie porozumień"
         date="12.06.2024"
         status="todo"
-        onClick={() => setSelectedStep('notDone')}
+        onClick={() => handleStepChange('AgreementCollection')}
         subtasks={[
           { text: 'Zaakceptowane wszystkie porozumienia 0/0', status: 'todo' },
           { text: 'Zaakceptowane wody polskie', status: 'todo' }
@@ -73,6 +80,6 @@ const Sidebar = ({ setSelectedStep }) => {
       />
     </aside>
   );
-}
+};
 
 export default Sidebar;
