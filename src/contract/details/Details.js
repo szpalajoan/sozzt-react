@@ -86,7 +86,7 @@ const Details = ({ contractId }) => {
       await fetchData(`contracts/${contractId}`, 'PUT', updatedContract);
 
       await deleteFiles(contractId, fetchData);
-      await uploadFiles(contractId, fetchData);
+      await uploadFiles(contractId, fetchData, 'contract-scans');
 
       refetchContract();
       refetchFiles();

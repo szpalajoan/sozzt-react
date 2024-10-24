@@ -24,11 +24,15 @@ const PreliminaryPlan = ({ contractId }) => {
     };
     setLoading(true);
     try {
-      await fetchData(
-        `contracts/preliminary-plans/${contractId}/google-map-url`, 
-        'PUT', 
-        editPreliminaryPlanDto 
-      );
+      await fetchData(`contracts/preliminary-plans/${contractId}/google-map-url`, 'PUT',  editPreliminaryPlanDto);
+
+      await deleteFiles(contractId, fetchData);
+      await uploadFiles(contractId, fetchData, 'preliminary-maps');
+      
+      refetchPreliminaryPlan();
+      refetchFiles();
+      resetFiles();
+
           } catch (error) {
         console.error('Błąd podczas zapisywania danych:', error);
       } finally {

@@ -52,7 +52,7 @@ const AddContract = () => {
       const response = await fetchData('contracts/', 'POST', newContract);
 
       if (response && response.contractId) {
-        await uploadFiles(response.contractId, fetchData); 
+        await uploadFiles(response.contractId, fetchData, 'contract-scans'); 
       }
 
       navigate('/');

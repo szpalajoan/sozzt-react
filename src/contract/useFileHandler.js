@@ -20,14 +20,14 @@ const useFileHandler = () => {
     setDeletedFiles([]);
   };
 
-  const uploadFiles = async (contractId, fetchData) => {
+  const uploadFiles = async (contractId, fetchData, fileType) => {
     if (newFiles.length > 0) {
       await Promise.all(
         newFiles.map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);
           formData.append('fileId', uuidv4());
-          await fetchData(`contracts/${contractId}/contract-scans`, 'POST', formData);
+          await fetchData(`contracts/${contractId}/${fileType}`, 'POST', formData);
         })
       );
     }
