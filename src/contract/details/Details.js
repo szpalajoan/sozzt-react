@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {  Button, Box,CircularProgress } from '@mui/material';
 import useFetch from "../../useFetch";
 import './Details.css';
-import useDataFetching from '../../useDataFetching';
-import { contractFields, renderTextFields } from './DetailsFields';
+import useDataFetching from '../../useDataFetching'; 
+import { contractFields } from './DetailsFields';
+import { renderTextFields } from './../renderTextFields';
 import FileUploadSection from './../FileUploadSection';
 import useFileHandler from './../useFileHandler';
 
 const Details = ({ contractId }) => {
   const { data: contract, isPending: isContractPending, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
-  const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/contract-scans`);
+  const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=CONTRACT_SCAN_FROM_TAURON`);
 
   const [formState, setFormState] = useState({});
   const [loading, setLoading] = useState(false);
@@ -45,12 +46,12 @@ const Details = ({ contractId }) => {
         contractNumber: contract.contractDetails.contractNumber,
         workNumber: contract.contractDetails.workNumber,
         customerContractNumber: contract.contractDetails.customerContractNumber,
-        orderDate: contract.contractDetails.orderDate,
+        orderDate: contract.contractDetails.orderDate ? contract.contractDetails.orderDate.split('T')[0] : "",
       });
     }
   }, [contract]);
 
-  if (isContractPending || isFilesPending) return <div>Loading...</div>;
+  if (isContractPending) return <div>Loading...</div>;
   if (!contract) return <div>Nie znaleziono kontraktu</div>;
 
   const { contractDetails, location } = contract;
@@ -75,7 +76,7 @@ const Details = ({ contractId }) => {
         contractNumber: formState.contractNumber || contractDetails.contractNumber,
         workNumber: formState.workNumber || contractDetails.workNumber,
         customerContractNumber: formState.customerContractNumber || contractDetails.customerContractNumber,
-        orderDate: formState.orderDate || contractDetails.orderDate,
+        orderDate: formState.orderDate ? `${formState.orderDate}T00:00:00Z` : contractDetails.orderDate,
       },
     };
 
