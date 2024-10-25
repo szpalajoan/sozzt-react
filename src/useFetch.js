@@ -5,7 +5,6 @@ const useFetch = (url) => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
 
-  // Funkcja do pobierania danych
   const fetchData = async () => {
     const username = 'user';
     const password = 'user';
@@ -37,6 +36,7 @@ const useFetch = (url) => {
 
  
   const refetch = () => {
+    console.log('refetch');
     setIsPending(true); 
     fetchData();
   };

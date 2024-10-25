@@ -28,7 +28,7 @@ const Details = ({ contractId }) => {
   } = useFileHandler();
 
   useEffect(() => {
-    if (fetchedFiles) {
+    if (fetchedFiles && files.length === 0) {
       console.log("Pobrano pliki:", fetchedFiles);
 
       setFiles(fetchedFiles);
@@ -91,7 +91,6 @@ const Details = ({ contractId }) => {
       refetchContract();
       refetchFiles();
       resetFiles();
-
 
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
