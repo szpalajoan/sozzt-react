@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {  Button, Box,CircularProgress } from '@mui/material';
+import { Button, Box, CircularProgress, Snackba } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 import useFetch from "../../useFetch";
 import './Details.css';
-import useDataFetching from '../../useDataFetching'; 
+import useDataFetching from '../../useDataFetching';
 import { contractFields } from './DetailsFields';
 import { renderTextFields } from './../renderTextFields';
 import FileUploadSection from './../FileUploadSection';
@@ -61,6 +62,7 @@ const Details = ({ contractId }) => {
   };
 
   const handleSave = async () => {
+    console.log("handleSave", formState);
     const updatedContract = {
       ...contract,
       location: {
@@ -99,6 +101,19 @@ const Details = ({ contractId }) => {
     }
   };
 
+  const handleFinalize = async () => {
+    await handleSave();
+
+    console.log("Kontrakt został sfinalizowany.");
+    try {
+          await fetchData(`contracts/${contractId}/finalize-introduction`, 'POST');
+
+          refetchContract();
+        } catch (error) {
+          console.error('Błąd podczas finalizacji kontraktu:', error);
+        }
+  };
+
   const fields = contractFields(contractDetails, location);
 
 
@@ -114,10 +129,16 @@ const Details = ({ contractId }) => {
         handleFileDelete={handleFileDelete}
       />
 
-      <Box mt={3}>
+
+      <Box mt={3} display="flex" gap={2}>
         <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
           {loading ? <CircularProgress size={24} /> : 'Zapisz'}
         </Button>
+        {contract.contractSteps && contract.contractSteps.length === 0 && (
+          <Button variant="contained" className="finalize-button" onClick={handleFinalize}>
+            Finalizuj
+          </Button>
+        )}
       </Box>
     </Box>
   );
