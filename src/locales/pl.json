@@ -1,7 +1,21 @@
 {
     "contract": {
         "finalize": {
-            "error": "Musisz uzupełnić wszystkie pola, żeby sfinalizować kontrakt."
+            "error": "Musisz uzupełnić wszystkie pola, żeby sfinalizować kontrakt.",
+            "introduction": "Sfinalizuj kontrakt, aby rozpocząć prace nad zleceniem."
         }
-    }
+    },
+    "steps": {
+        "PRELIMINARY_PLAN": "Wstępny plan",
+        "TERRAIN_VISION": "Wizja w terenie",
+        "ROUTE_PREPARATION": "Przygotowanie trasy",
+        "AGREEMENT_PREPARATION": "Przygotowanie porozumień",
+        "AGREEMENT_COLLECTION": "Zebranie porozumień"
+      },
+      "stepStatus": {
+        "ON_HOLD": "On-hold",
+        "IN_PROGRESS": "W trakcie",
+        "COMPLETED": "Zakonczony"
+      },
+      "loading": "Ładowanie..."
 }

@@ -34,7 +34,7 @@
 }
 
 .sidebar .date {
-  font-size: 0.9em;
+  font-size: 1.1em;
   color: #666;
 }
 
@@ -49,6 +49,10 @@
   text-transform: uppercase;
 }
 
+.sidebar .status.on_hold {
+  color: black;
+}
+
 .sidebar .status.done {
   color: green;
 }
@@ -57,7 +61,7 @@
   color: red;
 }
 
-.sidebar .status.actual {
+.sidebar .status.in_progress {
   color: orange;
 }
 

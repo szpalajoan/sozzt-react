@@ -6,13 +6,13 @@ import { useState, useEffect } from 'react';
 import Details from './details/Details';
 
 const Contract = () => {
-  const { contractId, step } = useParams();  // Pobieramy parametry z URL
-  const [selectedStep, setSelectedStep] = useState(step || 'Details');  // Ustawiamy wybrany krok
-  const navigate = useNavigate();  // Hook do nawigacji
+  const { contractId, step } = useParams(); 
+  const [selectedStep, setSelectedStep] = useState(step || 'Details');
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     if (step) {
-      setSelectedStep(step);  // Aktualizujemy krok na podstawie parametru w URL
+      setSelectedStep(step);
     } else {
       setSelectedStep('Details');
     }
@@ -20,9 +20,9 @@ const Contract = () => {
 
   const handleStepChange = (newStep) => {
     if (newStep === 'Details') {
-      navigate(`/contract/${contractId}`, { replace: true });  // Nawigujemy do domyślnego URL bez kroku
+      navigate(`/contract/${contractId}`, { replace: true });
     } else {
-      navigate(`/contract/${contractId}/${newStep}`, { replace: true });  // Nawigacja do wybranego kroku
+      navigate(`/contract/${contractId}/${newStep}`, { replace: true });
     }
     setSelectedStep(newStep);
   };
@@ -31,7 +31,7 @@ const Contract = () => {
     switch (selectedStep) {
       case 'Details':
         return <Details contractId={contractId} />;
-      case 'preliminary-plan':
+      case 'PRELIMINARY_PLAN':
         return <PreliminaryPlan contractId={contractId} />;
       default:
         return <p>Jeszcze nie zrobione</p>;

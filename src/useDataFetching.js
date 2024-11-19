@@ -41,7 +41,7 @@ const useDataFetching = (url) => {
       const response = await fetch('http://localhost:8080/api/' + url, config);
 
       if (!response.ok) {
-        await handleErrorResponse(response, t); // Przekaż `t` do `handleErrorResponse`
+        await handleErrorResponse(response, t); 
       }
       console.log(url + ' ' + method + ' ' + payload + ' ' + response.status);
 
@@ -50,7 +50,7 @@ const useDataFetching = (url) => {
         try {
           const responseData = await response.json();
           console.log(responseData);
-          setData(responseData); // Ustaw dane po pomyślnym pobraniu
+          setData(responseData); 
           return responseData;
         } catch (error) {
           console.error('Błąd podczas parsowania JSON:', error);
