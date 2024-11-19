@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import './i18n/i18n';
+
+const handleErrorResponse = async (response, t) => {
+  const { codeError } = await response.json();
+  const errorMessage = t(`${codeError}`) || "Unknown error";
+  throw new Error(errorMessage);
+};
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation(); 
 
   const fetchData = async () => {
     const username = 'user';
@@ -18,7 +27,7 @@ const useFetch = (url) => {
       });
 
       if (!response.ok) {
-        throw new Error('HTTP error! status: ' + response.status);
+        await handleErrorResponse(response, t); 
       }
 
       const data = await response.json();

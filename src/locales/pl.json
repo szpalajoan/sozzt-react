@@ -1,0 +1,7 @@
+{
+    "contract": {
+        "finalize": {
+            "error": "Musisz uzupełnić wszystkie pola, żeby sfinalizować kontrakt."
+        }
+    }
+}

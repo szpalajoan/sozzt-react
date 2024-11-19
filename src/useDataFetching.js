@@ -1,9 +1,18 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import './i18n/i18n';
+
+const handleErrorResponse = async (response, t) => {
+  const { codeError } = await response.json();
+  const errorMessage = t(`${codeError}`) || "Unknown error";
+  throw new Error(errorMessage);
+};
 
 const useDataFetching = (url) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
+  const { t } = useTranslation(); 
 
   const fetchData = async (url, method, payload, customHeaders = {}) => {
     const username = 'user';
@@ -21,7 +30,6 @@ const useDataFetching = (url) => {
         body: null,
       };
 
-
       if (payload instanceof FormData) {
         config.body = payload;
         headers.delete('Content-Type');
@@ -33,7 +41,7 @@ const useDataFetching = (url) => {
       const response = await fetch('http://localhost:8080/api/' + url, config);
 
       if (!response.ok) {
-        throw new Error('HTTP error! status: ' + response.status);
+        await handleErrorResponse(response, t); // Przekaż `t` do `handleErrorResponse`
       }
       console.log(url + ' ' + method + ' ' + payload + ' ' + response.status);
 
@@ -42,16 +50,17 @@ const useDataFetching = (url) => {
         try {
           const responseData = await response.json();
           console.log(responseData);
-          return responseData; 
+          setData(responseData); // Ustaw dane po pomyślnym pobraniu
+          return responseData;
         } catch (error) {
           console.error('Błąd podczas parsowania JSON:', error);
-          return null; 
+          return null;
         }
       }
     } catch (error) {
       setError(error.message);
       setIsPending(false);
-      throw error; 
+      throw error;
     }
   };
 

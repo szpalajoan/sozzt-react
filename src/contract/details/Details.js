@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Box, CircularProgress, Snackba } from '@mui/material';
+import { Button, Box, CircularProgress, Snackbar } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import useFetch from "../../useFetch";
 import './Details.css';
@@ -9,12 +9,19 @@ import { renderTextFields } from './../renderTextFields';
 import FileUploadSection from './../FileUploadSection';
 import useFileHandler from './../useFileHandler';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Details = ({ contractId }) => {
   const { data: contract, isPending: isContractPending, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=CONTRACT_SCAN_FROM_TAURON`);
 
   const [formState, setFormState] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState(''); 
+  const [openSnackbar, setOpenSnackbar] = useState(false); 
 
   const { fetchData } = useDataFetching('contracts/');
   const {
@@ -83,6 +90,7 @@ const Details = ({ contractId }) => {
     };
 
     setLoading(true);
+    setErrorMessage('');
 
     try {
       await fetchData(`contracts/${contractId}`, 'PUT', updatedContract);
@@ -96,6 +104,8 @@ const Details = ({ contractId }) => {
 
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
+      setErrorMessage(error.message || 'Wystąpił błąd podczas zapisywania danych.'); 
+      setOpenSnackbar(true);
     } finally {
       setLoading(false);
     }
@@ -104,18 +114,24 @@ const Details = ({ contractId }) => {
   const handleFinalize = async () => {
     await handleSave();
 
-    console.log("Kontrakt został sfinalizowany.");
     try {
-          await fetchData(`contracts/${contractId}/finalize-introduction`, 'POST');
+      await fetchData(`contracts/${contractId}/finalize-introduction`, 'POST');
 
-          refetchContract();
-        } catch (error) {
-          console.error('Błąd podczas finalizacji kontraktu:', error);
-        }
+      refetchContract();
+      console.log("Kontrakt został sfinalizowany.");
+
+    } catch (error) {
+      console.log(error.message);
+      setErrorMessage(error.message || 'Wystąpił błąd podczas finalizacji kontraktu.'); 
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false); 
   };
 
   const fields = contractFields(contractDetails, location);
-
 
   return (
     <Box>
@@ -140,6 +156,11 @@ const Details = ({ contractId }) => {
           </Button>
         )}
       </Box>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
