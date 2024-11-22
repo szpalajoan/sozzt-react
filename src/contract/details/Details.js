@@ -40,7 +40,7 @@ const Details = ({ contractId }) => {
   } = useFileHandler();
 
   useEffect(() => {
-    if (fetchedFiles && files.length === 0) {
+    if (fetchedFiles ) {
       console.log("Pobrano pliki:", fetchedFiles);
 
       setFiles(fetchedFiles);
@@ -102,8 +102,9 @@ const Details = ({ contractId }) => {
       await deleteFiles(contractId, fetchData);
       await uploadFiles(contractId, fetchData, 'contract-scans');
 
+      refetchContract();
+      refetchFiles();
       resetFiles();
-      navigate(0);
 
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
