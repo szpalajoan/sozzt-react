@@ -8,6 +8,7 @@ import { contractFields } from './DetailsFields';
 import { renderTextFields } from './../renderTextFields';
 import FileUploadSection from './../FileUploadSection';
 import useFileHandler from './../useFileHandler';
+import { useNavigate } from 'react-router-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -22,6 +23,9 @@ const Details = ({ contractId }) => {
 
   const [errorMessage, setErrorMessage] = useState(''); 
   const [openSnackbar, setOpenSnackbar] = useState(false); 
+
+  const navigate = useNavigate();
+
 
   const { fetchData } = useDataFetching('contracts/');
   const {
@@ -119,7 +123,7 @@ const Details = ({ contractId }) => {
 
       refetchContract();
       console.log("Kontrakt został sfinalizowany.");
-
+      navigate(0);
     } catch (error) {
       console.log(error.message);
       setErrorMessage(error.message || 'Wystąpił błąd podczas finalizacji kontraktu.'); 
