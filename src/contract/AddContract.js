@@ -44,7 +44,7 @@ const AddContract = () => {
         contractNumber: formState.contractNumber || '',
         workNumber: formState.workNumber || '',
         customerContractNumber: formState.customerContractNumber || '',
-        orderDate: formState.orderDate ? new Date(formState.orderDate).toISOString() : formState.orderDate, // Zamiana formatu daty
+        orderDate: formState.orderDate ? new Date(formState.orderDate).toISOString() : formState.orderDate,
       }
     };
 
@@ -52,15 +52,19 @@ const AddContract = () => {
       const response = await fetchData('contracts/', 'POST', newContract);
 
       if (response && response.contractId) {
-        await uploadFiles(response.contractId, fetchData, 'contract-scans'); 
+        await uploadFiles(response.contractId, fetchData, 'contract-scans');
+
+        navigate(`/contract/${response.contractId}`);
+      } else {
+        navigate('/');
       }
 
-      navigate('/');
       resetFiles();
     } catch (error) {
       console.error('Błąd podczas dodawania kontraktu:', error);
     }
   };
+
 
   const fields = contractFields({}, {});
 
