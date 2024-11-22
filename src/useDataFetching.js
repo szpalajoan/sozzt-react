@@ -58,9 +58,10 @@ const useDataFetching = (url) => {
         }
       }
     } catch (error) {
+      console.error('Fetch error:', error);
       setError(error.message);
+    } finally {
       setIsPending(false);
-      throw error;
     }
   };
 

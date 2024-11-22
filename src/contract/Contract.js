@@ -1,15 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
 import './Contract.css';
 import Sidebar from './SideBar';
-import PreliminaryPlan from './steps/PreliminaryPlan';
+import PreliminaryPlan from './preliminaryplan/PreliminaryPlan';
+import TerrainVision from './terrainVision/TerrainVision';
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
 
 
 const Contract = () => {
-  const { contractId, step } = useParams(); 
+  const { contractId, step } = useParams();
   const [selectedStep, setSelectedStep] = useState(step || 'Details');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (step) {
@@ -34,25 +35,28 @@ const Contract = () => {
         return <Details contractId={contractId} />;
       case 'PRELIMINARY_PLAN':
         return <PreliminaryPlan contractId={contractId} />;
+      case 'TERRAIN_VISION':
+        return <TerrainVision contractId={contractId} />;
+
       default:
         return <p>Jeszcze nie zrobione</p>;
     }
   };
 
   const goBackToHome = () => {
-    navigate('/'); 
+    navigate('/');
   };
 
   return (
     <div className="container">
       <div className="header">
-      <button className="back-button" onClick={goBackToHome}>&larr;</button> 
-      <h2 onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
+        <button className="back-button" onClick={goBackToHome}>&larr;</button>
+        <h2 onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
           Szczegóły Kontraktu
-        </h2> 
+        </h2>
       </div>
       <div className="contract-container">
-        <Sidebar setSelectedStep={handleStepChange} contractId={contractId} /> 
+        <Sidebar setSelectedStep={handleStepChange} contractId={contractId} />
         <main className="main-content">
           <article>
             {renderStepDetails()}

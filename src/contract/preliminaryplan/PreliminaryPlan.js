@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import useFetch from "../../useFetch";
-import { renderTextFields } from './../renderTextFields';
+import { renderTextFields } from '../renderTextFields';
 import { preliminaryPlanFields } from './preliminaryPlanFields';
-import useFileHandler from './../useFileHandler';
+import useFileHandler from '../useFileHandler';
 import { Button, Box, CircularProgress, Snackbar, Alert } from '@mui/material';
-import FileUploadSection from './../FileUploadSection';
+import FileUploadSection from '../FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,21 +1,22 @@
+import React from 'react';
 import { TextField } from '@mui/material';
 
+export const renderTextFields = (fields, data) => {
+  if (!Array.isArray(fields)) {
+    console.error('fields is not an array:', fields);
+    return null;
+  }
 
-const renderTextFields = (fields, formState, handleInputChange) => {
-    return fields.map(field => (
-      <TextField
-        key={field.name}
-        label={field.label}
-        name={field.name}
-        type={field.type || "text"}
-        value={formState[field.name] || field.value}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        required={field.required}
-        InputLabelProps={field.type === "date" ? { shrink: true } : {}}
-      />
-    ));
-  };
-
-  export { renderTextFields } 
+  return fields.map((field) => (
+    <TextField
+      key={field.name}
+      label={field.label}
+      value={data[field.name] || ''}
+      fullWidth
+      margin="normal"
+      InputProps={{
+        readOnly: true,
+      }}
+    />
+  ));
+};
