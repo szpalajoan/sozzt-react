@@ -51,7 +51,7 @@ const Contract = () => {
           Szczegóły Kontraktu
         </h2> 
       </div>
-      <div className="content">
+      <div className="contract-container">
         <Sidebar setSelectedStep={handleStepChange} contractId={contractId} /> 
         <main className="main-content">
           <article>

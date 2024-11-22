@@ -1,16 +1,46 @@
+.contract-container {
+  display: flex;
+  width: 100%;
+  gap: 2px;
+}
+
+.main-content {
+  flex: 3; 
+  padding: 5px; 
+  margin-left: 0; 
+  margin-top: 0; 
+  background-color: #123123;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .content {
   display: flex;
+  gap: 2px;
 }
 
-.sidebar {
+.content .sidebar {
   width: 25%;
-  padding: 20px;
- 
+  padding: 5px 0px 5px 5px; /* Zmniejszamy prawy padding do 0px */
 }
+
+/* Reszta styli pozostaje bez zmian */
+
+
+.content {
+  display: flex;
+  gap: 2px;
+}
+
+.content .sidebar {
+  width: 25%;
+  padding: 5px;
+}
+
 
 .sidebar .section {
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 10px;
+  padding: 10px; 
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
@@ -25,12 +55,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .sidebar .section-header h3 {
   margin: 0;
   font-size: 1.1em;
+  padding-top: 0
 }
 
 .sidebar .date {
@@ -166,10 +197,12 @@
   }
   
   .sidebar {
-    width: 25%;
-    padding: 20px;
-  
+    flex: 1; 
+    padding: 20px 0px 0px 5px; 
+    min-width: 200px; 
+    max-width: 300px; 
   }
+  
   
   .main-content {
     flex-grow: 1;
