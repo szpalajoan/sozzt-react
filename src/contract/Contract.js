@@ -5,6 +5,7 @@ import PreliminaryPlan from './steps/PreliminaryPlan';
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
 
+
 const Contract = () => {
   const { contractId, step } = useParams(); 
   const [selectedStep, setSelectedStep] = useState(step || 'Details');

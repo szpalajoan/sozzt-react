@@ -1,5 +1,12 @@
 {
     "contract": {
+        "details": {
+            "contractNumber": "Numer umowy",
+            "workingNumber": "Nr roboczy",
+            "customerContractNumber": "Nr kontraktu klienta",
+            "orderDate": "Data zamówienia",
+            "creationDate": "Data utworzenia"
+        },
         "finalize": {
             "error": "Musisz uzupełnić wszystkie pola, żeby sfinalizować kontrakt.",
             "introduction": "Sfinalizuj kontrakt, aby rozpocząć prace nad zleceniem."
@@ -11,11 +18,11 @@
         "ROUTE_PREPARATION": "Przygotowanie trasy",
         "AGREEMENT_PREPARATION": "Przygotowanie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień"
-      },
-      "stepStatus": {
+    },
+    "stepStatus": {
         "ON_HOLD": "On-hold",
         "IN_PROGRESS": "W trakcie",
         "COMPLETED": "Zakonczony"
-      },
-      "loading": "Ładowanie..."
+    },
+    "loading": "Ładowanie..."
 }
