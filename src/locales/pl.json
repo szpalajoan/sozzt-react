@@ -22,7 +22,12 @@
     "stepStatus": {
         "ON_HOLD": "On-hold",
         "IN_PROGRESS": "W trakcie",
-        "COMPLETED": "Zakonczony"
+        "DONE": "Zrobione"
     },
-    "loading": "Ładowanie..."
+    "loading": "Ładowanie...",
+    "preliminary-plan": {
+        "complete": {
+            "error": "Musisz uzupełnić wszystkie pola, żeby zakończyć wstępny plan."
+        }
+    }
 }
