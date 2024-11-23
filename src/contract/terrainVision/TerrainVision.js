@@ -3,13 +3,16 @@ import useFetch from "../../useFetch";
 import { renderTextFields } from '../renderTextFields';
 import { terrainVisionFields } from './TerrainVisionFields';
 import useFileHandler from '../useFileHandler';
-import { Button, Box, CircularProgress, Snackbar, Alert, Paper, Typography, Grid } from '@mui/material';
+import { Button, Box, CircularProgress, Snackbar, Alert, Typography, ImageList, ImageListItem, Modal } from '@mui/material';
 import FileUploadSection from '../FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
-
+import ImageGallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 const TerrainVision = ({ contractId }) => {
+  const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+
   const { data: terrainVisionData, isPending: isTerrainVisionPending, refetch: refetchTerrainVision } = useFetch(`contracts/terrain-vision/${contractId}`);
 
   const { data: fetchedTerrainFiles, isPending: isTerrainFilesPending, refetch: refetchTerrainFiles } = useFetch(`contracts/${contractId}/files?fileType=PHOTO_FROM_PLACE_OF_THE_CONTRACT`);
@@ -45,12 +48,21 @@ const TerrainVision = ({ contractId }) => {
     resetFiles: resetMapFiles
   } = useFileHandler();
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+
   useEffect(() => {
     if (fetchedTerrainFiles) {
       console.log("Pobrano zdjęcia z terenu:", fetchedTerrainFiles);
       setTerrainFiles(fetchedTerrainFiles);
     }
   }, [fetchedTerrainFiles]);
+
+  useEffect(() => {
+    console.log("Aktualne terrainFiles:", terrainFiles);
+  }, [terrainFiles]);
 
   useEffect(() => {
     if (fetchedMapFiles) {
@@ -76,6 +88,11 @@ const TerrainVision = ({ contractId }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const isImageFile = (fileName) => {
+    const extension = fileName.split('.').pop().toLowerCase();
+    return allowedImageExtensions.includes(extension);
   };
 
   const handleConfirmAllPhotosUploaded = async () => {
@@ -135,13 +152,69 @@ const TerrainVision = ({ contractId }) => {
   if (isTerrainVisionPending || isTerrainFilesPending || isMapFilesPending) return <CircularProgress />;
   if (!terrainVisionData) return <div>Nie znaleziono danych wizji terenowej</div>;
 
+  const handleImageClick = (index) => {
+    setCurrentImageIndex(index);
+    setIsGalleryOpen(true);
+  };
+
+  const handleCloseGallery = () => {
+    setIsGalleryOpen(false);
+  };
+
+
+  const generateFileUrl = (fileId) => {
+    return `http://localhost:8080/api/contracts/${contractId}/${fileId}`;
+  };
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  const galleryImages = terrainFiles
+    .filter(file => isImageFile(file.fileName))
+    .map(file => ({
+      original: generateFileUrl(file.fileId),
+      thumbnail: generateFileUrl(file.fileId),
+      description: file.fileName
+    }));
+
   return (
     <Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-
         <Box className="main-content">
           <h2>Zdjęcia z trasy</h2>
+          {terrainFiles.length > 0 ? (
+            <ImageList
+              sx={{
+                width: '100%',
+                height: terrainFiles.length <= 4 ? 200 : terrainFiles.length <= 8 ? 350 : 400
+              }}
+              cols={4}
+              rowHeight={164}
+            >
+              {terrainFiles.filter(file => isImageFile(file.fileName)).map((file, index) => {
+                const fileUrl = generateFileUrl(file.fileId);
+                return (
+                  <ImageListItem key={index} onClick={() => handleImageClick(index)}>
+                    <img
+                      src={fileUrl}
+                      alt={file.fileName || `Zdjęcie ${index + 1}`}
+                      loading="lazy"
+                      style={{ cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => {
+                        console.error(`Błąd ładowania obrazu ${index}:`, e);
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/150?text=Brak+obrazu';
+                      }}
+                    />
+                  </ImageListItem>
+                );
+              })}
+            </ImageList>
+          ) : (
+            <Typography variant="body1">Brak zdjęć do wyświetlenia</Typography>
+          )}
           <FileUploadSection
             contractId={contractId}
             files={terrainFiles}
@@ -232,8 +305,39 @@ const TerrainVision = ({ contractId }) => {
           {errorMessage}
         </Alert>
       </Snackbar>
+
+      <Modal
+        open={isGalleryOpen}
+        onClose={handleCloseGallery}
+        aria-labelledby="image-gallery-modal"
+        aria-describedby="image-gallery-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+        }}>
+          {galleryImages.length > 0 ? (
+            <ImageGallery
+              items={galleryImages}
+              startIndex={currentImageIndex}
+              showPlayButton={false}
+              showFullscreenButton={false}
+              onSlide={(currentIndex) => setCurrentImageIndex(currentIndex)}
+            />
+          ) : (
+            <Typography variant="body1">Brak zdjęć do wyświetlenia</Typography>
+          )}
+        </Box>
+      </Modal>
     </Box>
   );
+
 };
 
 export default TerrainVision;
