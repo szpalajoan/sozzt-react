@@ -48,10 +48,11 @@ const PreliminaryPlan = ({ contractId }) => {
 
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}/complete`, 'POST');
-
+   
       refetchPreliminaryPlan();
       console.log("Wstępny plan został skompletowany.");
       navigate(0);
+      
     } catch (error) {
       console.log(error.message);
       setErrorMessage(error.message || 'Wystąpił błąd podczas kompletowania wstępnego planu.');
@@ -93,7 +94,7 @@ const PreliminaryPlan = ({ contractId }) => {
 
 
   return (
-    <Box>
+    <Box  className="main-content">
       <h2>Wstępny plan</h2>
       {renderTextFields(fields, formState, handleInputChange)}
 

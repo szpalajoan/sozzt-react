@@ -120,12 +120,13 @@ const Details = ({ contractId }) => {
 
     try {
       await fetchData(`contracts/${contractId}/finalize-introduction`, 'POST');
+      console.log("fetchData został wywołany  - finalizacja");
 
       refetchContract();
       console.log("Kontrakt został sfinalizowany.");
       navigate(0);
     } catch (error) {
-      console.log(error.message);
+      console.log("errior w finalize " + error.message);
       setErrorMessage(error.message || 'Wystąpił błąd podczas finalizacji kontraktu.'); 
       setOpenSnackbar(true);
     }
@@ -138,7 +139,7 @@ const Details = ({ contractId }) => {
   const fields = contractFields(contractDetails, location);
 
   return (
-    <Box>
+    <Box className="main-content">
       {renderTextFields(fields, formState, handleInputChange)}
 
       <FileUploadSection

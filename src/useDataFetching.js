@@ -37,10 +37,12 @@ const useDataFetching = (url) => {
         headers.set('Content-Type', 'application/json');
         config.body = JSON.stringify(payload);
       }
-
+      
+      console.log(url + ' ' + method + ' ' + payload);
       const response = await fetch('http://localhost:8080/api/' + url, config);
 
       if (!response.ok) {
+        console.log('Error:', response.status);
         await handleErrorResponse(response, t); 
       }
       console.log(url + ' ' + method + ' ' + payload + ' ' + response.status);
@@ -58,10 +60,9 @@ const useDataFetching = (url) => {
         }
       }
     } catch (error) {
-      console.error('Fetch error:', error);
       setError(error.message);
-    } finally {
       setIsPending(false);
+      throw error;
     }
   };
 

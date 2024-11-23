@@ -57,7 +57,7 @@ const Contract = () => {
       </div>
       <div className="contract-container">
         <Sidebar setSelectedStep={handleStepChange} contractId={contractId} />
-        <main className="main-content">
+        <main className = "content-wrapper">
           <article>
             {renderStepDetails()}
           </article>
