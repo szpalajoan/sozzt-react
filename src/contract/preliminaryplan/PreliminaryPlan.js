@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const PreliminaryPlan = ({ contractId }) => {
   const { data: preliminaryPlan, isPending: isPreliminaryPlanPending, refetch: refetchPreliminaryPlan } = useFetch(`contracts/preliminary-plans/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_MAP`);
+  const { data: contract } = useFetch(`contracts/${contractId}`); //tylko po to zeby pobrac status 
 
   const { fetchData } = useDataFetching();
   const navigate = useNavigate();
@@ -19,6 +20,15 @@ const PreliminaryPlan = ({ contractId }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false)
+
+  const [showFinalizeButton, setShowFinalizeButton] = useState(false);
+
+  useEffect(() => {
+    if (contract && contract.contractSteps) {
+      const preliminaryPlanStep = contract.contractSteps.find(step => step.contractStepType === "PRELIMINARY_PLAN");
+      setShowFinalizeButton(preliminaryPlanStep && preliminaryPlanStep.contractStepStatus !== "DONE");
+    }
+  }, [contract]);
 
   const handleSave = async () => {
     const editPreliminaryPlanDto = {
@@ -48,11 +58,11 @@ const PreliminaryPlan = ({ contractId }) => {
 
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}/complete`, 'POST');
-   
+
       refetchPreliminaryPlan();
       console.log("Wstępny plan został skompletowany.");
       navigate(0);
-      
+
     } catch (error) {
       console.log(error.message);
       setErrorMessage(error.message || 'Wystąpił błąd podczas kompletowania wstępnego planu.');
@@ -94,7 +104,7 @@ const PreliminaryPlan = ({ contractId }) => {
 
 
   return (
-    <Box  className="main-content">
+    <Box className="main-content">
       <h2>Wstępny plan</h2>
       {renderTextFields(fields, formState, handleInputChange)}
 
@@ -110,9 +120,11 @@ const PreliminaryPlan = ({ contractId }) => {
         <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
           {loading ? <CircularProgress size={24} /> : 'Zapisz'}
         </Button>
-        <Button variant="contained" className="finalize-button" onClick={handleComplete} disabled={loading}>
-          Kompletuj
-        </Button>
+        {showFinalizeButton && (
+          <Button variant="contained" className="finalize-button" onClick={handleComplete} disabled={loading}>
+            Kompletuj
+          </Button>
+        )}
       </Box>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>

@@ -16,7 +16,7 @@ const TerrainVision = ({ contractId }) => {
   const { data: terrainVisionData, isPending: isTerrainVisionPending, refetch: refetchTerrainVision } = useFetch(`contracts/terrain-vision/${contractId}`);
 
   const { data: fetchedTerrainFiles, isPending: isTerrainFilesPending, refetch: refetchTerrainFiles } = useFetch(`contracts/${contractId}/files?fileType=PHOTO_FROM_PLACE_OF_THE_CONTRACT`);
-  const { data: fetchedMapFiles, isPending: isMapFilesPending, refetch: refetchMapFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_MAP_UPDATED`);
+  const { data: fetchedMapFiles, isPending: isMapFilesPending, refetch: refetchMapFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_UPDATED_MAP`);
 
   const { fetchData } = useDataFetching();
   const navigate = useNavigate();
@@ -115,7 +115,7 @@ const TerrainVision = ({ contractId }) => {
     setLoading(true);
     try {
       await deleteMapFiles(contractId, fetchData);
-      await uploadMapFiles(contractId, fetchData, 'preliminary-maps-updated');
+      await uploadMapFiles(contractId, fetchData, 'preliminary-updated-maps');
       refetchTerrainVision();
       refetchMapFiles();
       resetMapFiles();
@@ -283,7 +283,7 @@ const TerrainVision = ({ contractId }) => {
                       disabled={loading}
                       sx={{ backgroundColor: 'grey.500', color: 'white', '&:hover': { backgroundColor: 'grey.600' } }}
                     >
-                      Mapa nie jest potrzebna
+                      Nie trzeba poprawiać mapy
                     </Button>
                   </>
                 )}

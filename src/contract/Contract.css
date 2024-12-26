@@ -1,7 +1,8 @@
 .contract-container {
   display: flex;
-  width: 100%;
-  gap: 2px;
+  height: calc(100vh - 60px);
+  margin-top: 60px;
+  overflow: hidden;
 }
 
 .content {
@@ -11,11 +12,14 @@
 }
 
 .sidebar {
-  width: 300px; /* Fixed width for sidebar */
-  padding: 5px;
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
-  padding-top: 20px;
+  width: 300px; 
+  overflow-y: auto; 
+  height: 100%;
+  padding: 20px;
+  padding-right: 5px;
+  box-sizing: border-box;
 }
+
 
 .main-content {
   flex-grow: 1;
@@ -23,12 +27,14 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-left: 20px;
-  margin-top: 20px;
+  margin-left: 5px;
+ 
 }
-
-.content-wrapper{
-  flex: 1; 
+.content-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  width: calc(100% - 300px); 
 }
 
 .sidebar .section {
@@ -141,18 +147,62 @@
 }
 
 .back-button {
-  width: 30px;
-  height: 30px;
-  background-color: #ddd;
-  color: black;
+  width: 40px;
+  height: 40px;
+  background-color: #f0f0f0;
+  color: #333;
   border: none;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  margin-right: 20px;
+  font-size: 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.back-button::before {
+  content: '\2190';  /* Unicode dla strzałki w lewo */
+  line-height: 1;
 }
 
 .back-button:hover {
-  background-color: #bbb;
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.back-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #fdfdfd;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #e0e0e0;
 }

@@ -5,12 +5,14 @@ import PreliminaryPlan from './preliminaryplan/PreliminaryPlan';
 import TerrainVision from './terrainVision/TerrainVision';
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
-
+import useFetch from "../useFetch";
 
 const Contract = () => {
   const { contractId, step } = useParams();
   const [selectedStep, setSelectedStep] = useState(step || 'Details');
   const navigate = useNavigate();
+  const { data: contract } = useFetch(`contracts/${contractId}`);
+
 
   useEffect(() => {
     if (step) {
@@ -48,16 +50,17 @@ const Contract = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <button className="back-button" onClick={goBackToHome}>&larr;</button>
-        <h2 onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
-          Szczegóły Kontraktu
+    <div className="page-container">
+      <header className="fixed-header">
+      <button className="back-button" onClick={goBackToHome}></button>
+              <h2 className="header-title" onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
+          {contract ? `${contract.contractDetails.contractNumber} - ${contract.location.city}` : 'ładowanie' }
+
         </h2>
-      </div>
+      </header>
       <div className="contract-container">
         <Sidebar setSelectedStep={handleStepChange} contractId={contractId} />
-        <main className = "content-wrapper">
+        <main className="content-wrapper">
           <article>
             {renderStepDetails()}
           </article>
