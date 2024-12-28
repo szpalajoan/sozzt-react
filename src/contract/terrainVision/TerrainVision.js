@@ -147,7 +147,7 @@ const TerrainVision = ({ contractId }) => {
   const handleFinalizeTerrainVision = async () => {
     setLoading(true);
     try {
-      await fetchData(`contracts/terrain-vision/${contractId}/complete-terrain-vision`, 'POST');
+      await fetchData(`contracts/terrain-vision/${contractId}/complete`, 'POST');
       setOpenSnackbar(true);
       setErrorMessage('Wizja terenowa została pomyślnie zakończona i przekazana dalej.');
       refetchTerrainVision();
