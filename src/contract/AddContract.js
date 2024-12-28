@@ -80,6 +80,7 @@ const AddContract = () => {
           newFiles={newFiles}
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
+          titleTranslationKey="fileUpload.scanTitle"
         />
 
         <Button type="submit" variant="contained" color="primary" disabled={isPending}>

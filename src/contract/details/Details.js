@@ -148,6 +148,7 @@ const Details = ({ contractId }) => {
         newFiles={newFiles}
         handleFileDrop={handleFileDrop}
         handleFileDelete={handleFileDelete}
+        titleTranslationKey="fileUpload.scanTitle"
       />
 
 

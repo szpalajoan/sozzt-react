@@ -3,12 +3,14 @@ import { Box, Typography, List, ListItem, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import Dropzone from 'react-dropzone';
 import FileLink from './FileLink';
-
-const FileUploadSection = ({ files, newFiles, handleFileDrop, handleFileDelete, contractId }) => {
+import { useTranslation } from 'react-i18next'; 
+const FileUploadSection = ({ files, newFiles, handleFileDrop, handleFileDelete, contractId, titleTranslationKey }) => {
+  const { t } = useTranslation(); 
   return (
     <Box mb={2}>
-      <Typography variant="h6">Skany zlecenia</Typography>
+      <Typography variant="h6">{t(titleTranslationKey)}</Typography>
       <List>
+
         {files.map((file) => (
           <ListItem key={file.fileId}>
             <FileLink contractId={contractId} fileId={file.fileId} fileName={file.fileName} />

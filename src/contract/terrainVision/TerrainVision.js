@@ -144,6 +144,23 @@ const TerrainVision = ({ contractId }) => {
     }
   };
 
+  const handleFinalizeTerrainVision = async () => {
+    setLoading(true);
+    try {
+      await fetchData(`contracts/terrain-vision/${contractId}/complete-terrain-vision`, 'POST');
+      setOpenSnackbar(true);
+      setErrorMessage('Wizja terenowa została pomyślnie zakończona i przekazana dalej.');
+      refetchTerrainVision();
+      navigate(0);
+    } catch (error) {
+      console.error('Błąd podczas finalizacji wizji terenowej:', error);
+      setErrorMessage('Wystąpił błąd podczas finalizacji wizji terenowej.');
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -183,7 +200,7 @@ const TerrainVision = ({ contractId }) => {
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Box className="main-content">
-          <h2>Zdjęcia z trasy</h2>
+        <h2 className="section-title"> Zdjęcia z trasy</h2>
           {terrainFiles.length > 0 ? (
             <ImageList
               sx={{
@@ -246,9 +263,9 @@ const TerrainVision = ({ contractId }) => {
         </Box>
 
         <Box className="main-content">
-          <h2>Poprawiona wstępna mapa</h2>
+        <h2 className="section-title">Poprawiona wstępna mapa</h2>
           {terrainVisionData.mapChange === "NOT_NECESSARY" ? (
-            <Typography variant="body1">Mapa nie jest potrzebna dla tego kontraktu.</Typography>
+            <Typography variant="body1">Poprawiona mapa nie jest potrzebna dla tego kontraktu.</Typography>
           ) : (
             <>
               <FileUploadSection
@@ -292,7 +309,26 @@ const TerrainVision = ({ contractId }) => {
           )}
         </Box>
 
-
+        {terrainVisionData.allPhotosUploaded && terrainVisionData.mapChange !== "NONE" &&
+         terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
+          <Box className="finalize-content" >
+            <h2 className="section-title"> Finalizacja wizji terenowej</h2>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
+              Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
+            </Typography>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleFinalizeTerrainVision}
+              disabled={loading}
+            >
+              Zatwierdź i zakończ wizję terenową
+            </Button>
+          </Box>
+        )}
       </Box>
 
       <Snackbar

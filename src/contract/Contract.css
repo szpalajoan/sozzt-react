@@ -28,8 +28,27 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-left: 5px;
- 
 }
+
+.finalize-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 5px;
+  border: 2px solid #4CAF50;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 5px;
+  margin-bottom: 16px;
+  color: #333;
+  font-family: inherit;
+}
+
 .content-wrapper {
   flex-grow: 1;
   overflow-y: auto;

@@ -3,7 +3,7 @@ import useFetch from "../../useFetch";
 import { renderTextFields } from '../renderTextFields';
 import { preliminaryPlanFields } from './preliminaryPlanFields';
 import useFileHandler from '../useFileHandler';
-import { Button, Box, CircularProgress, Snackbar, Alert } from '@mui/material';
+import { Button, Box, CircularProgress, Snackbar, Alert, Typography } from '@mui/material';
 import FileUploadSection from '../FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
@@ -25,8 +25,8 @@ const PreliminaryPlan = ({ contractId }) => {
 
   useEffect(() => {
     if (contract && contract.contractSteps) {
-      const preliminaryPlanStep = contract.contractSteps.find(step => step.contractStepType === "PRELIMINARY_PLAN");
-      setShowFinalizeButton(preliminaryPlanStep && preliminaryPlanStep.contractStepStatus !== "DONE");
+      const foundPreliminaryPlanStep = contract.contractSteps.find(step => step.contractStepType === "PRELIMINARY_PLAN");
+      setShowFinalizeButton(foundPreliminaryPlanStep && foundPreliminaryPlanStep.contractStepStatus !== "DONE");
     }
   }, [contract]);
 
@@ -54,8 +54,6 @@ const PreliminaryPlan = ({ contractId }) => {
   }
 
   const handleComplete = async () => {
-    await handleSave();
-
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}/complete`, 'POST');
 
@@ -104,34 +102,55 @@ const PreliminaryPlan = ({ contractId }) => {
 
 
   return (
-    <Box className="main-content">
-      <h2>Wstępny plan</h2>
-      {renderTextFields(fields, formState, handleInputChange)}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 
-      <FileUploadSection
-        contractId={contractId}
-        files={files}
-        newFiles={newFiles}
-        handleFileDrop={handleFileDrop}
-        handleFileDelete={handleFileDelete}
-      />
+      <Box className="main-content">
+        <h2 className="section-title"> Wstępny plan</h2>
+        {renderTextFields(fields, formState, handleInputChange)}
 
-      <Box mt={3} display="flex" gap={2}>
-        <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : 'Zapisz'}
-        </Button>
-        {showFinalizeButton && (
-          <Button variant="contained" className="finalize-button" onClick={handleComplete} disabled={loading}>
-            Kompletuj
+        <FileUploadSection
+          contractId={contractId}
+          files={files}
+          newFiles={newFiles}
+          handleFileDrop={handleFileDrop}
+          handleFileDelete={handleFileDelete}
+          titleTranslationKey="fileUpload.scanTitle"
+        />
+
+        <Box mt={3} display="flex" gap={2}>
+          <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'Zapisz'}
           </Button>
-        )}
+        </Box>
       </Box>
+
+      {preliminaryPlan.preliminaryMapUploaded && showFinalizeButton && (
+          <Box className="finalize-content" >
+            <h2 className="section-title"> Finalizacja wizji terenowej</h2>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
+              Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
+            </Typography>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleComplete}
+              disabled={loading}
+            >
+              Zatwierdź i zakończ wizję terenową
+            </Button>
+          </Box>
+        )}
+
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
           {errorMessage}
         </Alert>
       </Snackbar>
     </Box>
+
   );
 };
 

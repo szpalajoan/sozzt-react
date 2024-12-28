@@ -29,5 +29,8 @@
         "complete": {
             "error": "Musisz uzupełnić wszystkie pola, żeby zakończyć wstępny plan."
         }
-    }
+    },
+    "fileUpload": {
+        "scanTitle": "Skany zlecenia"
+      }
 }
