@@ -69,7 +69,7 @@ const AddContract = () => {
   const fields = contractFields({}, {});
 
   return (
-    <Box p={3}>
+    <Box p={3} sx={{ height: 'calc(100vh - 64px)', overflowY: 'auto' }}>
       <Typography variant="h4" gutterBottom>Dodaj nowy kontrakt</Typography>
       <form onSubmit={handleSubmit}>
         {renderTextFields(fields, formState, handleInputChange)}
@@ -91,6 +91,7 @@ const AddContract = () => {
       </form>
     </Box>
   );
+
 };
 
 export default AddContract;

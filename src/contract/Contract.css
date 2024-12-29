@@ -61,6 +61,8 @@
 .sidebar .section {
   margin-bottom: 10px;
   padding: 10px; 
+  padding-top: 0px;
+  padding-bottom: 0px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
@@ -75,7 +77,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
 }
 
 .sidebar .section-header h3 {
@@ -92,6 +93,7 @@
 .sidebar .name {
   font-size: 0.9em;
   color: #666;
+  margin-top: 5px;
 }
 
 .sidebar .status {
