@@ -316,7 +316,7 @@ const TerrainVision = ({ contractId }) => {
         </Box>
 
 
-        {terrainVisionData.allPhotosUploaded && terrainVisionData.mapChange !== "NONE" &&
+        {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparation !== "NONE" &&
          terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
           <Box className="finalize-content" >
             <h2 className="section-title"> Finalizacja wizji terenowej</h2>

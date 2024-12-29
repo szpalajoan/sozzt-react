@@ -25,17 +25,17 @@ const RoutePreparation = ({ contractId }) => {
 
   useEffect(() => {
     if (contract && contract.contractSteps) {
-      const foundPreliminaryPlanStep = contract.contractSteps.find(step => step.contractStepType === "PRELIMINARY_PLAN");
-      setShowFinalizeButton(foundPreliminaryPlanStep && foundPreliminaryPlanStep.contractStepStatus !== "DONE");
+      const routeStatus = contract.contractSteps.find(step => step.contractStepType === "ROUTE_PREPARATION");
+      setShowFinalizeButton(routeStatus && routeStatus.contractStepStatus !== "DONE" && routePreparation.geodeticMapUploaded);
     }
-  }, [contract]);
+  }, [contract, routePreparation]); 
 
   const handleSave = async () => {
     setLoading(true);
     try {
       await deleteFiles(contractId, fetchData);
       await uploadFiles(contractId, fetchData, 'geodetic-maps');
-
+      refetchRoutePreparation();
       refetchFiles();
       resetFiles();
 
