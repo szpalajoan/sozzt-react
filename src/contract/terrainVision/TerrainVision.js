@@ -9,6 +9,7 @@ import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css'
+import OpenFolderButton from '../../components/OpenFolderButton';
 
 const TerrainVision = ({ contractId }) => {
   const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
@@ -130,12 +131,12 @@ const TerrainVision = ({ contractId }) => {
     }
   };
 
-  const handleConfirmMapChanges = async (mapChange) => {
+  const handleConfirmMapChanges = async (routePreparation) => {
     try {
       await handleSaveMap();
-      await fetchData(`contracts/terrain-vision/${contractId}/confirm-changes-on-map`, 'POST', { mapChange });
+      await fetchData(`contracts/terrain-vision/${contractId}/route-preparation-necessary`, 'POST', { routePreparation });
       setOpenSnackbar(true);
-      setErrorMessage(`Potwierdzono zmiany na mapie: ${mapChange}`);
+      setErrorMessage(`Potwierdzono zmiany na mapie: ${routePreparation}`);
       refetchTerrainVision();
     } catch (error) {
       console.error('Błąd podczas potwierdzania zmian na mapie:', error);
@@ -264,50 +265,56 @@ const TerrainVision = ({ contractId }) => {
 
         <Box className="main-content">
         <h2 className="section-title">Poprawiona wstępna mapa</h2>
-          {terrainVisionData.mapChange === "NOT_NECESSARY" ? (
-            <Typography variant="body1">Poprawiona mapa nie jest potrzebna dla tego kontraktu.</Typography>
+        <OpenFolderButton
+          folderPath="Projekty"
+          buttonText="Otwórz folder"
+        />
+        </Box>
+
+        <Box className="main-content">
+          <h2 className="section-title">Przygotowanie mapy przez geodetów</h2>
+          {terrainVisionData.routePreparation === "NONE" ? (
+            <Box sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap' }}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => handleConfirmMapChanges("NECESSARY")}
+                disabled={loading}
+              >
+                Mapa wymaga poprawy
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => handleConfirmMapChanges("NOT_NECESSARY")}
+                disabled={loading}
+                sx={{ backgroundColor: 'grey.500', color: 'white', '&:hover': { backgroundColor: 'grey.600' } }}
+              >
+                Mapa nie wymaga poprawy
+              </Button>
+            </Box>
           ) : (
             <>
-              <FileUploadSection
-                contractId={contractId}
-                files={mapFiles}
-                newFiles={newMapFiles}
-                handleFileDrop={handleMapFileDrop}
-                handleFileDelete={handleMapFileDelete}
-              />
-              <Box sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSaveMap}
-                  disabled={loading}
-                >
-                  {loading ? <CircularProgress size={24} /> : 'Zapisz mapę'}
-                </Button>
-                {terrainVisionData.mapChange === "NONE" && (
-                  <>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => handleConfirmMapChanges("MODIFIED")}
-                      disabled={loading}
-                    >
-                      Zatwierdź zmodyfikowaną mapę
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleConfirmMapChanges("NOT_NECESSARY")}
-                      disabled={loading}
-                      sx={{ backgroundColor: 'grey.500', color: 'white', '&:hover': { backgroundColor: 'grey.600' } }}
-                    >
-                      Nie trzeba poprawiać mapy
-                    </Button>
-                  </>
-                )}
-              </Box>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                {terrainVisionData.routePreparation === "NECESSARY" 
+                  ? "Kontrakt wymaga mapę geodetów." 
+                  : "Mapa nie wymaga geodetów."}
+              </Typography>
+              {terrainVisionData.terrainVisionStatus !== "COMPLETED" && (
+                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleConfirmMapChanges(terrainVisionData.routePreparation === "NECESSARY" ? "NOT_NECESSARY" : "NECESSARY")}
+                    disabled={loading}
+                  >
+                    Zmień decyzję
+                  </Button>
+                </Box>
+              )}
             </>
           )}
         </Box>
+
 
         {terrainVisionData.allPhotosUploaded && terrainVisionData.mapChange !== "NONE" &&
          terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (

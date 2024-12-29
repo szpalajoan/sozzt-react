@@ -7,6 +7,7 @@ import { Button, Box, CircularProgress, Snackbar, Alert, Typography } from '@mui
 import FileUploadSection from '../FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
+import OpenFolderButton from '../../components/OpenFolderButton';
 
 const PreliminaryPlan = ({ contractId }) => {
   const { data: preliminaryPlan, isPending: isPreliminaryPlanPending, refetch: refetchPreliminaryPlan } = useFetch(`contracts/preliminary-plans/${contractId}`);
@@ -39,13 +40,24 @@ const PreliminaryPlan = ({ contractId }) => {
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}`, 'PUT', editPreliminaryPlanDto);
 
-      await deleteFiles(contractId, fetchData);
-      await uploadFiles(contractId, fetchData, 'preliminary-maps');
+      refetchPreliminaryPlan();
+      setOpenSnackbar(true);
+      setErrorMessage('Mapa została zapisana pomyślnie.');
+    } catch (error) {
+      console.error('Błąd podczas zapisywania danych:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handlePreliminaryPlanAdded = async () => {
+    setLoading(true);
+    try {
+      await fetchData(`contracts/preliminary-plans/${contractId}/preliminary-map-added`, 'POST');
 
       refetchPreliminaryPlan();
-      refetchFiles();
-      resetFiles();
-
+      setOpenSnackbar(true);
+      setErrorMessage('Zatwierdzono wgranie mapy.');
     } catch (error) {
       console.error('Błąd podczas zapisywania danych:', error);
     } finally {
@@ -105,17 +117,8 @@ const PreliminaryPlan = ({ contractId }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 
       <Box className="main-content">
-        <h2 className="section-title"> Wstępny plan</h2>
+        <h2 className="section-title">Mapa google </h2>
         {renderTextFields(fields, formState, handleInputChange)}
-
-        <FileUploadSection
-          contractId={contractId}
-          files={files}
-          newFiles={newFiles}
-          handleFileDrop={handleFileDrop}
-          handleFileDelete={handleFileDelete}
-          titleTranslationKey="fileUpload.scanTitle"
-        />
 
         <Box mt={3} display="flex" gap={2}>
           <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
@@ -124,28 +127,42 @@ const PreliminaryPlan = ({ contractId }) => {
         </Box>
       </Box>
 
+      <Box className="main-content">
+        <h2 className="section-title">Wstępny plan</h2>
+        <OpenFolderButton
+          folderPath="Projekty"
+          buttonText="Otwórz folder"
+        />
+        {!preliminaryPlan.preliminaryMapUploaded && (
+        <Box mt={3} display="flex" gap={2}>
+          <Button variant="contained" color="success" onClick={handlePreliminaryPlanAdded} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'Zatwierdź wgranie mapy'}
+          </Button>
+        </Box>)}
+      </Box>
+
       {preliminaryPlan.preliminaryMapUploaded && showFinalizeButton && (
-          <Box className="finalize-content" >
-            <h2 className="section-title"> Finalizacja wizji terenowej</h2>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
-              Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
-            </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={handleComplete}
-              disabled={loading}
-            >
-              Zatwierdź i zakończ wizję terenową
-            </Button>
-          </Box>
-        )}
+        <Box className="finalize-content" >
+          <h2 className="section-title"> Finalizacja wizji terenowej</h2>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
+            Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
+          </Typography>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleComplete}
+            disabled={loading}
+          >
+            Zatwierdź i zakończ wizję terenową
+          </Button>
+        </Box>
+      )}
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={handleCloseSnackbar} severity={errorMessage.includes('błąd') ? 'error' : 'success'} sx={{ width: '100%' }}>
           {errorMessage}
         </Alert>
       </Snackbar>
