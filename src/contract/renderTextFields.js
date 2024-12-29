@@ -11,7 +11,7 @@ const renderTextFields = (fields, formState, handleInputChange) => {
         value={formState[field.name] || field.value}
         onChange={handleInputChange}
         fullWidth
-        margin="normal"
+        margin="dense"
         required={field.required}
         InputLabelProps={field.type === "date" ? { shrink: true } : {}}
       />
