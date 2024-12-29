@@ -16,13 +16,14 @@
         "PRELIMINARY_PLAN": "Wstępny plan",
         "TERRAIN_VISION": "Wizja w terenie",
         "ROUTE_PREPARATION": "Przygotowanie trasy",
-        "AGREEMENT_PREPARATION": "Przygotowanie porozumień",
+        "CONSENTS_COLLECTION": "Zebranie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień"
     },
     "stepStatus": {
         "ON_HOLD": "On-hold",
         "IN_PROGRESS": "W trakcie",
-        "DONE": "Zrobione"
+        "DONE": "Zrobione",
+        "NOT_ACTIVE": "Nie rozpoczęte"
     },
     "loading": "Ładowanie...",
     "preliminary-plan": {

@@ -26,7 +26,7 @@ const RoutePreparation = ({ contractId }) => {
   useEffect(() => {
     if (contract && contract.contractSteps) {
       const routeStatus = contract.contractSteps.find(step => step.contractStepType === "ROUTE_PREPARATION");
-      setShowFinalizeButton(routeStatus && routeStatus.contractStepStatus !== "DONE" && routePreparation.geodeticMapUploaded);
+      setShowFinalizeButton(routeStatus && routeStatus.contractStepStatus !== "DONE" && routePreparation && routePreparation.geodeticMapUploaded);
     }
   }, [contract, routePreparation]); 
 
