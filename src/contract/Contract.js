@@ -4,6 +4,7 @@ import Sidebar from './SideBar';
 import PreliminaryPlan from './preliminaryplan/PreliminaryPlan';
 import TerrainVision from './terrainVision/TerrainVision';
 import RoutePreparation from './routepreparation/RoutePreparation';
+import ConsentsCollection from './consentscollection/ConsentCollection';
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
 import useFetch from "../useFetch";
@@ -42,6 +43,8 @@ const Contract = () => {
         return <TerrainVision contractId={contractId} />;
       case 'ROUTE_PREPARATION':
         return <RoutePreparation contractId={contractId} />;
+      case 'CONSENTS_COLLECTION':
+        return <ConsentsCollection contractId={contractId} />;
       default:
         return <p>Jeszcze nie zrobione</p>;
     }

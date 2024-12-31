@@ -31,7 +31,34 @@
             "error": "Musisz uzupełnić wszystkie pola, żeby zakończyć wstępny plan."
         }
     },
+    "consentsCollection": {
+        "title": "Dodawanie porozumień",
+        "name": "Imię i nazwisko",
+        "plotNumber": "Numer działki",
+        "add": "Dodaj",
+        "acceptanceType": "Typ odebrania zgody",
+        "email": "Email",
+        "inPerson": "Osobiście",
+        "mail": "Poczta",
+        "acceptanceDate": "Data odebrania",
+        "attachFile": "skan",
+        "accept": "Zaakceptuj",
+        "reject": "Odrzuć",
+        "status": "Status",
+        "accepted": "Zaakceptowana",
+        "rejected": "Odrzucona",
+        "pending": "Oczekująca",
+        "rejectionReason": "Powód odrzucenia",
+        "acceptanceDetails": "Szczegóły akceptacji",
+        "rejectionDetails": "Szczegóły odrzucenia",
+        "provideRejectionReason": "Podaj powód odrzucenia",
+        "provideAcceptanceDetails": "Podaj szczegóły akceptacji",
+        "attachmentRequired": "Wymagane załączenie pliku",
+        "acceptanceTypeRequired": "Wymagane podanie typu odebrania zgody",
+        "acceptanceDateRequired": "Wymagane podanie daty odebrania",
+        "createDate" : "Data utworzenia"
+    },
     "fileUpload": {
         "scanTitle": "Skany zlecenia"
-      }
+    }
 }
