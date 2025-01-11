@@ -50,21 +50,6 @@ const PreliminaryPlan = ({ contractId }) => {
     }
   }
 
-  const handlePreliminaryPlanAdded = async () => {
-    setLoading(true);
-    try {
-      await fetchData(`contracts/preliminary-plans/${contractId}/preliminary-map-added`, 'POST');
-
-      refetchPreliminaryPlan();
-      setOpenSnackbar(true);
-      setErrorMessage('Zatwierdzono wgranie mapy.');
-    } catch (error) {
-      console.error('Błąd podczas zapisywania danych:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   const handleComplete = async () => {
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}/complete`, 'POST');
@@ -98,11 +83,28 @@ const PreliminaryPlan = ({ contractId }) => {
   useEffect(() => {
     if (fetchedFiles) {
       console.log("Pobrano pliki:", fetchedFiles);
-
       setFiles(fetchedFiles);
     }
   }, [fetchedFiles]);
 
+  const handleUploadPreliminaryMap = async () => {
+    setLoading(true);
+    try {
+      await uploadFiles(contractId, fetchData, 'preliminary-maps');
+      refetchPreliminaryPlan();
+      refetchFiles();
+      resetFiles();
+      setOpenSnackbar(true);
+      setErrorMessage('Mapa wstępna została pomyślnie wgrana.');
+    } catch (error) {
+      console.error('Błąd podczas wgrywania mapy wstępnej:', error);
+      setErrorMessage('Wystąpił błąd podczas wgrywania mapy wstępnej.');
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   if (isPreliminaryPlanPending) return <div>Loading...</div>;
   if (!preliminaryPlan) return <div>Nie znaleziono wstępnego planu</div>;
 
@@ -129,19 +131,43 @@ const PreliminaryPlan = ({ contractId }) => {
 
       <Box className="main-content">
         <h2 className="section-title">Wstępny plan</h2>
-        <OpenFolderButton
-          folderPath="Projekty"
-          buttonText="Otwórz folder"
-        />
+        {!preliminaryPlan.preliminaryMapUploaded ? (
+          <FileUploadSection
+            contractId={contractId}
+            files={files}
+            newFiles={newFiles}
+            handleFileDrop={handleFileDrop}
+            handleFileDelete={handleFileDelete}
+            titleTranslationKey="preliminary-plan.fileUpload.preliminaryMapTitle"
+          />
+        ) : (
+          <>
+            <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze z.
+            </Typography>
+            <OpenFolderButton
+              folderPath="Projekty"
+              buttonText="Otwórz folder"
+            />
+          </>
+        )}
+
         {!preliminaryPlan.preliminaryMapUploaded && (
-        <Box mt={3} display="flex" gap={2}>
-          <Button variant="contained" color="success" onClick={handlePreliminaryPlanAdded} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Zatwierdź wgranie mapy'}
-          </Button>
-        </Box>)}
+          <Box mt={3} display="flex" gap={2}>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={handleUploadPreliminaryMap} 
+              disabled={loading || newFiles.length === 0}
+            >
+              {loading ? <CircularProgress size={24} /> : 'Wgraj mapę wstępną'}
+            </Button>
+          </Box>
+        )}
+
       </Box>
 
-      {preliminaryPlan.preliminaryMapUploaded && showFinalizeButton && (
+      {preliminaryPlan.preliminaryMapUploaded && showFinalizeButton && preliminaryPlan.googleMapUrl && (
         <Box className="finalize-content" >
           <h2 className="section-title"> Finalizacja wizji terenowej</h2>
           <Typography variant="body1" sx={{ mb: 2 }}>

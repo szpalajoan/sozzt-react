@@ -29,6 +29,9 @@
     "preliminary-plan": {
         "complete": {
             "error": "Musisz uzupełnić wszystkie pola, żeby zakończyć wstępny plan."
+        },
+        "fileUpload": {
+            "preliminaryMapTitle": "Wgraj wstępną mapę"
         }
     },
     "consentsCollection": {

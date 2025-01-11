@@ -131,12 +131,12 @@ const TerrainVision = ({ contractId }) => {
     }
   };
 
-  const handleConfirmMapChanges = async (routePreparation) => {
+  const handleConfirmMapChanges = async (routePreparationNeed) => {
     try {
       await handleSaveMap();
-      await fetchData(`contracts/terrain-vision/${contractId}/route-preparation-necessary`, 'POST', { routePreparation });
+      await fetchData(`contracts/terrain-vision/${contractId}/route-preparation-need`, 'POST', { routePreparationNeed });
       setOpenSnackbar(true);
-      setErrorMessage(`Potwierdzono zmiany na mapie: ${routePreparation}`);
+      setErrorMessage(`Potwierdzono zmiany na mapie: ${routePreparationNeed}`);
       refetchTerrainVision();
     } catch (error) {
       console.error('Błąd podczas potwierdzania zmian na mapie:', error);
@@ -265,15 +265,19 @@ const TerrainVision = ({ contractId }) => {
 
         <Box className="main-content">
         <h2 className="section-title">Poprawiona wstępna mapa</h2>
+        <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+          Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze z mapą.
+        </Typography>
         <OpenFolderButton
           folderPath="Projekty"
           buttonText="Otwórz folder"
         />
         </Box>
 
+
         <Box className="main-content">
           <h2 className="section-title">Przygotowanie mapy przez geodetów</h2>
-          {terrainVisionData.routePreparation === "NONE" ? (
+          {terrainVisionData.routePreparationNeed === "NONE" ? (
             <Box sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap' }}>
               <Button
                 variant="contained"
@@ -295,7 +299,7 @@ const TerrainVision = ({ contractId }) => {
           ) : (
             <>
               <Typography variant="body1" sx={{ mb: 2 }}>
-                {terrainVisionData.routePreparation === "NECESSARY" 
+                {terrainVisionData.routePreparationNeed === "NECESSARY" 
                   ? "Kontrakt wymaga mapę geodetów." 
                   : "Mapa nie wymaga geodetów."}
               </Typography>
@@ -304,7 +308,7 @@ const TerrainVision = ({ contractId }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleConfirmMapChanges(terrainVisionData.routePreparation === "NECESSARY" ? "NOT_NECESSARY" : "NECESSARY")}
+                    onClick={() => handleConfirmMapChanges(terrainVisionData.routePreparationNeed === "NECESSARY" ? "NOT_NEED" : "NECESSARY")}
                     disabled={loading}
                   >
                     Zmień decyzję
@@ -316,7 +320,7 @@ const TerrainVision = ({ contractId }) => {
         </Box>
 
 
-        {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparation !== "NONE" &&
+        {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparationNeed !== "NONE" &&
          terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
           <Box className="finalize-content" >
             <h2 className="section-title"> Finalizacja wizji terenowej</h2>
