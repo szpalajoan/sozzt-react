@@ -36,8 +36,10 @@
     },
     "consentsCollection": {
         "title": "Dodawanie porozumień",
-        "name": "Imię i nazwisko",
+        "ownerName": "Imię i nazwisko",
+        "comment": "Komentarz",
         "plotNumber": "Numer działki",
+        "collectorName": "Zbieracz",
         "add": "Dodaj",
         "acceptanceType": "Typ odebrania zgody",
         "email": "Email",
@@ -59,7 +61,8 @@
         "attachmentRequired": "Wymagane załączenie pliku",
         "acceptanceTypeRequired": "Wymagane podanie typu odebrania zgody",
         "acceptanceDateRequired": "Wymagane podanie daty odebrania",
-        "createDate" : "Data utworzenia"
+        "createDate" : "Data utworzenia",
+        "CONSENT_CREATED": "Nowa"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia"

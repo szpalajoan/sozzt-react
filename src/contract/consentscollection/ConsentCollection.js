@@ -1,40 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography, TextField, Button, List, ListItem, Select, MenuItem, FormControl, InputLabel, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { AttachFile, Add, Check, Close } from '@mui/icons-material';
+import useDataFetching from '../../useDataFetching';
 
-const ConsentsCollection = () => {
+const ConsentsCollection = ({ contractId }) => {
     const { t } = useTranslation();
-    const [newConsent, setNewConsent] = useState({ name: '', plotNumber: '' });
+    const [newConsent, setNewConsent] = useState({ ownerName: '', plotNumber: '', comment: '', collectorName: '' });
     const [consents, setConsents] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [currentConsent, setCurrentConsent] = useState(null);
     const [actionType, setActionType] = useState('');
-    const [rejectionReason, setRejectionReason] = useState('');
+    const [statusComment, setStatusComment] = useState('');
+
+    const { fetchData } = useDataFetching('contracts/consents/');
+
+    const collectors = ['Ania', 'Kasia', 'Basia'];
+    useEffect(() => {
+        fetchConsents();
+    }, [contractId]);
+
+    const fetchConsents = async () => {
+        try {
+            const response = await fetchData(`contracts/consents/${contractId}`);
+            setConsents(response.privatePlotOwnerConsents);
+
+            if (!newConsent.collectorName && response.privatePlotOwnerConsents && response.privatePlotOwnerConsents.length > 0) {
+                const firstCollector = response.privatePlotOwnerConsents[0].collectorName;
+                console.log("firstCollector: " + firstCollector);
+                setNewConsent(prev => ({ ...prev, collectorName: firstCollector }));
+            }
+        } catch (error) {
+            console.error('Error fetching consents:', error);
+        }
+    };
 
     const handleInputChange = (field, value) => {
         setNewConsent({ ...newConsent, [field]: value });
     };
 
-    const addNewConsent = () => {
-        if (newConsent.name && newConsent.plotNumber) {
-            setConsents([...consents, { 
-                ...newConsent, 
-                status: 'pending', 
-                attachment: null, 
-                acceptanceType: '', 
-                acceptanceDate: '',
-                createDate: new Date().toLocaleDateString() // Dodaj tę linię
-            }]);
-            setNewConsent({ name: '', plotNumber: '' });
+    const addNewConsent = async () => {
+        if (newConsent.ownerName && newConsent.plotNumber) {
+            try {
+                const addPrivatePlotOwnerConsentDto = {
+                    ownerName: newConsent.ownerName,
+                    plotNumber: newConsent.plotNumber,
+                    comment: newConsent.comment,
+                    collectorName: newConsent.collectorName
+                };
+                console.log("newConsent: " + newConsent.collectorName);
+                console.log("addPrivatePlotOwnerConsentDto : " + addPrivatePlotOwnerConsentDto.collectorName);
+
+                await fetchData(`contracts/consents/${contractId}/private-plot-owner-consent`, 'POST', addPrivatePlotOwnerConsentDto);
+                fetchConsents();
+                // Clear all fields except collectorName
+                setNewConsent(prev => ({ ownerName: '', plotNumber: '', comment: '', collectorName: prev.collectorName }));
+            } catch (error) {
+                console.error('Error adding new consent:', error);
+            }
         }
     };
 
 
-    const handleConsentUpdate = (index, field, value) => {
-        const updatedConsents = [...consents];
-        updatedConsents[index][field] = value;
-        setConsents(updatedConsents);
+
+    const handleConsentUpdate = async (consentId, field, value) => {
+        try {
+            await fetchData(`${contractId}/private-plot-owner-consent/${consentId}`, 'PUT', { [field]: value });
+            fetchConsents();
+        } catch (error) {
+            console.error('Error updating consent:', error);
+        }
     };
 
     const openDialog = (consent, type) => {
@@ -47,41 +82,35 @@ const ConsentsCollection = () => {
         setDialogOpen(false);
         setCurrentConsent(null);
         setActionType('');
-        setRejectionReason('');
+        setStatusComment('');
     };
 
-    const handleAccept = () => {
-        if (!currentConsent.acceptanceType || !currentConsent.acceptanceDate || !currentConsent.attachment) {
-            alert(t('consentsCollection.acceptanceDetailsRequired'));
+    const handleStatusChange = async (newStatus) => {
+        if (!statusComment) {
+            alert(t('consentsCollection.statusCommentRequired'));
             return;
         }
-        const updatedConsents = consents.map(c => 
-            c === currentConsent ? { ...c, status: 'accepted' } : c
-        );
-        setConsents(updatedConsents);
-        closeDialog();
+        try {
+            await fetchData(`${contractId}/private-plot-owner-consent/${currentConsent.privatePlotOwnerConsentId}/status`, 'PUT', {
+                consentStatus: newStatus,
+                statusComment: statusComment
+            });
+            fetchConsents();
+            closeDialog();
+        } catch (error) {
+            console.error('Error changing consent status:', error);
+        }
     };
 
-    const handleReject = () => {
-        if (!rejectionReason) {
-            alert(t('consentsCollection.rejectionReasonRequired'));
-            return;
-        }
-        const updatedConsents = consents.map(c => 
-            c === currentConsent ? { ...c, status: 'rejected', rejectionReason } : c
-        );
-        setConsents(updatedConsents);
-        closeDialog();
-    };
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box className="main-content">
                 <h2 className="section-title">{t('consentsCollection.title')}</h2>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <TextField
-                        label={t('consentsCollection.name')}
-                        value={newConsent.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        label={t('consentsCollection.ownerName')}
+                        value={newConsent.ownerName}
+                        onChange={(e) => handleInputChange('ownerName', e.target.value)}
                         sx={{ mr: 2 }}
                     />
                     <TextField
@@ -90,6 +119,25 @@ const ConsentsCollection = () => {
                         onChange={(e) => handleInputChange('plotNumber', e.target.value)}
                         sx={{ mr: 2 }}
                     />
+                    <TextField
+                        label={t('consentsCollection.comment')}
+                        value={newConsent.comment}
+                        onChange={(e) => handleInputChange('comment', e.target.value)}
+                        sx={{ mr: 2 }}
+                    />
+                    <FormControl sx={{ mr: 2, minWidth: 120 }}>
+                        <InputLabel id="collector-select-label">{t('consentsCollection.collectorName')}</InputLabel>
+                        <Select
+                            labelId="collector-select-label"
+                            value={newConsent.collectorName}
+                            onChange={(e) => handleInputChange('collectorName', e.target.value)}
+                            label={t('consentsCollection.collectorName')}
+                        >
+                            {collectors.map((collector) => (
+                                <MenuItem key={collector} value={collector}>{collector}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button
                         startIcon={<Add />}
                         onClick={addNewConsent}
@@ -101,71 +149,50 @@ const ConsentsCollection = () => {
             </Box>
 
             <List sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {consents.map((consent, index) => (
-                    <ListItem key={index} className="main-content" sx={{ flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}>
-                        <h2 className="section-title">{consent.plotNumber} - {consent.name}</h2>
-                        <Typography>{t('consentsCollection.status')}: {t(`consentsCollection.${consent.status}`)}</Typography>
-                        <Typography>{t('consentsCollection.createDate')}: {consent.createDate}</Typography>
+                {consents.map((consent) => (
+                    <ListItem key={consent.privatePlotOwnerConsentId} className="main-content" sx={{ flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}>
+                        <h2 className="section-title">{consent.plotNumber} - {consent.ownerName}</h2>
+                        <Typography>{t('consentsCollection.status')}: {t(`consentsCollection.${consent.consentStatus}`)}</Typography>
+                        <Typography>{t('consentsCollection.createDate')}: {new Date(consent.consentCreateDate).toLocaleDateString()}</Typography>
+                        {consent.comment && (
+                            <Typography>{t('consentsCollection.comment')}: {consent.comment}</Typography>
+                        )}
+                        <Typography>{t('consentsCollection.collectorName')}: {consent.collectorName}</Typography>
 
-                        {consent.status === 'pending' && (
+                        {consent.consentStatus === 'CONSENT_CREATED' && (
                             <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-                                <FormControl sx={{ minWidth: 120 }}>
-                                    <InputLabel>{t('consentsCollection.acceptanceType')}</InputLabel>
-                                    <Select
-                                        value={consent.acceptanceType}
-                                        onChange={(e) => handleConsentUpdate(index, 'acceptanceType', e.target.value)}
-                                        label={t('consentsCollection.acceptanceType')}
-                                    >
-                                        <MenuItem value="email">{t('consentsCollection.email')}</MenuItem>
-                                        <MenuItem value="inPerson">{t('consentsCollection.inPerson')}</MenuItem>
-                                        <MenuItem value="mail">{t('consentsCollection.mail')}</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    label={t('consentsCollection.acceptanceDate')}
-                                    type="date"
-                                    value={consent.acceptanceDate}
-                                    onChange={(e) => handleConsentUpdate(index, 'acceptanceDate', e.target.value)}
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                                <input
-                                    accept="image/*,application/pdf"
-                                    style={{ display: 'none' }}
-                                    id={`attachment-button-${index}`}
-                                    type="file"
-                                    onChange={(e) => handleConsentUpdate(index, 'attachment', e.target.files[0])}
-                                />
-                                <label htmlFor={`attachment-button-${index}`}>
-                                    <Button component="span" startIcon={<AttachFile />}>
-                                        {t('consentsCollection.attachFile')}
-                                    </Button>
-                                </label>
-                                {consent.attachment && (
-                                    <Typography variant="body2">
-                                        {consent.attachment.name}
-                                    </Typography>
-                                )}
                                 <Button
                                     startIcon={<Check />}
-                                    onClick={() => openDialog(consent, 'accept')}
+                                    onClick={() => openDialog(consent, 'SENT')}
                                     variant="contained"
-                                    color="success"
+                                    color="primary"
                                 >
-                                    {t('consentsCollection.accept')}
+                                    {t('consentsCollection.markAsSent')}
                                 </Button>
                                 <Button
                                     startIcon={<Close />}
-                                    onClick={() => openDialog(consent, 'reject')}
+                                    onClick={() => openDialog(consent, 'INVALIDATED')}
                                     variant="contained"
                                     color="error"
                                 >
-                                    {t('consentsCollection.reject')}
+                                    {t('consentsCollection.invalidate')}
                                 </Button>
                             </Box>
                         )}
 
-                        {consent.status === 'rejected' && (
-                            <Typography>{t('consentsCollection.rejectionReason')}: {consent.rejectionReason}</Typography>
+                        {consent.consentStatus === 'SENT' && (
+                            <Button
+                                startIcon={<Check />}
+                                onClick={() => openDialog(consent, 'CONSENT_GIVEN')}
+                                variant="contained"
+                                color="success"
+                            >
+                                {t('consentsCollection.markAsGiven')}
+                            </Button>
+                        )}
+
+                        {consent.statusComment && (
+                            <Typography>{t('consentsCollection.statusComment')}: {consent.statusComment}</Typography>
                         )}
                     </ListItem>
                 ))}
@@ -173,30 +200,23 @@ const ConsentsCollection = () => {
 
             <Dialog open={dialogOpen} onClose={closeDialog}>
                 <DialogTitle>
-                    {actionType === 'accept' 
-                        ? t('consentsCollection.acceptanceDetails')
-                        : t('consentsCollection.rejectionDetails')
-                    }
+                    {t(`consentsCollection.${actionType}`)}
                 </DialogTitle>
                 <DialogContent>
-                    {actionType === 'accept' ? (
-                        <Typography>{t('consentsCollection.provideAcceptanceDetails')}</Typography>
-                    ) : (
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label={t('consentsCollection.rejectionReason')}
-                            type="text"
-                            fullWidth
-                            value={rejectionReason}
-                            onChange={(e) => setRejectionReason(e.target.value)}
-                        />
-                    )}
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label={t('consentsCollection.statusComment')}
+                        type="text"
+                        fullWidth
+                        value={statusComment}
+                        onChange={(e) => setStatusComment(e.target.value)}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>{t('cancel')}</Button>
-                    <Button onClick={actionType === 'accept' ? handleAccept : handleReject} color="primary">
-                        {actionType === 'accept' ? t('consentsCollection.accept') : t('consentsCollection.reject')}
+                    <Button onClick={() => handleStatusChange(actionType)} color="primary">
+                        {t('confirm')}
                     </Button>
                 </DialogActions>
             </Dialog>
