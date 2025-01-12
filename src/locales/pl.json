@@ -15,7 +15,7 @@
     "steps": {
         "PRELIMINARY_PLAN": "Wstępny plan",
         "TERRAIN_VISION": "Wizja w terenie",
-        "ROUTE_PREPARATION": "Przygotowanie trasy",
+        "ROUTE_PREPARATION": "Przygotowanie mapy (geodeci)",
         "CONSENTS_COLLECTION": "Zebranie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień"
     },
@@ -62,7 +62,18 @@
         "acceptanceTypeRequired": "Wymagane podanie typu odebrania zgody",
         "acceptanceDateRequired": "Wymagane podanie daty odebrania",
         "createDate" : "Data utworzenia",
-        "CONSENT_CREATED": "Nowa"
+        "CONSENT_CREATED": "Nowa",
+        "CONSENT_GIVEN": "Odebrana",
+        "approve": "Zatwierdź zgodę",
+        "deliveryType": "Typ odebranej zgody",
+        "EMAIL": "Email",
+        "POST": "Poczta",
+        "PERSONAL_VISIT": "Osobiście odebrana",
+        "deliveryTypeRequired": "Wybierz typ zgody",
+        "fileRequired": "Musisz wgrać skan zgody, żeby zatwierdzić",
+        "invalidate" : "Zgoda odrzucona",
+        "consentGivenDate": "Data odebrania zgody",
+        "statusComment" : "Powód odrzucenia zgody"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia"
