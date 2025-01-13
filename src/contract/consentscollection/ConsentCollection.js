@@ -107,16 +107,32 @@ const ConsentsCollection = ({ contractId }) => {
             return;
         }
         try {
-            await fetchData(`${contractId}/private-plot-owner-consent/${currentConsent.privatePlotOwnerConsentId}/status`, 'PUT', {
-                consentStatus: newStatus,
-                statusComment: statusComment
-            });
+            if (newStatus === 'INVALIDATED') {
+                await invalidateConsent();
+            } else {
+                await fetchData(`${contractId}/private-plot-owner-consent/${currentConsent.privatePlotOwnerConsentId}/status`, 'PUT', {
+                    consentStatus: newStatus,
+                    statusComment: statusComment
+                });
+            }
             fetchConsents();
             closeDialog();
         } catch (error) {
             console.error('Error changing consent status:', error);
         }
     };
+
+    const invalidateConsent = async () => {
+        try {
+            await fetchData(`contracts/consents/${contractId}/private-plot-owner-consent/${currentConsent.privatePlotOwnerConsentId}/invalidate`, 'PUT', {
+                reason: statusComment
+            });
+        } catch (error) {
+            console.error('Error invalidating consent:', error);
+            throw error;
+        }
+    };
+
 
 
     const openApproveDialog = (consent) => {
@@ -172,6 +188,8 @@ const ConsentsCollection = ({ contractId }) => {
             console.error('Error approving consent:', error);
         }
     };
+
+    
 
 
     return (
@@ -249,9 +267,15 @@ const ConsentsCollection = ({ contractId }) => {
                         )}
                         <Typography>{t('consentsCollection.collectorName')}: {consent.collectorName}</Typography>
 
-                        {consent.consentStatus === 'CONSENT_GIVEN' && consent.consentGivenDate && (
-                            <Typography>{t('consentsCollection.consentGivenDate')}: {new Date(consent.consentGivenDate).toLocaleDateString()}</Typography>
+                        {(consent.consentStatus === 'CONSENT_GIVEN' || consent.consentStatus === 'INVALIDATED') && consent.consentGivenDate && (
+                            <Typography>
+                                {consent.consentStatus === 'INVALIDATED' 
+                                    ? t('consentsCollection.invalidationDate')
+                                    : t('consentsCollection.consentGivenDate')}: 
+                                {new Date(consent.consentGivenDate).toLocaleDateString()}
+                            </Typography>
                         )}
+
 
                         {consent.consentStatus === 'CONSENT_CREATED' && (
                             <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -318,7 +342,7 @@ const ConsentsCollection = ({ contractId }) => {
                     <TextField
                         autoFocus
                         margin="dense"
-                        label={t('consentsCollection.statusComment')}
+                        label={actionType === 'INVALIDATED' ? t('consentsCollection.invalidationReason') : t('consentsCollection.statusComment')}
                         type="text"
                         fullWidth
                         value={statusComment}
@@ -332,6 +356,7 @@ const ConsentsCollection = ({ contractId }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
 
             <Dialog open={approveDialogOpen} onClose={closeApproveDialog}>
             <DialogTitle>
