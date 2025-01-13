@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, TextField, Button, List, ListItem, Select, MenuItem, FormControl, InputLabel, Dialog, DialogTitle, DialogContent, DialogActions, Chip } from '@mui/material';
+import { Box, Typography, TextField, Button, List, ListItem, Select, MenuItem, FormControl, InputLabel, Dialog, DialogTitle, DialogContent, DialogActions, Chip, Tabs, Tab } from '@mui/material';
 import { AttachFile, Add, Check, Close } from '@mui/icons-material';
 import useDataFetching from '../../useDataFetching';
 
@@ -19,6 +19,7 @@ const ConsentsCollection = ({ contractId }) => {
     const [approveComment, setApproveComment] = useState('');
     const [mailingDate, setMailingDate] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [activeTab, setActiveTab] = useState(0);
 
     const { fetchData } = useDataFetching('contracts/consents/');
 
@@ -175,7 +176,16 @@ const ConsentsCollection = ({ contractId }) => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <h2 className="section-title">{t('consentsCollection.title')}</h2>
+            <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+                <Tab label={t('consentsCollection.privateConsents')} />
+                <Tab label={t('consentsCollection.publicConsents')} />
+            </Tabs>
+
+            {activeTab === 0 && (
+                <Box>
             <Box className="main-content">
+
                 <h2 className="section-title">{t('consentsCollection.title')}</h2>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <TextField
@@ -298,7 +308,8 @@ const ConsentsCollection = ({ contractId }) => {
                 ))}
 
             </List>
-
+            </Box>
+            )}
             <Dialog open={dialogOpen} onClose={closeDialog}>
                 <DialogTitle>
                     {t(`consentsCollection.${actionType}`)}
