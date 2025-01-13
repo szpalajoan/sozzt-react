@@ -3,7 +3,7 @@ import useFetch from "../../useFetch";
 import { renderTextFields } from '../renderTextFields';
 import useFileHandler from '../useFileHandler';
 import { Button, Box, CircularProgress, Snackbar, Alert, Typography } from '@mui/material';
-import FileUploadSection from '../FileUploadSection';
+import FileUploadSection from '../../components/FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 
@@ -100,6 +100,7 @@ const RoutePreparation = ({ contractId }) => {
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
           titleTranslationKey="fileUpload.scanTitle"
+          showSaveButton={false}
         />
 
         <Box mt={3} display="flex" gap={2}>

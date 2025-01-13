@@ -26,12 +26,17 @@
         "NOT_ACTIVE": "Nie rozpoczęte"
     },
     "loading": "Ładowanie...",
-    "preliminary-plan": {
+    "preliminaryPlan": {
         "complete": {
             "error": "Musisz uzupełnić wszystkie pola, żeby zakończyć wstępny plan."
         },
         "fileUpload": {
             "preliminaryMapTitle": "Wgraj wstępną mapę"
+        },
+        "completeButton" : {
+            "title" : "Zatwierdź i zakończ wstępny plan",
+            "allActionsCompleted": "Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.",
+            "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
         }
     },
     "consentsCollection": {
@@ -73,9 +78,28 @@
         "fileRequired": "Musisz wgrać skan zgody, żeby zatwierdzić",
         "invalidate" : "Zgoda odrzucona",
         "consentGivenDate": "Data odebrania zgody",
-        "statusComment" : "Powód odrzucenia zgody"
+        "statusComment" : "Powód odrzucenia zgody",
+        "privateConsents" : "Prywatne zgody",
+        "publicConsents" : "Publiczne zgody",
+        "mailingDate" : "Data wysyłki"
     },
     "fileUpload": {
-        "scanTitle": "Skany zlecenia"
+        "scanTitle": "Skany zlecenia",
+        "dragAndDropText": "Wybierz lub przeciągnij i upuść tutaj pliki"
+    },
+    "common" : {
+        "upload": {
+            "save": "Zapisz"
+        }
+    },
+    "completeStep": {
+        "completeAndFinalize": "Zakończ i sfinalizuj"
+    },
+    "terrainVision": {
+        "completeButton" : {
+            "title" : "Finalizacja wizji terenowej",
+            "allActionsCompleted": "Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.",
+            "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
+        }
     }
 }

@@ -6,7 +6,7 @@ import './Details.css';
 import useDataFetching from '../../useDataFetching';
 import { contractFields } from './DetailsFields';
 import { renderTextFields } from './../renderTextFields';
-import FileUploadSection from './../FileUploadSection';
+import FileUploadSection from '../../components/FileUploadSection';
 import useFileHandler from './../useFileHandler';
 import { useNavigate } from 'react-router-dom';
 
@@ -149,6 +149,7 @@ const Details = ({ contractId }) => {
         handleFileDrop={handleFileDrop}
         handleFileDelete={handleFileDelete}
         titleTranslationKey="fileUpload.scanTitle"
+        showSaveButton={false}
       />
 
 

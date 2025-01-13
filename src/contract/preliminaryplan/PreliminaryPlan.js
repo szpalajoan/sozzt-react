@@ -4,11 +4,12 @@ import { renderTextFields } from '../renderTextFields';
 import { preliminaryPlanFields } from './preliminaryPlanFields';
 import useFileHandler from '../useFileHandler';
 import { Button, Box, CircularProgress, Snackbar, Alert, Typography } from '@mui/material';
-import FileUploadSection from '../FileUploadSection';
+import FileUploadSection from '../../components/FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 import OpenFolderButton from '../../components/OpenFolderButton';
-
+import SnackbarAlert from '../../components/SnackbarAlert';
+import CompleteStepButton from '../../components/CompleteStepButton';
 const PreliminaryPlan = ({ contractId }) => {
   const { data: preliminaryPlan, isPending: isPreliminaryPlanPending, refetch: refetchPreliminaryPlan } = useFetch(`contracts/preliminary-plans/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_MAP`);
@@ -104,7 +105,7 @@ const PreliminaryPlan = ({ contractId }) => {
       setLoading(false);
     }
   };
-  
+
   if (isPreliminaryPlanPending) return <div>Loading...</div>;
   if (!preliminaryPlan) return <div>Nie znaleziono wstępnego planu</div>;
 
@@ -131,60 +132,39 @@ const PreliminaryPlan = ({ contractId }) => {
 
       <Box className="main-content">
         <h2 className="section-title">Wstępny plan</h2>
-        {!preliminaryPlan.preliminaryMapUploaded ? (
-          <FileUploadSection
-            contractId={contractId}
-            files={files}
-            newFiles={newFiles}
-            handleFileDrop={handleFileDrop}
-            handleFileDelete={handleFileDelete}
-            titleTranslationKey="preliminary-plan.fileUpload.preliminaryMapTitle"
-          />
-        ) : (
+        {preliminaryPlan.preliminaryMapUploaded ? (
           <>
             <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
-              Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze z.
+              Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
             </Typography>
             <OpenFolderButton
               folderPath="Projekty"
               buttonText="Otwórz folder"
             />
           </>
+        ) : (
+          <FileUploadSection
+            contractId={contractId}
+            files={files}
+            newFiles={newFiles}
+            handleFileDrop={handleFileDrop}
+            handleFileDelete={handleFileDelete}
+            titleTranslationKey="preliminaryPlan.fileUpload.preliminaryMapTitle"
+            handleSave={handleUploadPreliminaryMap}
+            loading={loading}
+          />
         )}
-
-        {!preliminaryPlan.preliminaryMapUploaded && (
-          <Box mt={3} display="flex" gap={2}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              onClick={handleUploadPreliminaryMap} 
-              disabled={loading || newFiles.length === 0}
-            >
-              {loading ? <CircularProgress size={24} /> : 'Wgraj mapę wstępną'}
-            </Button>
-          </Box>
-        )}
-
       </Box>
 
+
       {preliminaryPlan.preliminaryMapUploaded && showFinalizeButton && preliminaryPlan.googleMapUrl && (
-        <Box className="finalize-content" >
-          <h2 className="section-title"> Finalizacja wizji terenowej</h2>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
-            Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
-          </Typography>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={handleComplete}
-            disabled={loading}
-          >
-            Zatwierdź i zakończ wizję terenową
-          </Button>
-        </Box>
+        <CompleteStepButton
+          handleComplete={handleComplete}
+          loading={loading}
+          titleKey="preliminaryPlan.completeButton.title"
+          descriptionKey="preliminaryPlan.completeButton.allActionsCompleted"
+          warningMessage="preliminaryPlan.completeButton.warning"
+        />
       )}
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>

@@ -4,12 +4,13 @@ import { renderTextFields } from '../renderTextFields';
 import { terrainVisionFields } from './TerrainVisionFields';
 import useFileHandler from '../useFileHandler';
 import { Button, Box, CircularProgress, Snackbar, Alert, Typography, ImageList, ImageListItem, Modal } from '@mui/material';
-import FileUploadSection from '../FileUploadSection';
+import FileUploadSection from '../../components/FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css'
 import OpenFolderButton from '../../components/OpenFolderButton';
+import CompleteStepButton from '../../components/CompleteStepButton';
 
 const TerrainVision = ({ contractId }) => {
   const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
@@ -239,6 +240,7 @@ const TerrainVision = ({ contractId }) => {
             newFiles={newTerrainFiles}
             handleFileDrop={handleTerrainFileDrop}
             handleFileDelete={handleTerrainFileDelete}
+            showSaveButton={false}
           />
           <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
             <Button
@@ -319,26 +321,15 @@ const TerrainVision = ({ contractId }) => {
           )}
         </Box>
 
-
         {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparationNeed !== "NONE" &&
          terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
-          <Box className="finalize-content" >
-            <h2 className="section-title"> Finalizacja wizji terenowej</h2>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
-              Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
-            </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={handleFinalizeTerrainVision}
-              disabled={loading}
-            >
-              Zatwierdź i zakończ wizję terenową
-            </Button>
-          </Box>
+          <CompleteStepButton
+          handleComplete={handleFinalizeTerrainVision}
+          loading={loading}
+          titleKey="terrainVision.completeButton.title"
+          descriptionKey="terrainVision.completeButton.allActionsCompleted"
+          warningMessage="terrainVision.completeButton.warning"
+        />
         )}
       </Box>
 

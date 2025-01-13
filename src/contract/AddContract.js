@@ -5,7 +5,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { contractFields } from './details/DetailsFields'; 
 import { renderTextFields } from './renderTextFields';
 import './AddContract.css';
-import FileUploadSection from './FileUploadSection';
+import FileUploadSection from '../components/FileUploadSection';
 import useFileHandler from './useFileHandler';
 
 
@@ -81,6 +81,7 @@ const AddContract = () => {
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
           titleTranslationKey="fileUpload.scanTitle"
+          showSaveButton={false}
         />
 
         <Button type="submit" variant="contained" color="primary" disabled={isPending}>
