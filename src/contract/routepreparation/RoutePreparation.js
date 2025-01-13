@@ -6,6 +6,7 @@ import { Button, Box, CircularProgress, Snackbar, Alert, Typography } from '@mui
 import FileUploadSection from '../../components/FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
+import CompleteStepButton from '../../components/CompleteStepButton';
 
 const RoutePreparation = ({ contractId }) => {
   const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/route-preparation/${contractId}`);
@@ -91,7 +92,7 @@ const RoutePreparation = ({ contractId }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 
       <Box className="main-content">
-        <h2 className="section-title">Prygotowaine trasy</h2>
+        <h2 className="section-title">Prygotowanie mapy</h2>
 
         <FileUploadSection
           contractId={contractId}
@@ -99,7 +100,7 @@ const RoutePreparation = ({ contractId }) => {
           newFiles={newFiles}
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
-          titleTranslationKey="fileUpload.scanTitle"
+          titleTranslationKey="routePreparation.fileUpload"
           showSaveButton={false}
         />
 
@@ -110,24 +111,15 @@ const RoutePreparation = ({ contractId }) => {
         </Box>
       </Box>
 
+
       {showFinalizeButton && (
-          <Box className="finalize-content" >
-            <h2 className="section-title"> Finalizacja wizji terenowej</h2>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 2, fontStyle: 'italic' }}>
-              Uwaga: Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie.
-            </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={handleComplete}
-              disabled={loading}
-            >
-              Zatwierdź i zakończ wizję terenową
-            </Button>
-          </Box>
+         <CompleteStepButton
+          handleComplete={handleComplete}
+          loading={loading}
+          titleKey="routePreparation.completeButton.title"
+          descriptionKey="routePreparation.completeButton.allActionsCompleted"
+          warningMessage="routePreparation.completeButton.warning"
+        />
         )}
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>

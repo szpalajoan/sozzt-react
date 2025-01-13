@@ -287,7 +287,7 @@ const TerrainVision = ({ contractId }) => {
                 onClick={() => handleConfirmMapChanges("NECESSARY")}
                 disabled={loading}
               >
-                Mapa wymaga poprawy
+                Wymagana mapa od geodetów
               </Button>
               <Button
                 variant="contained"
@@ -295,7 +295,7 @@ const TerrainVision = ({ contractId }) => {
                 disabled={loading}
                 sx={{ backgroundColor: 'grey.500', color: 'white', '&:hover': { backgroundColor: 'grey.600' } }}
               >
-                Mapa nie wymaga poprawy
+                Nie wymaga
               </Button>
             </Box>
           ) : (

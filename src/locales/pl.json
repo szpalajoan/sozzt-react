@@ -85,7 +85,9 @@
         "publicConsents" : "Publiczne zgody",
         "mailingDate" : "Data wysyłki",
         "invalidationDate" : "Data odrzucenia zgody",
-        "invalidationReason" : "Powód odrzucenia zgody"
+        "invalidationReason" : "Powód odrzucenia zgody",
+        "publicOwnerName" : "Instytucja państwowa",
+        "publicConsentsTitle" : "Dodawanie publicznej zgody"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
@@ -97,12 +99,20 @@
         }
     },
     "completeStep": {
-        "completeAndFinalize": "Zakończ i sfinalizuj"
+        "completeAndFinalize": "Zatwierdź i zakończ"
     },
     "terrainVision": {
         "completeButton" : {
             "title" : "Finalizacja wizji terenowej",
             "allActionsCompleted": "Wszystkie zdjęcia zostały przesłane i mapa została zatwierdzona. Możesz teraz sfinalizować ten etap.",
+            "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
+        }
+    },
+    "routePreparation": {
+        "fileUpload": "Wgrane mapy",
+        "completeButton" : {
+            "title" : "Finalizacja wgrania mapy",
+            "allActionsCompleted": "Mapy zostały przesłane. Możesz teraz sfinalizować ten etap.",
             "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
         }
     }
