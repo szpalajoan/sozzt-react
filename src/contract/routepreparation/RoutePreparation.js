@@ -100,7 +100,6 @@ const RoutePreparation = ({ contractId }) => {
           newFiles={newFiles}
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
-          titleTranslationKey="routePreparation.fileUpload"
           showSaveButton={false}
         />
 

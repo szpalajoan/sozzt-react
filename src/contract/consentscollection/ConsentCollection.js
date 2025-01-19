@@ -217,7 +217,6 @@ const ConsentsCollection = ({ contractId }) => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <h2 className="section-title">{t('consentsCollection.title')}</h2>
             <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
                 <Tab label={t('consentsCollection.privateConsents')} />
                 <Tab label={t('consentsCollection.publicConsents')} />
