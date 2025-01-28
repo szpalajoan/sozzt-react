@@ -87,7 +87,8 @@
         "invalidationDate" : "Data odrzucenia zgody",
         "invalidationReason" : "Powód odrzucenia zgody",
         "publicOwnerName" : "Instytucja państwowa",
-        "publicConsentsTitle" : "Dodawanie publicznej zgody"
+        "publicConsentsTitle" : "Dodawanie publicznej zgody",
+        "consentScan" : "Skan zgody"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",

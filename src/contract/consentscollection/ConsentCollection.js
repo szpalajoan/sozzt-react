@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Box, Typography, TextField, Button, List, ListItem, Select, MenuItem, FormControl, InputLabel, Dialog, DialogTitle, DialogContent, DialogActions, Chip, Tabs, Tab } from '@mui/material';
 import { AttachFile, Add, Check, Close } from '@mui/icons-material';
 import useDataFetching from '../../useDataFetching';
+import FileLink from '../FileLink';
+import useFetch from "../../useFetch";
+
 
 import { renderTextFields } from '../renderTextFields';
 
@@ -23,6 +26,10 @@ const ConsentsCollection = ({ contractId }) => {
     const [newPublicConsent, setNewPublicConsent] = useState({ ownerName: '', plotNumber: '', comment: '', collectorName: '' });
     const [publicConsents, setPublicConsents] = useState([]);
 
+    const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=PRIVATE_PLOT_OWNER_CONSENT_AGREEMENT`);
+    const { data: publicFetchedFiles, isPending: isPublicFilesPending, refetch: refetchPublicFiles } = useFetch(`contracts/${contractId}/files?fileType=PUBLIC_OWNER_CONSENT_AGREEMENT`);
+
+
     const { fetchData } = useDataFetching('contracts/consents/');
 
     const collectors = ['Ania', 'Kasia', 'Basia'];
@@ -30,6 +37,8 @@ const ConsentsCollection = ({ contractId }) => {
 
     useEffect(() => {
         fetchConsents();
+
+        console.log(fetchedFiles);
     }, [contractId]);
 
     const fetchConsents = async () => {
@@ -98,16 +107,6 @@ const ConsentsCollection = ({ contractId }) => {
             } catch (error) {
                 console.error('Error adding new public consent:', error);
             }
-        }
-    };
-
-
-    const handleConsentUpdate = async (consentId, field, value) => {
-        try {
-            await fetchData(`${contractId}/private-plot-owner-consent/${consentId}`, 'PUT', { [field]: value });
-            fetchConsents();
-        } catch (error) {
-            console.error('Error updating consent:', error);
         }
     };
 
@@ -212,9 +211,6 @@ const ConsentsCollection = ({ contractId }) => {
         }
     };
 
-
-
-
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
@@ -289,13 +285,19 @@ const ConsentsCollection = ({ contractId }) => {
                                 )}
                                 <Typography>{t('consentsCollection.collectorName')}: {consent.collectorName}</Typography>
 
-                                {(consent.consentStatus === 'CONSENT_GIVEN' || consent.consentStatus === 'INVALIDATED') && consent.consentGivenDate && (
-                                    <Typography>
-                                        {consent.consentStatus === 'INVALIDATED'
-                                            ? t('consentsCollection.invalidationDate')
-                                            : t('consentsCollection.consentGivenDate')}:
-                                        {new Date(consent.consentGivenDate).toLocaleDateString()}
-                                    </Typography>
+                                {consent.consentStatus === 'CONSENT_GIVEN' && (
+                                    <Box sx={{ mt: 2 }}>
+                                        <Typography variant="subtitle1">{t('consentsCollection.consentScan')}:</Typography>
+                                        {fetchedFiles && fetchedFiles.find(file => file.additionalObjectId === consent.privatePlotOwnerConsentId) ? (
+                                            <FileLink
+                                                contractId={contractId}
+                                                fileId={fetchedFiles.find(file => file.additionalObjectId === consent.privatePlotOwnerConsentId).fileId}
+                                                fileName={fetchedFiles.find(file => file.additionalObjectId === consent.privatePlotOwnerConsentId).fileName}
+                                            />
+                                        ) : (
+                                            <Typography variant="body2">{t('consentsCollection.noScanAvailable')}</Typography>
+                                        )}
+                                    </Box>
                                 )}
 
 
@@ -356,7 +358,7 @@ const ConsentsCollection = ({ contractId }) => {
                     </List>
                 </Box>
             )}
-            
+
             {activeTab === 1 && (
                 <Box>
                     <Box className="main-content">
@@ -568,7 +570,7 @@ const ConsentsCollection = ({ contractId }) => {
             </Dialog>
         </Box>
 
-        
+
     );
 };
 export default ConsentsCollection;
