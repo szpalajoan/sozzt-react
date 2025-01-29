@@ -1,31 +1,36 @@
 import React from 'react';
-import { 
-    ListItem, 
-    Box, 
-    Typography, 
-    Chip, 
-    Button 
+import {
+    ListItem,
+    Box,
+    Typography,
+    Chip,
+    Button
 } from '@mui/material';
 import { Check, Close } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import FileLink from '../../../contract/FileLink';
 
-const ConsentItem = ({ 
-    consent, 
-    files, 
-    contractId, 
+const ConsentItem = ({
+    consent,
+    files,
+    contractId,
     type = 'private',
-    onOpenDialog, 
-    onOpenApproveDialog 
+    onOpenDialog,
+    onOpenApproveDialog
 }) => {
     const { t } = useTranslation();
-    const consentId = type === 'private' 
-        ? consent.privatePlotOwnerConsentId 
+    const consentId = type === 'private'
+        ? consent.privatePlotOwnerConsentId
         : consent.publicPlotOwnerConsentId;
 
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        return new Date(dateString).toLocaleDateString();
+    };
+
     return (
-        <ListItem 
-            className="main-content" 
+        <ListItem
+            className="main-content"
             sx={{ flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2 }}>
@@ -60,6 +65,12 @@ const ConsentItem = ({
             {consent.collectorName && (
                 <Typography>
                     {t('consentsCollection.collectorName')}: {consent.collectorName}
+                </Typography>
+            )}
+
+            {consent.mailingDate && (
+                <Typography>
+                    {t('consentsCollection.mailingDate')}: {formatDate(consent.mailingDate)}
                 </Typography>
             )}
 

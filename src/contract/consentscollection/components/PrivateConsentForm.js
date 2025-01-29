@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
-const PrivateConsentForm = ({ onSubmit }) => {
+const PrivateConsentForm = ({ onSubmit, defaultCollector }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState({
         ownerName: '',
         plotNumber: '',
         comment: '',
-        collectorName: '',
+        collectorName: defaultCollector,
     });
+
+    useEffect(() => {
+        setFormData(prev => ({
+            ...prev,
+            collectorName: defaultCollector
+        }));
+    }, [defaultCollector]);
 
     const collectors = ['Ania', 'Kasia', 'Basia'];
 
@@ -23,12 +30,13 @@ const PrivateConsentForm = ({ onSubmit }) => {
 
         try {
             await onSubmit(formData);
-            setFormData({
+            setFormData(prev => ({
+                ...prev,
                 ownerName: '',
                 plotNumber: '',
                 comment: '',
-                collectorName: ''
-            });
+                collectorName: prev.collectorName
+            }));
         } catch (error) {
             console.error('Error adding consent:', error);
         }

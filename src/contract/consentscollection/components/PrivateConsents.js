@@ -28,6 +28,9 @@ const PrivateConsents = ({
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
+    // Pobierz zbieracza z pierwszej zgody, jeśli istnieje
+    const defaultCollector = consents?.[0]?.collectorName || '';
+
     const handleStatusChange = async (newStatus, comment) => {
         if (newStatus === 'INVALIDATED') {
             await onInvalidate(currentConsent.privatePlotOwnerConsentId, comment);
@@ -67,7 +70,10 @@ const PrivateConsents = ({
         <Box>
             <Box className="main-content">
                 <h2 className="section-title">Private Consents</h2>
-                <PrivateConsentForm onSubmit={onAddConsent} />
+                <PrivateConsentForm 
+                    onSubmit={onAddConsent}
+                    defaultCollector={defaultCollector}
+                />
             </Box>
 
             <List sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
