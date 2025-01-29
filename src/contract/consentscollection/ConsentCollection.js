@@ -16,7 +16,9 @@ const ConsentsCollection = ({ contractId }) => {
         addPrivateConsent,
         addPublicConsent,
         updateConsentStatus,
+        updatePublicConsentStatus,
         invalidateConsent,
+        invalidatePublicConsent,
         approveConsent,
         uploadConsentFile
     } = useConsents(contractId);
@@ -60,8 +62,8 @@ const ConsentsCollection = ({ contractId }) => {
                     consents={publicConsents}
                     fetchedFiles={publicFetchedFiles}
                     onAddConsent={addPublicConsent}
-                    onUpdateStatus={(id, status, comment) => updateConsentStatus(id, status, comment, 'public')}
-                    onInvalidate={(id, reason) => invalidateConsent(id, reason, 'public')}
+                    onUpdateStatus={updatePublicConsentStatus}
+                    onInvalidate={invalidatePublicConsent}
                     onApprove={(id, data) => approveConsent(id, data, 'public')}
                     onUploadFile={(id, file) => uploadConsentFile(id, file, 'public')}
                     refetchFiles={refetchPublicFiles}

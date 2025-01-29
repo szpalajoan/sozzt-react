@@ -23,7 +23,14 @@ const ConsentForm = ({ onSubmit, type }) => {
         if (!formData.ownerName || !formData.plotNumber) return;
 
         try {
-            await onSubmit(formData);
+            const submitData = {
+                ...formData,
+                mailingDate: formData.mailingDate 
+                    ? new Date(formData.mailingDate + 'T00:00:00.000Z').toISOString()
+                    : null
+            };
+
+            await onSubmit(submitData);
             setFormData(prev => ({
                 ...prev,
                 ownerName: '',

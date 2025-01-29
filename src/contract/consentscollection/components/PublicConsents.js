@@ -15,7 +15,8 @@ const PublicConsents = ({
     onInvalidate,
     onApprove,
     refetchFiles,
-    fetchConsents
+    fetchConsents,
+    onUploadFile
 }) => {
     const { t } = useTranslation();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -29,7 +30,7 @@ const PublicConsents = ({
         if (newStatus === 'INVALIDATED') {
             await onInvalidate(currentConsent.publicPlotOwnerConsentId, comment);
         } else {
-            await onUpdateStatus(currentConsent.publicPlotOwnerConsentId, newStatus, comment, 'public');
+            await onUpdateStatus(currentConsent.publicPlotOwnerConsentId, newStatus, comment);
         }
         setDialogOpen(false);
     };
@@ -103,10 +104,9 @@ const PublicConsents = ({
                 consent={currentConsent}
                 onClose={() => setApproveDialogOpen(false)}
                 onApprove={(consentId, data) => onApprove(consentId, data, 'public')}
-                contractId={contractId}
-                refetchFiles={refetchFiles}
-                type="public"
+                onUploadFile={onUploadFile}
                 onComplete={handleApproveComplete}
+                type="public"
             />
 
             <Snackbar

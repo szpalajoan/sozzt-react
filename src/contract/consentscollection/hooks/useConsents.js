@@ -63,6 +63,23 @@ export const useConsents = (contractId) => {
         }
     };
 
+    const updatePublicConsentStatus = async (consentId, status, comment) => {
+        try {
+            await fetchData(
+                `contracts/consents/${contractId}/public-plot-owner-consent/${consentId}/status`,
+                'PUT',
+                {
+                    consentStatus: status,
+                    statusComment: comment
+                }
+            );
+            await fetchConsents();
+        } catch (error) {
+            console.error('Error updating public consent status:', error);
+            throw error;
+        }
+    };
+
     const invalidateConsent = async (consentId, reason) => {
         try {
             await fetchData(
@@ -73,6 +90,20 @@ export const useConsents = (contractId) => {
             await fetchConsents();
         } catch (error) {
             console.error('Error invalidating consent:', error);
+            throw error;
+        }
+    };
+
+    const invalidatePublicConsent = async (consentId, reason) => {
+        try {
+            await fetchData(
+                `contracts/consents/${contractId}/public-plot-owner-consent/${consentId}/invalidate`,
+                'PUT',
+                { reason }
+            );
+            await fetchConsents();
+        } catch (error) {
+            console.error('Error invalidating public consent:', error);
             throw error;
         }
     };
@@ -100,7 +131,11 @@ export const useConsents = (contractId) => {
                 ? `contracts/consents/${contractId}/private-plot-owner-consent/${consentId}/agreement`
                 : `contracts/consents/${contractId}/public-plot-owner-consent/${consentId}/agreement`;
             
-            await fetchData(endpoint, 'PUT', formData);
+            await fetchData(endpoint, 'PUT', formData, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            });
         } catch (error) {
             console.error('Error uploading consent file:', error);
             throw error;
@@ -114,7 +149,9 @@ export const useConsents = (contractId) => {
         addPrivateConsent,
         addPublicConsent,
         updateConsentStatus,
+        updatePublicConsentStatus,
         invalidateConsent,
+        invalidatePublicConsent,
         approveConsent,
         uploadConsentFile
     };
