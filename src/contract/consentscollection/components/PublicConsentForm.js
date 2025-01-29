@@ -8,8 +8,7 @@ const PublicConsentForm = ({ onSubmit }) => {
     const [formData, setFormData] = useState({
         ownerName: '',
         plotNumber: '',
-        comment: '',
-        mailingDate: ''
+        comment: ''
     });
 
     const handleInputChange = (field, value) => {
@@ -20,19 +19,11 @@ const PublicConsentForm = ({ onSubmit }) => {
         if (!formData.ownerName || !formData.plotNumber) return;
 
         try {
-            const submitData = {
-                ...formData,
-                mailingDate: formData.mailingDate 
-                    ? new Date(formData.mailingDate + 'T00:00:00.000Z').toISOString()
-                    : null
-            };
-
-            await onSubmit(submitData);
+            await onSubmit(formData);
             setFormData({
                 ownerName: '',
                 plotNumber: '',
-                comment: '',
-                mailingDate: ''
+                comment: ''
             });
         } catch (error) {
             console.error('Error adding consent:', error);
@@ -42,7 +33,7 @@ const PublicConsentForm = ({ onSubmit }) => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <TextField
-                label={t('consentsCollection.ownerName')}
+                label={t('consentsCollection.publicOwnerName')}
                 value={formData.ownerName}
                 onChange={(e) => handleInputChange('ownerName', e.target.value)}
                 sx={{ mr: 2 }}
@@ -51,16 +42,6 @@ const PublicConsentForm = ({ onSubmit }) => {
                 label={t('consentsCollection.plotNumber')}
                 value={formData.plotNumber}
                 onChange={(e) => handleInputChange('plotNumber', e.target.value)}
-                sx={{ mr: 2 }}
-            />
-            <TextField
-                label={t('consentsCollection.mailingDate')}
-                type="date"
-                value={formData.mailingDate}
-                onChange={(e) => handleInputChange('mailingDate', e.target.value)}
-                InputLabelProps={{
-                    shrink: true,
-                }}
                 sx={{ mr: 2 }}
             />
             <Button

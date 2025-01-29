@@ -194,7 +194,18 @@ const TerrainVision = ({ contractId }) => {
     .map(file => ({
       original: generateFileUrl(file.fileId),
       thumbnail: generateFileUrl(file.fileId),
-      description: file.fileName
+      description: file.fileName,
+      renderItem: (item) => (
+        <img
+          src={item.original}
+          alt={item.description}
+          style={{ maxHeight: '70vh', width: 'auto' }}
+          onError={(e) => {
+            e.target.src = 'https://via.placeholder.com/400?text=Błąd+ładowania';
+            e.target.onerror = null;
+          }}
+        />
+      )
     }));
 
   return (
@@ -222,9 +233,8 @@ const TerrainVision = ({ contractId }) => {
                       loading="lazy"
                       style={{ cursor: 'pointer', width: '100%', height: '100%', objectFit: 'cover' }}
                       onError={(e) => {
-                        console.error(`Błąd ładowania obrazu ${index}:`, e);
+                        e.target.src = 'https://via.placeholder.com/150?text=Błąd+ładowania';
                         e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/150?text=Brak+obrazu';
                       }}
                     />
                   </ImageListItem>

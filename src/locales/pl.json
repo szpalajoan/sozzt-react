@@ -86,6 +86,7 @@
         "publicOwnerName" : "Instytucja państwowa",
         "publicConsentsTitle" : "Dodawanie publicznej zgody",
         "consentScan" : "Skan zgody",
+        "publicMailingDate" : "Data odbioru",
         "deliveryTypes" : {
             "PERSONAL_VISIT" : "Osobiście odebrana",
             "EMAIL" : "Email",

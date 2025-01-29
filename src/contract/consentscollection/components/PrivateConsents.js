@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Box, List, Snackbar, Alert } from '@mui/material';
-import ConsentForm from './ConsentForm';
 import ConsentItem from './ConsentItem';
 import ConsentDialog from './ConsentDialog';
-import ApproveDialog from './ApproveDialog';
 import { useTranslation } from 'react-i18next';
 import PrivateConsentForm from './PrivateConsentForm';
 import PrivateApproveDialog from './PrivateApproveDialog';

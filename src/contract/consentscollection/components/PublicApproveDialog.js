@@ -49,7 +49,7 @@ const PublicApproveDialog = ({
 
         try {
             const updateDto = {
-                ownerName: consent.ownerName,
+                ownerName: consent.publicOwnerName,
                 plotNumber: consent.plotNumber,
                 comment: approveComment,
                 deliveryType: deliveryType,
@@ -88,7 +88,7 @@ const PublicApproveDialog = ({
             classes={{ paper: 'approve-dialog' }}
         >
             <DialogTitle className="approve-dialog-title">
-                {`${consent.plotNumber} - ${consent.ownerName}`}
+                {`${consent.publicOwnerName } - ${consent.plotNumber}`}
             </DialogTitle>
             <DialogContent className="approve-dialog-content">
                 <FormControl fullWidth margin="normal">
@@ -109,19 +109,17 @@ const PublicApproveDialog = ({
                     </Select>
                 </FormControl>
 
-                {(deliveryType === 'EMAIL' || deliveryType === 'POST') && (
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        label={t('consentsCollection.mailingDate')}
-                        type="date"
-                        value={mailingDate || ''}
-                        onChange={(e) => setMailingDate(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                )}
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label={t('consentsCollection.publicMailingDate')}
+                    type="date"
+                    value={mailingDate || ''}
+                    onChange={(e) => setMailingDate(e.target.value)}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
 
                 <TextField
                     fullWidth

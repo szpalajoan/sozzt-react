@@ -35,7 +35,10 @@ const ConsentItem = ({
         >
             <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2 }}>
                 <h2 className="section-title" style={{ marginRight: '10px', marginBottom: 0 }}>
-                    {consent.plotNumber} - {consent.ownerName}
+                    {type === 'private' 
+                        ? `${consent.plotNumber} - ${consent.ownerName}`
+                        : `${consent.publicOwnerName} - ${consent.plotNumber}`
+                    }
                 </h2>
                 <Chip
                     label={t(`consentsCollection.${consent.consentStatus}`)}
@@ -70,7 +73,10 @@ const ConsentItem = ({
 
             {consent.mailingDate && (
                 <Typography>
-                    {t('consentsCollection.mailingDate')}: {formatDate(consent.mailingDate)}
+                    {t(type === 'private' 
+                        ? 'consentsCollection.mailingDate' 
+                        : 'consentsCollection.publicMailingDate'
+                    )}: {formatDate(consent.mailingDate)}
                 </Typography>
             )}
 
