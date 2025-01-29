@@ -20,7 +20,8 @@ const ApproveDialog = ({
     consent, 
     onClose, 
     onApprove,
-    onUploadFile, 
+    onUploadFile,
+    onComplete,
     type = 'private'
 }) => {
     const { t } = useTranslation();
@@ -62,12 +63,15 @@ const ApproveDialog = ({
                 : consent.publicPlotOwnerConsentId;
 
             await onApprove(consentId, updateDto);
-
+            
             if (selectedFile) {
                 await onUploadFile(consentId, selectedFile, type);
             }
 
             handleClose();
+            if (onComplete) {
+                await onComplete();
+            }
         } catch (error) {
             console.error('Error approving consent:', error);
         }

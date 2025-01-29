@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Box, List } from '@mui/material';
+import { Box, List, Snackbar, Alert } from '@mui/material';
 import ConsentForm from './ConsentForm';
 import ConsentItem from './ConsentItem';
 import ConsentDialog from './ConsentDialog';
 import ApproveDialog from './ApproveDialog';
+import { useTranslation } from 'react-i18next';
 
 const PublicConsents = ({
     contractId,
@@ -13,12 +14,16 @@ const PublicConsents = ({
     onUpdateStatus,
     onInvalidate,
     onApprove,
-    refetchFiles
+    refetchFiles,
+    fetchConsents
 }) => {
+    const { t } = useTranslation();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [approveDialogOpen, setApproveDialogOpen] = useState(false);
     const [currentConsent, setCurrentConsent] = useState(null);
     const [actionType, setActionType] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     const handleStatusChange = async (newStatus, comment) => {
         if (newStatus === 'INVALIDATED') {
@@ -35,6 +40,24 @@ const PublicConsents = ({
             if (a.consentStatus !== 'CONSENT_GIVEN' && b.consentStatus === 'CONSENT_GIVEN') return -1;
             return 0;
         });
+    };
+
+    const handleApproveComplete = async () => {
+        try {
+            await fetchConsents();
+            await refetchFiles();
+            setApproveDialogOpen(false);
+            setSnackbarMessage(t('consentsCollection.approveSuccess'));
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error('Error after approving consent:', error);
+            setSnackbarMessage(t('consentsCollection.approveError'));
+            setSnackbarOpen(true);
+        }
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -83,7 +106,23 @@ const PublicConsents = ({
                 contractId={contractId}
                 refetchFiles={refetchFiles}
                 type="public"
+                onComplete={handleApproveComplete}
             />
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert 
+                    onClose={handleCloseSnackbar} 
+                    severity="success" 
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

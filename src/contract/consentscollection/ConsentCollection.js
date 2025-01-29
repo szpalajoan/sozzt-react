@@ -50,6 +50,7 @@ const ConsentsCollection = ({ contractId }) => {
                     onApprove={approveConsent}
                     onUploadFile={uploadConsentFile}
                     refetchFiles={refetchFiles}
+                    fetchConsents={fetchConsents}
                 />
             )}
 
@@ -64,6 +65,7 @@ const ConsentsCollection = ({ contractId }) => {
                     onApprove={(id, data) => approveConsent(id, data, 'public')}
                     onUploadFile={(id, file) => uploadConsentFile(id, file, 'public')}
                     refetchFiles={refetchPublicFiles}
+                    fetchConsents={fetchConsents}
                 />
             )}
         </Box>
