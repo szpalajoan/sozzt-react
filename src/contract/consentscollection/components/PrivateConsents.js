@@ -5,6 +5,8 @@ import ConsentItem from './ConsentItem';
 import ConsentDialog from './ConsentDialog';
 import ApproveDialog from './ApproveDialog';
 import { useTranslation } from 'react-i18next';
+import PrivateConsentForm from './PrivateConsentForm';
+import PrivateApproveDialog from './PrivateApproveDialog';
 
 const PrivateConsents = ({
     contractId,
@@ -65,10 +67,7 @@ const PrivateConsents = ({
         <Box>
             <Box className="main-content">
                 <h2 className="section-title">Private Consents</h2>
-                <ConsentForm
-                    onSubmit={onAddConsent}
-                    type="private"
-                />
+                <PrivateConsentForm onSubmit={onAddConsent} />
             </Box>
 
             <List sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -98,14 +97,13 @@ const PrivateConsents = ({
                 actionType={actionType}
             />
 
-            <ApproveDialog
+            <PrivateApproveDialog
                 open={approveDialogOpen}
                 consent={currentConsent}
                 onClose={() => setApproveDialogOpen(false)}
                 onApprove={onApprove}
                 onUploadFile={onUploadFile}
                 onComplete={handleApproveComplete}
-                type="private"
             />
 
             <Snackbar

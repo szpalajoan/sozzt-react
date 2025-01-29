@@ -5,6 +5,8 @@ import ConsentItem from './ConsentItem';
 import ConsentDialog from './ConsentDialog';
 import ApproveDialog from './ApproveDialog';
 import { useTranslation } from 'react-i18next';
+import PublicConsentForm from './PublicConsentForm';
+import PublicApproveDialog from './PublicApproveDialog';
 
 const PublicConsents = ({
     contractId,
@@ -65,10 +67,7 @@ const PublicConsents = ({
         <Box>
             <Box className="main-content">
                 <h2 className="section-title">Public Consents</h2>
-                <ConsentForm
-                    onSubmit={onAddConsent}
-                    type="public"
-                />
+                <PublicConsentForm onSubmit={onAddConsent} />
             </Box>
 
             <List sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -99,14 +98,13 @@ const PublicConsents = ({
                 actionType={actionType}
             />
 
-            <ApproveDialog
+            <PublicApproveDialog
                 open={approveDialogOpen}
                 consent={currentConsent}
                 onClose={() => setApproveDialogOpen(false)}
-                onApprove={(consentId, data) => onApprove(consentId, data, 'public')}
+                onApprove={onApprove}
                 onUploadFile={onUploadFile}
                 onComplete={handleApproveComplete}
-                type="public"
             />
 
             <Snackbar

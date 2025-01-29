@@ -73,9 +73,6 @@
         "INVALIDATED": "Odrzucona",
         "approve": "Zatwierdź zgodę",
         "deliveryType": "Typ odebranej zgody",
-        "EMAIL": "Email",
-        "POST": "Poczta",
-        "PERSONAL_VISIT": "Osobiście odebrana",
         "deliveryTypeRequired": "Wybierz typ zgody",
         "fileRequired": "Musisz wgrać skan zgody, żeby zatwierdzić",
         "invalidate" : "Zgoda odrzucona",
@@ -88,7 +85,12 @@
         "invalidationReason" : "Powód odrzucenia zgody",
         "publicOwnerName" : "Instytucja państwowa",
         "publicConsentsTitle" : "Dodawanie publicznej zgody",
-        "consentScan" : "Skan zgody"
+        "consentScan" : "Skan zgody",
+        "deliveryTypes" : {
+            "PERSONAL_VISIT" : "Osobiście odebrana",
+            "EMAIL" : "Email",
+            "POST" : "Poczta"
+        }
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
