@@ -7,6 +7,12 @@ import ConsentsVerificationStep from './components/ConsentsVerificationStep';
 import { useDocumentation } from './hooks/useDocumentation';
 import { useRouteDrawingPerson } from './hooks/useRouteDrawingPerson';
 import { useDocumentationFiles } from './hooks/useDocumentationFiles';
+import { useDocumentCompilation } from './hooks/useDocumentCompilation';
+import DocumentCompilationStep from './components/DocumentCompilationStep';
+import { useTauronCommunication } from './hooks/useTauronCommunication';
+import TauronCommunicationStep from './components/TauronCommunicationStep';
+import { useTermVerification } from './hooks/useTermVerification';
+import TermVerificationStep from './components/TermVerificationStep';
 
 const PreparationOfDocumentation = ({ contractId }) => {
   const {
@@ -49,6 +55,31 @@ const PreparationOfDocumentation = ({ contractId }) => {
     handleError
   );
 
+  const documentCompilation = useDocumentCompilation(
+    documentation,
+    setDocumentation,
+    contractId,
+    handleSuccess,
+    handleError
+  );
+
+  const tauronCommunication = useTauronCommunication(
+    contractId,
+    fetchData,
+    setDocumentation,
+    handleSuccess,
+    handleError
+  );
+
+  const termVerification = useTermVerification(
+    documentation,
+    setDocumentation,
+    contractId,
+    fetchData,
+    handleSuccess,
+    handleError
+  );
+
   if (isPending) return <CircularProgress />;
   if (!documentation) return <Typography>Nie znaleziono dokumentacji</Typography>;
 
@@ -84,6 +115,45 @@ const PreparationOfDocumentation = ({ contractId }) => {
         documentation={documentation}
         loading={loading}
         onComplete={completeConsentsVerification}
+      />
+
+      <DocumentCompilationStep 
+        documentation={documentation}
+        designer={documentCompilation.designer}
+        isEditingDesigner={documentCompilation.isEditingDesigner}
+        onDesignerEdit={() => documentCompilation.setIsEditingDesigner(true)}
+        setDesigner={documentCompilation.setDesigner}
+        handleDesignerChange={documentCompilation.handleDesignerChange}
+        loading={loading}
+        documentProps={{
+          contractId,
+          files: documentCompilation.documentFiles,
+          newFiles: documentCompilation.newDocumentFiles,
+          handleFileDrop: documentCompilation.handleDocumentDrop,
+          handleFileDelete: documentCompilation.handleDocumentDelete,
+          handleSave: documentCompilation.handleUploadDocument,
+          loading,
+          titleTranslationKey: "documentation.fileUpload.compiledDocumentTitle"
+        }}
+      />
+
+      <TauronCommunicationStep 
+        documentation={documentation}
+        onMarkSent={tauronCommunication.handleMarkSent}
+        onMarkApproved={tauronCommunication.handleMarkApproved}
+        loading={loading}
+      />
+
+      <TermVerificationStep 
+        documentation={documentation}
+        personResponsible={termVerification.personResponsible}
+        isEditingPerson={termVerification.isEditingPerson}
+        onPersonEdit={() => termVerification.setIsEditingPerson(true)}
+        setPersonResponsible={termVerification.setPersonResponsible}
+        handlePersonChange={termVerification.handlePersonChange}
+        onApproveTerms={termVerification.handleApproveTerms}
+        onComplete={termVerification.handleComplete}
+        loading={loading}
       />
 
       <SnackbarAlert

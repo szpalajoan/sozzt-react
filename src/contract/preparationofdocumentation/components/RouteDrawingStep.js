@@ -55,40 +55,45 @@ const RouteDrawingStep = ({
         )}
       </Box>
 
-      {/* Map upload section */}
-      <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#333' }}>
-        Mapa z trasą
-      </Typography>
-      {documentation.routeDrawing?.mapWithRouteFileId ? (
+      {/* Show file sections only when person is selected */}
+      {documentation.routeDrawing?.drawingBy && (
         <>
-          <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
-            Mapa z trasą została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
+          {/* Map upload section */}
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#333' }}>
+            Mapa z trasą
           </Typography>
-          <OpenFolderButton
-            folderPath="Projekty"
-            buttonText="Otwórz folder"
-          />
-        </>
-      ) : (
-        <FileUploadSection {...drawnRouteProps} />
-      )}
+          {documentation.routeDrawing?.mapWithRouteFileId ? (
+            <>
+              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+                Mapa z trasą została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
+              </Typography>
+              <OpenFolderButton
+                folderPath="Projekty"
+                buttonText="Otwórz folder"
+              />
+            </>
+          ) : (
+            <FileUploadSection {...drawnRouteProps} />
+          )}
 
-      {/* PDF upload section */}
-      <Typography variant="h6" sx={{ mb: 2, mt: 3, fontWeight: 'bold', color: '#333' }}>
-        PDF z trasą i danymi
-      </Typography>
-      {documentation.routeDrawing?.routeWithDataFileId ? (
-        <>
-          <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
-            PDF został już wgrany. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
+          {/* PDF upload section */}
+          <Typography variant="h6" sx={{ mb: 2, mt: 3, fontWeight: 'bold', color: '#333' }}>
+            PDF z trasą i danymi
           </Typography>
-          <OpenFolderButton
-            folderPath="Projekty"
-            buttonText="Otwórz folder"
-          />
+          {documentation.routeDrawing?.routeWithDataFileId ? (
+            <>
+              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+                PDF został już wgrany. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
+              </Typography>
+              <OpenFolderButton
+                folderPath="Projekty"
+                buttonText="Otwórz folder"
+              />
+            </>
+          ) : (
+            <FileUploadSection {...pdfProps} />
+          )}
         </>
-      ) : (
-        <FileUploadSection {...pdfProps} />
       )}
     </Box>
   );

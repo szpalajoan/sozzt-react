@@ -123,7 +123,32 @@
     "documentation": {
         "correctnessOfTheMap": "Zatwierdzenie mapy",
         "fileUpload": {
-            "drawnRouteTitle": "Rozrysowana trasa"
+            "drawnRouteTitle": "Rozrysowana trasa",
+            "pdfTitle": "PDF z trasą i danymi",
+            "compiledDocumentTitle": "'Sklejony' projekt"
+        },
+        "documentCompilation": {
+            "title": "Cała dokumentacja",
+            "documentUploaded": "Dokument został już wgrany. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.",
+            "uploadSuccess": "Dokument został wgrany pomyślnie",
+            "uploadError": "Wystąpił błąd podczas wgrywania dokumentu"
+        },
+        "tauronCommunication": {
+            "title": "Komunikacja z Tauronem",
+            "documentationSent": "Dokumentacja została wysłana do Tauronu",
+            "approvedByTauron": "Dokumentacja została zaakceptowana przez Tauron",
+            "markAsSent": "Oznacz jako wysłane do Tauronu",
+            "markAsApproved": "Oznacz jako zaakceptowane przez Tauron",
+            "sentDate": "Data wysłania"
+        },
+        "termVerification": {
+            "title": "Weryfikacja terminów",
+            "personLabel": "Osoba odpowiedzialna za weryfikację",
+            "assignPerson": "Przypisz osobę",
+            "approveTerms": "Zatwierdź terminy",
+            "termsApproved": "Terminy zostały zatwierdzone",
+            "complete": "Zakończ dokumentację",
+            "documentationCompleted": "Dokumentacja została zakończona"
         }
     }
 }
