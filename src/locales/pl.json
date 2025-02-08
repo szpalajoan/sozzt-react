@@ -123,8 +123,7 @@
     "documentation": {
         "correctnessOfTheMap": "Zatwierdzenie mapy",
         "fileUpload": {
-            "drawnRouteTitle": "Rozrysowana trasa",
-            "pdfTitle": "PDF z trasą i danymi"
+            "drawnRouteTitle": "Rozrysowana trasa"
         }
     }
 }
