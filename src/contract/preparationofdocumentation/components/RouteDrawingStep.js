@@ -21,7 +21,7 @@ const RouteDrawingStep = ({
       <h2 className="section-title">Rysowanie trasy</h2>
       
       {/* Person selection */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 1.5 }}>
         {!isEditingPerson && documentation.routeDrawing?.drawingBy ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <PersonIcon color="action" />
@@ -59,12 +59,12 @@ const RouteDrawingStep = ({
       {documentation.routeDrawing?.drawingBy && (
         <>
           {/* Map upload section */}
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#333' }}>
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: 'bold', color: '#333' }}>
             Mapa z trasą
           </Typography>
           {documentation.routeDrawing?.mapWithRouteFileId ? (
             <>
-              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 1 }}>
                 Mapa z trasą została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
               </Typography>
               <OpenFolderButton
@@ -77,12 +77,12 @@ const RouteDrawingStep = ({
           )}
 
           {/* PDF upload section */}
-          <Typography variant="h6" sx={{ mb: 2, mt: 3, fontWeight: 'bold', color: '#333' }}>
+          <Typography variant="h6" sx={{ mb: 1, mt: 2, fontWeight: 'bold', color: '#333' }}>
             PDF z trasą i danymi
           </Typography>
           {documentation.routeDrawing?.routeWithDataFileId ? (
             <>
-              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 1 }}>
                 PDF został już wgrany. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.
               </Typography>
               <OpenFolderButton
