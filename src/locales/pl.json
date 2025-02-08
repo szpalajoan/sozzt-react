@@ -119,5 +119,12 @@
             "allActionsCompleted": "Mapy zostały przesłane. Możesz teraz sfinalizować ten etap.",
             "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
         }
+    },
+    "documentation": {
+        "correctnessOfTheMap": "Zatwierdzenie mapy",
+        "fileUpload": {
+            "drawnRouteTitle": "Rozrysowana trasa",
+            "pdfTitle": "PDF z trasą i danymi"
+        }
     }
 }

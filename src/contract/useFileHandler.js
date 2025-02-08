@@ -33,6 +33,20 @@ const useFileHandler = () => {
     }
   };
 
+  // New method for documentation files
+  const uploadDocumentationFiles = async (contractId, fetchData, fileType) => {
+    if (newFiles.length > 0) {
+      await Promise.all(
+        newFiles.map(async (file) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('fileId', uuidv4());
+          await fetchData(`${fileType}`, 'POST', formData);
+        })
+      );
+    }
+  };
+
   const deleteFiles = async (contractId, fetchData) => {
     if (deletedFiles.length > 0) {
       await Promise.all(
@@ -50,6 +64,7 @@ const useFileHandler = () => {
     handleFileDrop,
     handleFileDelete,
     uploadFiles,
+    uploadDocumentationFiles,
     deleteFiles,
     resetFiles,
     setFiles
