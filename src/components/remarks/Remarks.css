@@ -170,8 +170,8 @@
   margin: 0 4px;
 }
 
-.remark-creation-info {
-  color: #999;
-  font-size: 0.8rem;
-  margin-top: 12px;
+.remark-card .MuiCardContent-root .remark-creation-info.MuiTypography-root {
+  font-size: 0.8rem !important;
+  color: #999 !important;
+  margin-top: 4px !important;
 } 

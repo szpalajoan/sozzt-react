@@ -208,14 +208,21 @@ const RemarkCard = ({ remark, onStatusChange, onEdit }) => {
             <span>{remark.assignedTo}</span>
             <span className="metadata-separator">•</span>
             <CalendarIcon fontSize="small" />
-            <span>{format(new Date(remark.deadline), 'dd.MM.yyyy HH:mm', { locale: pl })}</span>
+            <span>{format(new Date(remark.deadline), 'dd.MM.yyyy, HH:mm', { locale: pl })}</span>
           </div>
         </div>
 
         <Typography className="remark-description">{remark.description}</Typography>
         
-        <Typography className="remark-creation-info">
-          Utworzono: {format(new Date(remark.createdAt), 'dd.MM.yyyy HH:mm', { locale: pl })} - {remark.createdBy}
+        <Typography 
+          className="remark-creation-info" 
+          sx={{ 
+            fontSize: '0.7rem',
+            color: '#999',
+            marginTop: '12px'
+          }}
+        >
+          Utworzono: {format(new Date(remark.createdAt), 'dd.MM.yyyy, HH:mm', { locale: pl })} - {remark.createdBy}
         </Typography>
       </CardContent>
     </Card>
