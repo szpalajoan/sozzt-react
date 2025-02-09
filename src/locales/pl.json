@@ -150,5 +150,39 @@
             "complete": "Zakończ dokumentację",
             "documentationCompleted": "Dokumentacja została zakończona"
         }
+    },
+    "remarks": {
+        "title": "Uwagi",
+        "addRemark": "Dodaj uwagę",
+        "noRemarks": "Brak uwag dla tego kroku",
+        "dialog": {
+            "title": "Dodaj nową uwagę",
+            "titleField": "Tytuł",
+            "descriptionField": "Opis",
+            "deadlineField": "Termin",
+            "cancel": "Anuluj",
+            "add": "Dodaj"
+        },
+        "status": {
+            "new": "Nowa",
+            "inProgress": "W trakcie",
+            "done": "Zakończona",
+            "cancelled": "Anulowana"
+        },
+        "actions": {
+            "start": "Rozpocznij",
+            "complete": "Zakończ"
+        },
+        "metadata": {
+            "created": "Utworzono",
+            "deadline": "Termin",
+            "createdBy": "Utworzył",
+            "assignedTo": "Przypisano do"
+        },
+        "edit": {
+            "title": "Edytuj uwagę",
+            "save": "Zapisz zmiany",
+            "assignedTo": "Przypisana osoba"
+        }
     }
 }

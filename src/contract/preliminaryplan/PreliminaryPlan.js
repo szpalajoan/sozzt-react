@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import OpenFolderButton from '../../components/OpenFolderButton';
 import SnackbarAlert from '../../components/SnackbarAlert';
 import CompleteStepButton from '../../components/CompleteStepButton';
+import Remarks from '../../components/remarks/Remarks';
+
 const PreliminaryPlan = ({ contractId }) => {
   const { data: preliminaryPlan, isPending: isPreliminaryPlanPending, refetch: refetchPreliminaryPlan } = useFetch(`contracts/preliminary-plans/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_MAP`);
@@ -166,6 +168,8 @@ const PreliminaryPlan = ({ contractId }) => {
           warningMessage="preliminaryPlan.completeButton.warning"
         />
       )}
+
+      <Remarks stepId="PRELIMINARY_PLAN" />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity={errorMessage.includes('błąd') ? 'error' : 'success'} sx={{ width: '100%' }}>
