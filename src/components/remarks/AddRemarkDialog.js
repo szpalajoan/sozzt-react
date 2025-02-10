@@ -22,13 +22,13 @@ const AddRemarkDialog = ({ open, onClose, onAdd }) => {
   });
 
   const handleAdd = () => {
-    onAdd({
+    // Konwertujemy string z datą na Instant (ISO string)
+    const formattedRemark = {
       ...newRemark,
-      status: 'NEW',
-      createdBy: 'Current User',
-      createdAt: new Date().toISOString()
-    });
-    onClose();
+      deadline: new Date(newRemark.deadline).toISOString()
+    };
+    
+    onAdd(formattedRemark);
     setNewRemark({ title: '', description: '', deadline: '', assignedTo: '' });
   };
 

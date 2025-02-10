@@ -54,7 +54,7 @@
   border-radius: 0;
   padding-left: 20px;
   padding-right: 20px;
-  padding-top: 16px;
+  padding-top: 12px;
   border-bottom: 1px solid #eee;
 }
 
@@ -69,6 +69,10 @@
 
 .remark-card .MuiCardContent-root {
   padding: 0;
+}
+
+.remark-card .MuiCardContent-root:last-child {
+  padding-bottom: 12px !important;
 }
 
 .remark-card-header {
@@ -95,6 +99,7 @@
   line-height: 1.5;
   margin: 12px 0;
   font-size: 0.9rem;
+  white-space: pre-wrap;
 }
 
 .remark-metadata {
@@ -108,7 +113,8 @@
 
 .remark-actions {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 4px;
 }
 
 .status-chip {
@@ -162,8 +168,13 @@
   background-color: #f5f5f5 !important;
 }
 
+.remark-footer {
+  margin-top: 12px;
+}
+
 .remark-metadata-row {
-  margin: 12px 0;
+  display: flex;
+  align-items: center;
   color: #666;
   font-size: 0.9rem;
 }
@@ -172,6 +183,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .remark-metadata-group svg {
@@ -181,17 +193,56 @@
 
 .metadata-separator {
   color: #ccc;
-  margin: 0 4px;
+}
+
+.remark-creation-info {
+  color: #999 !important;
+  font-size: 0.8rem !important;
 }
 
 .remark-card .MuiCardContent-root .remark-creation-info.MuiTypography-root {
-  font-size: 0.8rem !important;
-  color: #999 !important;
-  margin-top: 4px !important;
+  margin-top: 0 !important;
 }
-
-
 
 .remarks-section .MuiPaper-rounded {
   border-radius: 0 !important;
+}
+
+.remarks-loading {
+  text-align: center;
+  padding: 24px;
+  color: #666;
+  background: #f5f5f5;
+  border-radius: 6px;
+  margin: 12px 20px;
+}
+
+.remark-card-overdue {
+  background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.remark-card-urgent {
+  background-color: rgba(255, 152, 0, 0.1) !important;
+}
+
+.remark-card-overdue:hover {
+  background-color: rgba(244, 67, 54, 0.15) !important;
+}
+
+.remark-card-urgent:hover {
+  background-color: rgba(255, 152, 0, 0.15) !important;
+}
+
+.more-options-button {
+  color: #666 !important;
+  margin-left: 8px !important;
+}
+
+.more-options-button:hover {
+  color: #333 !important;
+  background-color: #f5f5f5 !important;
+}
+
+.cancel-menu-item {
+  color: #d32f2f !important;
 } 

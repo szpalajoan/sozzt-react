@@ -171,18 +171,26 @@
         },
         "actions": {
             "start": "Rozpocznij",
-            "complete": "Zakończ"
+            "complete": "Zakończ",
+            "cancel": "Anuluj",
+            "edit": "Edytuj"
         },
         "metadata": {
             "created": "Utworzono",
             "deadline": "Termin",
             "createdBy": "Utworzył",
-            "assignedTo": "Przypisano do"
+            "assignedTo": "Przypisana osoba"
         },
         "edit": {
             "title": "Edytuj uwagę",
             "save": "Zapisz zmiany",
             "assignedTo": "Przypisana osoba"
+        },
+        "loading": "Ładowanie uwag...",
+        "error": {
+            "update": "Błąd podczas aktualizacji uwagi",
+            "add": "Błąd podczas dodawania uwagi",
+            "load": "Wystąpił błąd podczas ładowania uwag"
         }
     }
 }

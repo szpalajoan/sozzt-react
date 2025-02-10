@@ -169,7 +169,7 @@ const PreliminaryPlan = ({ contractId }) => {
         />
       )}
 
-      <Remarks stepId="PRELIMINARY_PLAN" />
+      <Remarks stepId="PRELIMINARY_PLAN" contractId={contractId} />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity={errorMessage.includes('błąd') ? 'error' : 'success'} sx={{ width: '100%' }}>
