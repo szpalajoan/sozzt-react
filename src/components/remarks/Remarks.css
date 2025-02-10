@@ -115,7 +115,7 @@
   font-weight: 500;
   font-size: 0.75rem;
   height: 24px;
-  border-radius: 0 !important;
+  border-radius: 6px !important;
 }
 
 .remark-dialog {
@@ -190,9 +190,7 @@
   margin-top: 4px !important;
 }
 
-.remark-card.MuiCard-root {
-  border-radius: 0 !important;
-}
+
 
 .remarks-section .MuiPaper-rounded {
   border-radius: 0 !important;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { PersonOutline as PersonIcon } from '@mui/icons-material';
 import useFetch from "../useFetch";
 
 const Section = ({ stepType, deadline, name, stepStatus, comments, onClick }) => {
@@ -10,12 +11,17 @@ const Section = ({ stepType, deadline, name, stepStatus, comments, onClick }) =>
     <div className="section" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="section-header">
         <h3>{translate(`steps.${stepType}`)}</h3>
-        <p className="date">{new Date(deadline).toLocaleDateString()}</p> 
+        <span className="date">{new Date(deadline).toLocaleDateString()}</span> 
       </div>
-      <p className="name">{name}</p>
-      <p className={`status ${stepStatus.toLowerCase()}`}>
-      {translate(`stepStatus.${stepStatus}`)}
-      </p>
+      <div className="section-details">
+        <div className="assigned-person">
+          <PersonIcon fontSize="small" />
+          <span>{name}</span>
+        </div>
+        <div className={`status-badge ${stepStatus.toLowerCase()}`}>
+          {translate(`stepStatus.${stepStatus}`)}
+        </div>
+      </div>
       {comments && <p className="comments">{comments}</p>}
     </div>
   );
