@@ -357,8 +357,8 @@ const Remarks = ({ stepId }) => {
 
   return (
     <div className="remarks-section">
-      <div className="section-header">
-        <h2 className="section-title">
+      <div className="remarks-section-header">
+        <h2 className="remarks-section-title">
           <span>{t('remarks.title')}</span>
           <Button
             className="add-remark-button"
