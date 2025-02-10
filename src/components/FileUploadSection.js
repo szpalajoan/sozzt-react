@@ -19,7 +19,9 @@ const FileUploadSection = ({
   const { t } = useTranslation();
   return (
     <Box mb={2}>
-      <Typography variant="h6">{t(titleTranslationKey)}</Typography>
+      <Typography variant="h6" className="file-section-title">
+        {t(titleTranslationKey)}
+      </Typography>
       <List>
         {files.map((file) => (
           <ListItem key={file.fileId}>

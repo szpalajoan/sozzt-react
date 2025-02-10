@@ -18,7 +18,6 @@ const TerrainVision = ({ contractId }) => {
   const { data: terrainVisionData, isPending: isTerrainVisionPending, refetch: refetchTerrainVision } = useFetch(`contracts/terrain-vision/${contractId}`);
 
   const { data: fetchedTerrainFiles, isPending: isTerrainFilesPending, refetch: refetchTerrainFiles } = useFetch(`contracts/${contractId}/files?fileType=PHOTO_FROM_PLACE_OF_THE_CONTRACT`);
-  const { data: fetchedMapFiles, isPending: isMapFilesPending, refetch: refetchMapFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_UPDATED_MAP`);
 
   const { fetchData } = useDataFetching();
   const navigate = useNavigate();
@@ -66,12 +65,6 @@ const TerrainVision = ({ contractId }) => {
     console.log("Aktualne terrainFiles:", terrainFiles);
   }, [terrainFiles]);
 
-  useEffect(() => {
-    if (fetchedMapFiles) {
-      console.log("Pobrano mapy:", fetchedMapFiles);
-      setMapFiles(fetchedMapFiles);
-    }
-  }, [fetchedMapFiles]);
 
   const handleSaveTerrainPhotos = async () => {
     setLoading(true);
@@ -113,28 +106,9 @@ const TerrainVision = ({ contractId }) => {
     }
   };
 
-  const handleSaveMap = async () => {
-    setLoading(true);
-    try {
-      await deleteMapFiles(contractId, fetchData);
-      await uploadMapFiles(contractId, fetchData, 'preliminary-updated-maps');
-      refetchTerrainVision();
-      refetchMapFiles();
-      resetMapFiles();
-      setOpenSnackbar(true);
-      setErrorMessage('Mapa została zapisana pomyślnie.');
-    } catch (error) {
-      console.error('Błąd podczas zapisywania mapy:', error);
-      setErrorMessage('Wystąpił błąd podczas zapisywania mapy.');
-      setOpenSnackbar(true);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleConfirmMapChanges = async (routePreparationNeed) => {
     try {
-      await handleSaveMap();
       await fetchData(`contracts/terrain-vision/${contractId}/route-preparation-need`, 'POST', { routePreparationNeed });
       setOpenSnackbar(true);
       setErrorMessage(`Potwierdzono zmiany na mapie: ${routePreparationNeed}`);
@@ -168,7 +142,7 @@ const TerrainVision = ({ contractId }) => {
     setOpenSnackbar(false);
   };
 
-  if (isTerrainVisionPending || isTerrainFilesPending || isMapFilesPending) return <CircularProgress />;
+  if (isTerrainVisionPending || isTerrainFilesPending ) return <CircularProgress />;
   if (!terrainVisionData) return <div>Nie znaleziono danych wizji terenowej</div>;
 
   const handleImageClick = (index) => {
@@ -211,8 +185,8 @@ const TerrainVision = ({ contractId }) => {
   return (
     <Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Box className="main-content">
+<Box className="step-container">
+          <Box className="main-content">
         <h2 className="section-title"> Zdjęcia z trasy</h2>
           {terrainFiles.length > 0 ? (
             <ImageList

@@ -119,7 +119,7 @@ const PreliminaryPlan = ({ contractId }) => {
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box className="step-container">
 
       <Box className="main-content">
         <h2 className="section-title">Mapa google </h2>

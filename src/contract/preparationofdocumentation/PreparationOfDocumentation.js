@@ -84,7 +84,7 @@ const PreparationOfDocumentation = ({ contractId }) => {
   if (!documentation) return <Typography>Nie znaleziono dokumentacji</Typography>;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box className="step-container">
       <MapVerificationStep 
         documentation={documentation}
         loading={loading}
