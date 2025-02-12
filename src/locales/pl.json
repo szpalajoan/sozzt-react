@@ -191,6 +191,9 @@
             "update": "Błąd podczas aktualizacji uwagi",
             "add": "Błąd podczas dodawania uwagi",
             "load": "Wystąpił błąd podczas ładowania uwag"
-        }
+        },
+        "pending": "{{count}} uwag do wykonania",
+        "pending_one": "1 uwaga do wykonania",
+        "toComplete": "uwag do wykonania"
     }
 }

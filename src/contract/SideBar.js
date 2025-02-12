@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PersonOutline as PersonIcon } from '@mui/icons-material';
 import useFetch from "../useFetch";
+import { Badge, Chip } from '@mui/material';
+import { Comment as CommentIcon, TaskAlt, PriorityHigh, ErrorOutline } from '@mui/icons-material';
 
-const Section = ({ stepType, deadline, name, stepStatus, comments, onClick }) => {
+const Section = ({ stepType, deadline, name, stepStatus, comments, onClick, pendingRemarks }) => {
   const { t: translate } = useTranslation(); 
 
   return (
@@ -23,6 +25,12 @@ const Section = ({ stepType, deadline, name, stepStatus, comments, onClick }) =>
         </div>
       </div>
       {comments && <p className="comments">{comments}</p>}
+      {pendingRemarks > 0 && (
+        <div className="remarks-indicator">
+          <ErrorOutline fontSize="small" />
+          <span>{pendingRemarks} {translate('remarks.toComplete')}</span>
+        </div>
+      )}
     </div>
   );
 };
@@ -30,7 +38,17 @@ const Section = ({ stepType, deadline, name, stepStatus, comments, onClick }) =>
 const Sidebar = ({ contractId, setSelectedStep, refetchContract }) => {
   const { t: translate } = useTranslation(); 
   const { data: contract, isPending: isContractPending } = useFetch(`contracts/${contractId}`);
+  const { data: remarks } = useFetch(`contracts/remarks/${contractId}`);
   const navigate = useNavigate();
+
+  const getPendingRemarksCount = (stepType) => {
+    if (!remarks) return 0;
+    
+    return remarks.filter(remark => 
+      remark.remarkType === stepType && 
+      !['DONE', 'CANCELLED'].includes(remark.remarkStatus)
+    ).length;
+  };
 
   const handleStepChange = (stepType) => {
     setSelectedStep(stepType);
@@ -48,7 +66,8 @@ const Sidebar = ({ contractId, setSelectedStep, refetchContract }) => {
             stepType={step.contractStepType} 
             deadline={step.deadline} 
             name="Daniel" 
-            stepStatus={step.contractStepStatus} 
+            stepStatus={step.contractStepStatus}
+            pendingRemarks={getPendingRemarksCount(step.contractStepType)}
             onClick={() => handleStepChange(step.contractStepType)}
           />
         ))

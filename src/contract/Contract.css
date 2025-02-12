@@ -338,3 +338,29 @@ body, html {
 
 }
 
+.remarks-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #d32f2f;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(211, 47, 47, 0.05);
+  width: fit-content;
+}
+
+.remarks-indicator svg {
+  font-size: 16px;
+}
+
+/* Usuń nieużywane style */
+.remarks-count,
+.remarks-indicator .MuiBadge-badge,
+.remarks-indicator .MuiChip-root,
+.remarks-indicator .MuiChip-icon,
+.remarks-indicator .MuiChip-label {
+  display: none;
+}
+
