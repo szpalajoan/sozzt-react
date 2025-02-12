@@ -14,8 +14,8 @@ const Contract = () => {
   const { contractId, step } = useParams();
   const [selectedStep, setSelectedStep] = useState(step || 'Details');
   const navigate = useNavigate();
-  const { data: contract } = useFetch(`contracts/${contractId}`);
-
+  const { data: contract, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
+  const { data: remarks, refetch: refetchRemarks } = useFetch(`contracts/remarks/${contractId}`);
 
   useEffect(() => {
     if (step) {
@@ -32,22 +32,30 @@ const Contract = () => {
       navigate(`/contract/${contractId}/${newStep}`, { replace: true });
     }
     setSelectedStep(newStep);
+    refetchContract();
+    refetchRemarks();
   };
 
   const renderStepDetails = () => {
+    const commonProps = {
+      contractId,
+      onRemarkChange: refetchRemarks,
+      remarks: remarks
+    };
+
     switch (selectedStep) {
       case 'Details':
-        return <Details contractId={contractId} />;
+        return <Details {...commonProps} />;
       case 'PRELIMINARY_PLAN':
-        return <PreliminaryPlan contractId={contractId} />;
+        return <PreliminaryPlan {...commonProps} />;
       case 'TERRAIN_VISION':
-        return <TerrainVision contractId={contractId} />;
+        return <TerrainVision {...commonProps} />;
       case 'ROUTE_PREPARATION':
-        return <RoutePreparation contractId={contractId} />;
+        return <RoutePreparation {...commonProps} />;
       case 'CONSENTS_COLLECTION':
-        return <ConsentsCollection contractId={contractId} />;
+        return <ConsentsCollection {...commonProps} />;
       case 'PREPARATION_OF_DOCUMENTATION':
-        return <PreparationOfDocumentation contractId={contractId} />;
+        return <PreparationOfDocumentation {...commonProps} />;
       default:
         return <p>Jeszcze nie zrobione</p>;
     }
@@ -60,14 +68,18 @@ const Contract = () => {
   return (
     <div className="page-container">
       <header className="fixed-header">
-      <button className="back-button" onClick={goBackToHome}></button>
-              <h2 className="header-title" onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
+        <button className="back-button" onClick={goBackToHome}></button>
+        <h2 className="header-title" onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
           {contract ? `${contract.contractDetails.contractNumber} - ${contract.location.city}` : 'ładowanie' }
-
         </h2>
       </header>
       <div className="contract-container">
-        <Sidebar setSelectedStep={handleStepChange} contractId={contractId} />
+        <Sidebar 
+          setSelectedStep={handleStepChange} 
+          contractId={contractId}
+          contract={contract}
+          remarks={remarks}
+        />
         <main className="content-wrapper">
           <article>
             {renderStepDetails()}

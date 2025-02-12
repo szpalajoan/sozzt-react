@@ -26,7 +26,7 @@ const formatDateToInstant = (dateString) => {
   return new Date(dateString).toISOString();
 };
 
-const RemarksContent = ({ stepId, contractId }) => {
+const RemarksContent = ({ stepId, contractId, onRemarkChange }) => {
   const { t } = useTranslation();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editedRemark, setEditedRemark] = useState(null);
@@ -84,6 +84,7 @@ const RemarksContent = ({ stepId, contractId }) => {
       
       if (response) {
         refetchRemarks();
+        onRemarkChange?.();
       }
     } catch (error) {
       console.error('Error updating remark status:', error);
@@ -112,6 +113,7 @@ const RemarksContent = ({ stepId, contractId }) => {
       
       if (response) {
         refetchRemarks();
+        onRemarkChange?.();
         setIsAddDialogOpen(false);
       }
     } catch (error) {
@@ -141,6 +143,7 @@ const RemarksContent = ({ stepId, contractId }) => {
       const response = await fetchData('contracts/remarks/edit', 'PUT', editRemarkDto);
       if (response) {
         refetchRemarks();
+        onRemarkChange?.();
         setEditedRemark(null);
       }
     } catch (error) {

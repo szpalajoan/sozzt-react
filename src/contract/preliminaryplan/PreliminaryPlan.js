@@ -12,7 +12,7 @@ import SnackbarAlert from '../../components/SnackbarAlert';
 import CompleteStepButton from '../../components/CompleteStepButton';
 import Remarks from '../../components/remarks/Remarks';
 
-const PreliminaryPlan = ({ contractId }) => {
+const PreliminaryPlan = ({ contractId, onRemarkChange, onStepComplete }) => {
   const { data: preliminaryPlan, isPending: isPreliminaryPlanPending, refetch: refetchPreliminaryPlan } = useFetch(`contracts/preliminary-plans/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=PRELIMINARY_MAP`);
   const { data: contract } = useFetch(`contracts/${contractId}`); //tylko po to zeby pobrac status 
@@ -56,11 +56,10 @@ const PreliminaryPlan = ({ contractId }) => {
   const handleComplete = async () => {
     try {
       await fetchData(`contracts/preliminary-plans/${contractId}/complete`, 'POST');
-
+      onStepComplete?.();
       refetchPreliminaryPlan();
       console.log("Wstępny plan został skompletowany.");
       navigate(0);
-
     } catch (error) {
       console.log(error.message);
       setErrorMessage(error.message || 'Wystąpił błąd podczas kompletowania wstępnego planu.');
@@ -169,7 +168,11 @@ const PreliminaryPlan = ({ contractId }) => {
         />
       )}
 
-      <Remarks stepId="PRELIMINARY_PLAN" contractId={contractId} />
+      <Remarks 
+        stepId="PRELIMINARY_PLAN" 
+        contractId={contractId} 
+        onRemarkChange={onRemarkChange}
+      />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity={errorMessage.includes('błąd') ? 'error' : 'success'} sx={{ width: '100%' }}>

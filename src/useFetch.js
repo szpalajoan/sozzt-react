@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import './i18n/i18n';
 
@@ -14,7 +14,7 @@ const useFetch = (url) => {
   const [error, setError] = useState(null);
   const { t } = useTranslation(); 
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const username = 'user';
     const password = 'user';
     const headers = new Headers();
@@ -33,22 +33,22 @@ const useFetch = (url) => {
       const data = await response.json();
       setData(data);
       setIsPending(false);
+      setError(null);
     } catch (error) {
       setError(error.message);
       setIsPending(false);
     }
-  };
+  }, [url, t]);
 
   useEffect(() => {
     fetchData();
-  }, [url]);
+  }, [fetchData]);
 
- 
-  const refetch = () => {
-    console.log('refetch');
-    setIsPending(true); 
+  const refetch = useCallback(() => {
+    console.log('Refetching data for:', url);
+    setIsPending(true);
     fetchData();
-  };
+  }, [fetchData]);
 
   return { data, isPending, error, refetch }; 
 };

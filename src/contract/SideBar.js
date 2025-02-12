@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PersonOutline as PersonIcon } from '@mui/icons-material';
@@ -35,30 +35,33 @@ const Section = ({ stepType, deadline, name, stepStatus, comments, onClick, pend
   );
 };
 
-const Sidebar = ({ contractId, setSelectedStep, refetchContract }) => {
+const Sidebar = ({ contractId, setSelectedStep, contract, remarks }) => {
   const { t: translate } = useTranslation(); 
-  const { data: contract, isPending: isContractPending } = useFetch(`contracts/${contractId}`);
-  const { data: remarks } = useFetch(`contracts/remarks/${contractId}`);
   const navigate = useNavigate();
 
   const getPendingRemarksCount = (stepType) => {
     if (!remarks) return 0;
     
+    const remarkType = {
+      'PRELIMINARY_PLAN': 'PRELIMINARY_PLAN',
+      'TERRAIN_VISION': 'TERRAIN_VISION',
+      'ROUTE_PREPARATION': 'ROUTE_PREPARATION',
+      'CONSENTS_COLLECTION': 'CONSENTS_COLLECTION',
+      'PREPARATION_OF_DOCUMENTATION': 'PREPARATION_OF_DOCUMENTATION',
+    }[stepType] || 'GENERAL_CONTRACT';
+    
     return remarks.filter(remark => 
-      remark.remarkType === stepType && 
+      remark.remarkType === remarkType && 
       !['DONE', 'CANCELLED'].includes(remark.remarkStatus)
     ).length;
   };
 
   const handleStepChange = (stepType) => {
     setSelectedStep(stepType);
-    navigate(`/contract/${contractId}/${stepType}`, { replace: true });
-    refetchContract?.(); 
   };
 
   return (
     <aside className="sidebar">
-      {isContractPending && <p>{translate('loading')}</p>} 
       {contract?.contractSteps?.length > 0 ? (
         contract.contractSteps.map((step, index) => (
           <Section
@@ -72,9 +75,7 @@ const Sidebar = ({ contractId, setSelectedStep, refetchContract }) => {
           />
         ))
       ) : (
-        !isContractPending && (
-          <p>{translate('contract.finalize.introduction')}</p> 
-        )
+        <p>{translate('contract.finalize.introduction')}</p> 
       )}
     </aside>
   );

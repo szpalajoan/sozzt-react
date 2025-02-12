@@ -20,10 +20,14 @@ const RemarksLoader = () => (
   </div>
 );
 
-const Remarks = ({ stepId, contractId }) => {
+const Remarks = ({ stepId, contractId, onRemarkChange }) => {
   return (
     <Suspense fallback={<RemarksLoader />}>
-      <RemarksContent stepId={stepId} contractId={contractId} />
+      <RemarksContent 
+        stepId={stepId} 
+        contractId={contractId} 
+        onRemarkChange={onRemarkChange}
+      />
     </Suspense>
   );
 };
