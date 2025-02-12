@@ -13,6 +13,7 @@ import { useTauronCommunication } from './hooks/useTauronCommunication';
 import TauronCommunicationStep from './components/TauronCommunicationStep';
 import { useTermVerification } from './hooks/useTermVerification';
 import TermVerificationStep from './components/TermVerificationStep';
+import Remarks from '../../components/remarks/Remarks';
 
 const PreparationOfDocumentation = ({ contractId }) => {
   const {
@@ -155,6 +156,8 @@ const PreparationOfDocumentation = ({ contractId }) => {
         onComplete={termVerification.handleComplete}
         loading={loading}
       />
+
+      <Remarks stepId="PREPARATION_OF_DOCUMENTATION" contractId={contractId} />
 
       <SnackbarAlert
         open={snackbar.open}

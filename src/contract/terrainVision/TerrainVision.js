@@ -11,6 +11,8 @@ import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css'
 import OpenFolderButton from '../../components/OpenFolderButton';
 import CompleteStepButton from '../../components/CompleteStepButton';
+import Remarks from '../../components/remarks/Remarks';
+
 
 const TerrainVision = ({ contractId }) => {
   const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
@@ -142,7 +144,7 @@ const TerrainVision = ({ contractId }) => {
     setOpenSnackbar(false);
   };
 
-  if (isTerrainVisionPending || isTerrainFilesPending ) return <CircularProgress />;
+  if (isTerrainVisionPending || isTerrainFilesPending) return <CircularProgress />;
   if (!terrainVisionData) return <div>Nie znaleziono danych wizji terenowej</div>;
 
   const handleImageClick = (index) => {
@@ -185,9 +187,9 @@ const TerrainVision = ({ contractId }) => {
   return (
     <Box>
 
-<Box className="step-container">
-          <Box className="main-content">
-        <h2 className="section-title"> Zdjęcia z trasy</h2>
+      <Box className="step-container">
+        <Box className="main-content">
+          <h2 className="section-title"> Zdjęcia z trasy</h2>
           {terrainFiles.length > 0 ? (
             <ImageList
               sx={{
@@ -250,14 +252,14 @@ const TerrainVision = ({ contractId }) => {
         </Box>
 
         <Box className="main-content">
-        <h2 className="section-title">Poprawiona wstępna mapa</h2>
-        <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
-          Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze z mapą.
-        </Typography>
-        <OpenFolderButton
-          folderPath="Projekty"
-          buttonText="Otwórz folder"
-        />
+          <h2 className="section-title">Poprawiona wstępna mapa</h2>
+          <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+            Mapa została już wgrana. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze z mapą.
+          </Typography>
+          <OpenFolderButton
+            folderPath="Projekty"
+            buttonText="Otwórz folder"
+          />
         </Box>
 
 
@@ -285,8 +287,8 @@ const TerrainVision = ({ contractId }) => {
           ) : (
             <>
               <Typography variant="body1" sx={{ mb: 2 }}>
-                {terrainVisionData.routePreparationNeed === "NECESSARY" 
-                  ? "Kontrakt wymaga mapę geodetów." 
+                {terrainVisionData.routePreparationNeed === "NECESSARY"
+                  ? "Kontrakt wymaga mapę geodetów."
                   : "Mapa nie wymaga geodetów."}
               </Typography>
               {terrainVisionData.terrainVisionStatus !== "COMPLETED" && (
@@ -306,16 +308,20 @@ const TerrainVision = ({ contractId }) => {
         </Box>
 
         {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparationNeed !== "NONE" &&
-         terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
-          <CompleteStepButton
-          handleComplete={handleFinalizeTerrainVision}
-          loading={loading}
-          titleKey="terrainVision.completeButton.title"
-          descriptionKey="terrainVision.completeButton.allActionsCompleted"
-          warningMessage="terrainVision.completeButton.warning"
-        />
-        )}
+          terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
+            <CompleteStepButton
+              handleComplete={handleFinalizeTerrainVision}
+              loading={loading}
+              titleKey="terrainVision.completeButton.title"
+              descriptionKey="terrainVision.completeButton.allActionsCompleted"
+              warningMessage="terrainVision.completeButton.warning"
+            />
+          )}
+
+        <Remarks stepId="TERRAIN_VISION" contractId={contractId} />
       </Box>
+
+
 
       <Snackbar
         open={openSnackbar}

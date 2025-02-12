@@ -7,6 +7,7 @@ import FileUploadSection from '../../components/FileUploadSection';
 import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 import CompleteStepButton from '../../components/CompleteStepButton';
+import Remarks from '../../components/remarks/Remarks';
 
 const RoutePreparation = ({ contractId }) => {
   const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/route-preparation/${contractId}`);
@@ -120,6 +121,8 @@ const RoutePreparation = ({ contractId }) => {
           warningMessage="routePreparation.completeButton.warning"
         />
         )}
+
+        <Remarks stepId="ROUTE_PREPARATION" contractId={contractId} />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
