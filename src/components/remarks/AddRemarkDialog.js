@@ -22,10 +22,12 @@ const AddRemarkDialog = ({ open, onClose, onAdd }) => {
   });
 
   const handleAdd = () => {
-    // Konwertujemy string z datą na Instant (ISO string)
     const formattedRemark = {
       ...newRemark,
-      deadline: new Date(newRemark.deadline).toISOString()
+      // Dodaj deadline tylko jeśli został ustawiony
+      ...(newRemark.deadline && {
+        deadline: new Date(newRemark.deadline).toISOString()
+      })
     };
     
     onAdd(formattedRemark);
@@ -93,7 +95,7 @@ const AddRemarkDialog = ({ open, onClose, onAdd }) => {
         <Button 
           onClick={handleAdd} 
           variant="contained"
-          disabled={!newRemark.title || !newRemark.description || !newRemark.deadline || !newRemark.assignedTo}
+          disabled={!newRemark.title || !newRemark.description || !newRemark.assignedTo}
         >
           {t('remarks.dialog.add')}
         </Button>

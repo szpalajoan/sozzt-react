@@ -19,6 +19,7 @@ import { format, isAfter, isBefore, addDays } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import { STATUS_COLORS, STATUS_LABELS } from './remarksConstants';
+import StatusBadge from '../StatusBadge';
 
 const RemarkCard = ({ remark, onStatusChange, onEdit, isLoading }) => {
   const { t } = useTranslation();
@@ -63,12 +64,7 @@ const RemarkCard = ({ remark, onStatusChange, onEdit, isLoading }) => {
       <CardContent>
         <div className="remark-card-header">
           <div className="remark-header-left">
-            <Chip 
-              label={t(STATUS_LABELS[remark.remarkStatus])} 
-              color={STATUS_COLORS[remark.remarkStatus]} 
-              size="small"
-              className="status-chip"
-            />
+            <StatusBadge status={remark.remarkStatus} />
             <div className="remark-title-section">
               <Typography className="remark-title">{remark.title}</Typography>
             </div>
@@ -145,9 +141,13 @@ const RemarkCard = ({ remark, onStatusChange, onEdit, isLoading }) => {
             <div className="remark-metadata-group">
               <PersonIcon fontSize="small" />
               <span>{remark.assignedTo}</span>
-              <span className="metadata-separator">•</span>
-              <CalendarIcon fontSize="small" />
-              <span>{format(new Date(remark.deadline), 'dd.MM.yyyy, HH:mm', { locale: pl })}</span>
+              {remark.deadline && (
+                <>
+                  <span className="metadata-separator">•</span>
+                  <CalendarIcon fontSize="small" />
+                  <span>{format(new Date(remark.deadline), 'dd.MM.yyyy, HH:mm', { locale: pl })}</span>
+                </>
+              )}
               <span className="metadata-separator">•</span>
               <span className="remark-creation-info">
                 {t('remarks.metadata.created')}: {format(new Date(remark.createdAt), 'dd.MM.yyyy, HH:mm', { locale: pl })} - {remark.createdBy}

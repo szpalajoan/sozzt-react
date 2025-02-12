@@ -21,10 +21,14 @@
         "PREPARATION_OF_DOCUMENTATION" : "Przygotowanie dokumentacji"
     },
     "stepStatus": {
-        "ON_HOLD": "On-hold",
+        "NEW": "Nowa",
         "IN_PROGRESS": "W trakcie",
-        "DONE": "Zrobione",
-        "NOT_ACTIVE": "Nie rozpoczęte"
+        "DONE": "Zakończona",
+        "CANCELLED": "Anulowana",
+        "TO_DO": "Do zrobienia",
+        "COMPLETED": "Zakończony",
+        "ON_HOLD": "Nieaktywny",
+        "NOT_ACTIVE": "Nieaktywny"
     },
     "loading": "Ładowanie...",
     "preliminaryPlan": {

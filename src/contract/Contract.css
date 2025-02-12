@@ -132,37 +132,48 @@
 }
 
 .status-badge {
-  font-size: 0.75rem;
-  font-weight: 500;
   padding: 4px 8px;
   border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
   text-transform: uppercase;
+  width: fit-content;
 }
 
-.status-badge.on_hold { 
-  background-color: #f5f5f5;
-  color: #333;
+.status-badge.new {
+  background-color: #e3f2fd;
+  color: #1976d2;
 }
 
-.status-badge.done { 
+.status-badge.in_progress {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.done {
   background-color: #e8f5e9;
   color: #2e7d32;
 }
 
-.status-badge.todo { 
-  background-color: #ffebee;
-  color: #c62828;
+.status-badge.cancelled {
+  background-color: #fafafa;
+  color: #757575;
+}
+.sidebar .status-badge.on_hold {
+  background-color: #f5f5f5;
+  color: #333;
 }
 
-.status-badge.in_progress { 
-  background-color: #fff3e0;
-  color: #ef6c00;
+.sidebar .status-badge.not_active {
+  background-color: #f5f5f5;
+  color: #333;
 }
 
 .sidebar .comments {
   margin-top: 10px;
   color: #333;
 }
+
 
 .sidebar .subtasks {
   margin-top: 10px;

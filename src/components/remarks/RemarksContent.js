@@ -19,11 +19,18 @@ const getStatusPriority = (status) => {
   return priorities[status] || 0;
 };
 
+// Dodaj funkcję pomocniczą do bezpiecznej konwersji daty
 const formatDateToInstant = (dateString) => {
-  if (dateString.length === 16) {
-    return new Date(dateString + ':00.000Z').toISOString();
+  if (!dateString) return null;
+  
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return null;
+    return date.toISOString();
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return null;
   }
-  return new Date(dateString).toISOString();
 };
 
 const RemarksContent = ({ stepId, contractId, onRemarkChange }) => {
@@ -106,8 +113,20 @@ const RemarksContent = ({ stepId, contractId, onRemarkChange }) => {
         title: newRemark.title,
         description: newRemark.description,
         assignedTo: newRemark.assignedTo,
-        deadline: formatDateToInstant(newRemark.deadline)
+        ...(newRemark.deadline && {
+          deadline: formatDateToInstant(newRemark.deadline)
+        })
       };
+
+      // Nie wysyłaj requestu jeśli deadline jest nieprawidłowy
+      if (newRemark.deadline && !addRemarkDto.deadline) {
+        setSnackbar({
+          open: true,
+          message: t('remarks.error.invalidDate'),
+          severity: 'error'
+        });
+        return;
+      }
 
       const response = await fetchData('contracts/remarks/', 'POST', addRemarkDto);
       
@@ -137,8 +156,20 @@ const RemarksContent = ({ stepId, contractId, onRemarkChange }) => {
         title: updatedRemark.title,
         description: updatedRemark.description,
         assignedTo: updatedRemark.assignedTo,
-        deadline: formatDateToInstant(updatedRemark.deadline)
+        ...(updatedRemark.deadline && {
+          deadline: formatDateToInstant(updatedRemark.deadline)
+        })
       };
+
+      // Nie wysyłaj requestu jeśli deadline jest nieprawidłowy
+      if (updatedRemark.deadline && !editRemarkDto.deadline) {
+        setSnackbar({
+          open: true,
+          message: t('remarks.error.invalidDate'),
+          severity: 'error'
+        });
+        return;
+      }
 
       const response = await fetchData('contracts/remarks/edit', 'PUT', editRemarkDto);
       if (response) {

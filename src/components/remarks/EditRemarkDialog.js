@@ -23,7 +23,15 @@ const EditRemarkDialog = ({ open, onClose, onSave, remark }) => {
   });
 
   const handleSave = () => {
-    onSave({ ...remark, ...editedRemark });
+    const updatedRemark = {
+      ...remark,
+      ...editedRemark,
+      // Dodaj deadline tylko jeśli został ustawiony
+      ...(editedRemark.deadline && {
+        deadline: new Date(editedRemark.deadline).toISOString()
+      })
+    };
+    onSave(updatedRemark);
     onClose();
   };
 
@@ -88,7 +96,7 @@ const EditRemarkDialog = ({ open, onClose, onSave, remark }) => {
         <Button 
           onClick={handleSave} 
           variant="contained"
-          disabled={!editedRemark.title || !editedRemark.description || !editedRemark.deadline || !editedRemark.assignedTo}
+          disabled={!editedRemark.title || !editedRemark.description || !editedRemark.assignedTo}
         >
           {t('remarks.edit.save')}
         </Button>

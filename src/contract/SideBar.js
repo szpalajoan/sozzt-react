@@ -5,6 +5,7 @@ import { PersonOutline as PersonIcon } from '@mui/icons-material';
 import useFetch from "../useFetch";
 import { Badge, Chip } from '@mui/material';
 import { Comment as CommentIcon, TaskAlt, PriorityHigh, ErrorOutline } from '@mui/icons-material';
+import StatusBadge from '../components/StatusBadge';
 
 const Section = ({ stepType, deadline, name, stepStatus, comments, onClick, pendingRemarks }) => {
   const { t: translate } = useTranslation(); 
@@ -20,15 +21,18 @@ const Section = ({ stepType, deadline, name, stepStatus, comments, onClick, pend
           <PersonIcon fontSize="small" />
           <span>{name}</span>
         </div>
-        <div className={`status-badge ${stepStatus.toLowerCase()}`}>
-          {translate(`stepStatus.${stepStatus}`)}
-        </div>
+        <StatusBadge status={stepStatus} />
       </div>
       {comments && <p className="comments">{comments}</p>}
       {pendingRemarks > 0 && (
         <div className="remarks-indicator">
           <ErrorOutline fontSize="small" />
-          <span>{pendingRemarks} {translate('remarks.toComplete')}</span>
+          <span>
+            {pendingRemarks === 1 
+              ? translate('remarks.pending_one') 
+              : `${pendingRemarks} ${translate('remarks.toComplete')}`
+            }
+          </span>
         </div>
       )}
     </div>
