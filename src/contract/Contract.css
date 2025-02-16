@@ -375,3 +375,46 @@ body, html {
   display: none;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-right: 16px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.add-remark-button {
+  margin-left: 8px !important;
+  border-radius: 50% !important;
+  min-width: 0 !important;
+  padding: 8px !important;
+}
+
+/* Nowe style dla przycisku w nagłówku */
+.header-add-remark-button {
+  display: flex !important;
+  align-items: center !important;
+  margin-left: 16px !important;
+  padding: 6px 16px !important;
+  text-transform: none !important;
+  border-radius: 4px !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  border: 1px solid rgba(0, 0, 0, 0.23) !important;
+  background-color: transparent !important;
+}
+
+.header-add-remark-button:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.header-add-remark-button .MuiButton-startIcon {
+  margin-right: 8px !important;
+}
+

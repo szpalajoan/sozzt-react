@@ -1,0 +1,40 @@
+{
+  "remarks": {
+    "add": "Dodaj uwagę",
+    "addRemark": "Dodaj uwagę",
+    "edit": "Edytuj uwagę",
+    "delete": "Usuń uwagę",
+    "title": "Tytuł",
+    "description": "Opis",
+    "assignedTo": "Przypisane do",
+    "deadline": "Termin",
+    "step": "Krok",
+    "selectStep": "Wybierz krok",
+    "status": {
+      "new": "Nowa",
+      "inProgress": "W trakcie",
+      "done": "Zakończona",
+      "cancelled": "Anulowana"
+    },
+    "error": {
+      "add": "Błąd podczas dodawania uwagi",
+      "update": "Błąd podczas aktualizacji uwagi",
+      "delete": "Błąd podczas usuwania uwagi",
+      "invalidDate": "Nieprawidłowy format daty"
+    },
+    "metadata": {
+      "created": "Utworzono",
+      "deadline": "Termin",
+      "createdBy": "Utworzył",
+      "assignedTo": "Przypisana osoba"
+    },
+    "dialog": {
+      "title": "Dodaj nową uwagę",
+      "titleField": "Tytuł",
+      "descriptionField": "Opis",
+      "deadlineField": "Termin",
+      "cancel": "Anuluj",
+      "add": "Dodaj"
+    }
+  }
+} 

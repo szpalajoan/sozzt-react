@@ -68,7 +68,17 @@ const PublicConsents = ({
                 <PublicConsentForm onSubmit={onAddConsent} />
             </Box>
 
-            <List sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <List sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 0,
+                '& .MuiListItem-root': {
+                    marginBottom: 1
+                },
+                '& .MuiListItem-root:last-child': {
+                    marginBottom: 0
+                }
+            }}>
                 {sortConsents(consents).map((consent) => (
                     <ConsentItem
                         key={consent.publicPlotOwnerConsentId}

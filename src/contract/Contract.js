@@ -9,6 +9,13 @@ import PreparationOfDocumentation from './preparationofdocumentation/Preparation
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
 import useFetch from "../useFetch";
+import { Comment as CommentIcon } from '@mui/icons-material';
+import { IconButton, Button, Typography } from '@mui/material';
+import AddRemarkDialog from '../components/remarks/AddRemarkDialog';
+import { useTranslation } from 'react-i18next';
+import useDataFetching from '../useDataFetching';
+import { formatDateToInstant } from '../utils/dateUtils';
+import { Add as AddIcon } from '@mui/icons-material';
 
 const Contract = () => {
   const { contractId, step } = useParams();
@@ -16,6 +23,9 @@ const Contract = () => {
   const navigate = useNavigate();
   const { data: contract, refetch: refetchContract } = useFetch(`contracts/${contractId}`);
   const { data: remarks, refetch: refetchRemarks } = useFetch(`contracts/remarks/${contractId}`);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const { t } = useTranslation();
+  const { fetchData } = useDataFetching();
 
   useEffect(() => {
     if (step) {
@@ -34,6 +44,29 @@ const Contract = () => {
     setSelectedStep(newStep);
     refetchContract();
     refetchRemarks();
+  };
+
+  const handleAddRemark = async (newRemark) => {
+    try {
+      const addRemarkDto = {
+        contractId,
+        remarkType: newRemark.selectedStep,
+        title: newRemark.title,
+        description: newRemark.description,
+        assignedTo: newRemark.assignedTo,
+        ...(newRemark.deadline && {
+          deadline: formatDateToInstant(newRemark.deadline)
+        })
+      };
+
+      const response = await fetchData('contracts/remarks/', 'POST', addRemarkDto);
+      if (response) {
+        refetchRemarks();
+        setIsAddDialogOpen(false);
+      }
+    } catch (error) {
+      console.error('Error adding remark:', error);
+    }
   };
 
   const renderStepDetails = () => {
@@ -69,9 +102,19 @@ const Contract = () => {
     <div className="page-container">
       <header className="fixed-header">
         <button className="back-button" onClick={goBackToHome}></button>
-        <h2 className="header-title" onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
-          {contract ? `${contract.contractDetails.contractNumber} - ${contract.location.city}` : 'ładowanie' }
-        </h2>
+        <div className="header-content">
+          <h2 className="header-title" onClick={() => handleStepChange('Details')} style={{ cursor: 'pointer' }}>
+            {contract ? `${contract.contractDetails.contractNumber} - ${contract.location.city}` : 'ładowanie' }
+          </h2>
+          <Button
+            onClick={() => setIsAddDialogOpen(true)}
+            className="header-add-remark-button"
+            startIcon={<AddIcon />}
+            variant="outlined"
+          >
+            {t('remarks.addRemark')}
+          </Button>
+        </div>
       </header>
       <div className="contract-container">
         <Sidebar 
@@ -86,6 +129,14 @@ const Contract = () => {
           </article>
         </main>
       </div>
+
+      <AddRemarkDialog
+        open={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+        onAdd={handleAddRemark}
+        steps={contract?.contractSteps}
+        showStepSelect
+      />
     </div>
   );
 };

@@ -7,31 +7,38 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  MenuItem
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { MOCK_USERS } from './remarksConstants';
 
-const AddRemarkDialog = ({ open, onClose, onAdd }) => {
+const AddRemarkDialog = ({ open, onClose, onAdd, steps, showStepSelect }) => {
   const { t } = useTranslation();
   const [newRemark, setNewRemark] = useState({
     title: '',
     description: '',
     deadline: '',
-    assignedTo: ''
+    assignedTo: '',
+    selectedStep: ''
   });
 
   const handleAdd = () => {
-    const formattedRemark = {
-      ...newRemark,
-      // Dodaj deadline tylko jeśli został ustawiony
-      ...(newRemark.deadline && {
-        deadline: new Date(newRemark.deadline).toISOString()
-      })
-    };
-    
-    onAdd(formattedRemark);
-    setNewRemark({ title: '', description: '', deadline: '', assignedTo: '' });
+    if (showStepSelect && !newRemark.selectedStep) {
+      alert(t('remarks.selectStep'));
+      return;
+    }
+
+    onAdd(newRemark);
+    setNewRemark({ 
+      title: '', 
+      description: '', 
+      deadline: '', 
+      assignedTo: '',
+      selectedStep: ''
+    });
   };
 
   return (
@@ -43,9 +50,27 @@ const AddRemarkDialog = ({ open, onClose, onAdd }) => {
       className="remark-dialog"
     >
       <DialogTitle className="remark-dialog-title">
-        {t('remarks.dialog.title')}
+        {t('remarks.add')}
       </DialogTitle>
       <DialogContent className="remark-dialog-content">
+        {showStepSelect && (
+          <TextField
+            select
+            label={t('remarks.step')}
+            value={newRemark.selectedStep}
+            onChange={(e) => setNewRemark(prev => ({ ...prev, selectedStep: e.target.value }))}
+            fullWidth
+            required
+            className="remark-form-field"
+            sx={{ mb: 2, mt: 1 }}
+          >
+            {steps?.map((step) => (
+              <MenuItem key={step.contractStepType} value={step.contractStepType}>
+                {t(`steps.${step.contractStepType}`)}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
           <TextField
             label={t('remarks.dialog.titleField')}
@@ -95,7 +120,7 @@ const AddRemarkDialog = ({ open, onClose, onAdd }) => {
         <Button 
           onClick={handleAdd} 
           variant="contained"
-          disabled={!newRemark.title || !newRemark.description || !newRemark.assignedTo}
+          disabled={!newRemark.title || !newRemark.description}
         >
           {t('remarks.dialog.add')}
         </Button>
