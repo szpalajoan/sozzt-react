@@ -15,7 +15,7 @@ import { useTermVerification } from './hooks/useTermVerification';
 import TermVerificationStep from './components/TermVerificationStep';
 import Remarks from '../../components/remarks/Remarks';
 
-const PreparationOfDocumentation = ({ contractId }) => {
+const PreparationOfDocumentation = ({ contractId, onRemarkChange }) => {
   const {
     documentation,
     setDocumentation,
@@ -157,7 +157,11 @@ const PreparationOfDocumentation = ({ contractId }) => {
         loading={loading}
       />
 
-      <Remarks stepId="PREPARATION_OF_DOCUMENTATION" contractId={contractId} />
+      <Remarks 
+        stepId="PREPARATION_OF_DOCUMENTATION" 
+        contractId={contractId} 
+        onRemarkChange={onRemarkChange}
+      />
 
       <SnackbarAlert
         open={snackbar.open}

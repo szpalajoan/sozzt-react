@@ -14,7 +14,7 @@ import CompleteStepButton from '../../components/CompleteStepButton';
 import Remarks from '../../components/remarks/Remarks';
 
 
-const TerrainVision = ({ contractId }) => {
+const TerrainVision = ({ contractId, onRemarkChange }) => {
   const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
 
   const { data: terrainVisionData, isPending: isTerrainVisionPending, refetch: refetchTerrainVision } = useFetch(`contracts/terrain-vision/${contractId}`);
@@ -318,7 +318,11 @@ const TerrainVision = ({ contractId }) => {
             />
           )}
 
-        <Remarks stepId="TERRAIN_VISION" contractId={contractId} />
+        <Remarks 
+          stepId="TERRAIN_VISION" 
+          contractId={contractId} 
+          onRemarkChange={onRemarkChange}
+        />
       </Box>
 
 

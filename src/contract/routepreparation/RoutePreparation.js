@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import CompleteStepButton from '../../components/CompleteStepButton';
 import Remarks from '../../components/remarks/Remarks';
 
-const RoutePreparation = ({ contractId }) => {
+const RoutePreparation = ({ contractId, onRemarkChange }) => {
   const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/route-preparation/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=GEODETIC_MAP`);
   
@@ -122,7 +122,11 @@ const RoutePreparation = ({ contractId }) => {
         />
         )}
 
-        <Remarks stepId="ROUTE_PREPARATION" contractId={contractId} />
+        <Remarks 
+          stepId="ROUTE_PREPARATION" 
+          contractId={contractId} 
+          onRemarkChange={onRemarkChange}
+        />
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
