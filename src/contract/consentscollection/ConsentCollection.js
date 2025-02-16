@@ -37,12 +37,11 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
     }, [contractId]);
 
     const canComplete = () => {
-        // Check if consents collection is already completed
         if (consents?.completed) {
             return false;
         }
         
-        const allPrivateConsentsApproved = consents?.privatePlotOwnerConsents?.every(
+        const allPrivateConsentsApproved = consents?.every(
             consent => consent.consentStatus === 'CONSENT_GIVEN'
         );
         const allPublicConsentsApproved = publicConsents?.every(
@@ -50,6 +49,7 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         );
         return allPrivateConsentsApproved && allPublicConsentsApproved;
     };
+
 
     const handleComplete = async () => {
         try {
