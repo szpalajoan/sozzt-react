@@ -81,94 +81,105 @@ const PreparationOfDocumentation = ({ contractId, onRemarkChange }) => {
     handleError
   );
 
+  const renderStepDetails = () => {
+    const commonProps = {
+      documentation,
+      loading
+    };
+
+    return (
+      <>
+        <MapVerificationStep 
+          {...commonProps}
+          onApprove={approveMap}
+        />
+
+        <RouteDrawingStep 
+          {...commonProps}
+          personResponsible={routeDrawingPerson.personResponsible}
+          isEditingPerson={routeDrawingPerson.isEditingPerson}
+          onPersonEdit={() => routeDrawingPerson.setIsEditingPerson(true)}
+          setPersonResponsible={routeDrawingPerson.setPersonResponsible}
+          handlePersonResponsibleChange={routeDrawingPerson.handlePersonResponsibleChange}
+          drawnRouteProps={{
+            contractId,
+            ...drawnRouteFiles,
+            loading
+          }}
+          pdfProps={{
+            contractId,
+            ...pdfFiles,
+            loading
+          }}
+        />
+
+        <ConsentsVerificationStep 
+          {...commonProps}
+          onComplete={completeConsentsVerification}
+          isDisabled={!documentation.correctnessOfTheMap || !documentation.routeDrawing?.routeWithDataFileId}
+        />
+
+        <DocumentCompilationStep 
+          {...commonProps}
+          designer={documentCompilation.designer}
+          isEditingDesigner={documentCompilation.isEditingDesigner}
+          onDesignerEdit={() => documentCompilation.setIsEditingDesigner(true)}
+          setDesigner={documentCompilation.setDesigner}
+          handleDesignerChange={documentCompilation.handleDesignerChange}
+          isDisabled={!documentation.consentsVerification?.consentsVerified}
+          documentProps={{
+            contractId,
+            files: documentCompilation.documentFiles,
+            newFiles: documentCompilation.newDocumentFiles,
+            handleFileDrop: documentCompilation.handleDocumentDrop,
+            handleFileDelete: documentCompilation.handleDocumentDelete,
+            handleSave: documentCompilation.handleUploadDocument,
+            loading,
+            titleTranslationKey: "documentation.fileUpload.compiledDocumentTitle"
+          }}
+        />
+
+        <TauronCommunicationStep 
+          {...commonProps}
+          onMarkSent={tauronCommunication.handleMarkSent}
+          onMarkApproved={tauronCommunication.handleMarkApproved}
+          isDisabled={!documentation.documentCompilation?.compiledDocumentId}
+        />
+
+        <TermVerificationStep 
+          {...commonProps}
+          personResponsible={termVerification.personResponsible}
+          isEditingPerson={termVerification.isEditingPerson}
+          onPersonEdit={() => termVerification.setIsEditingPerson(true)}
+          setPersonResponsible={termVerification.setPersonResponsible}
+          handlePersonChange={termVerification.handlePersonChange}
+          onApproveTerms={termVerification.handleApproveTerms}
+          onComplete={termVerification.handleComplete}
+          isDisabled={!documentation.tauronCommunication?.approvedByTauron}
+        />
+
+        <Remarks 
+          stepId="PREPARATION_OF_DOCUMENTATION" 
+          contractId={contractId} 
+          onRemarkChange={onRemarkChange}
+        />
+
+        <SnackbarAlert
+          open={snackbar.open}
+          handleClose={() => setSnackbar({ ...snackbar, open: false })}
+          message={snackbar.message}
+          severity={snackbar.severity}
+        />
+      </>
+    );
+  };
+
   if (isPending) return <CircularProgress />;
   if (!documentation) return <Typography>Nie znaleziono dokumentacji</Typography>;
 
   return (
     <Box className="step-container">
-      <MapVerificationStep 
-        documentation={documentation}
-        loading={loading}
-        onApprove={approveMap}
-      />
-
-      <RouteDrawingStep 
-        documentation={documentation}
-        personResponsible={routeDrawingPerson.personResponsible}
-        isEditingPerson={routeDrawingPerson.isEditingPerson}
-        onPersonEdit={() => routeDrawingPerson.setIsEditingPerson(true)}
-        setPersonResponsible={routeDrawingPerson.setPersonResponsible}
-        handlePersonResponsibleChange={routeDrawingPerson.handlePersonResponsibleChange}
-        loading={loading}
-        drawnRouteProps={{
-          contractId,
-          ...drawnRouteFiles,
-          loading
-        }}
-        pdfProps={{
-          contractId,
-          ...pdfFiles,
-          loading
-        }}
-      />
-
-      <ConsentsVerificationStep 
-        documentation={documentation}
-        loading={loading}
-        onComplete={completeConsentsVerification}
-      />
-
-      <DocumentCompilationStep 
-        documentation={documentation}
-        designer={documentCompilation.designer}
-        isEditingDesigner={documentCompilation.isEditingDesigner}
-        onDesignerEdit={() => documentCompilation.setIsEditingDesigner(true)}
-        setDesigner={documentCompilation.setDesigner}
-        handleDesignerChange={documentCompilation.handleDesignerChange}
-        loading={loading}
-        documentProps={{
-          contractId,
-          files: documentCompilation.documentFiles,
-          newFiles: documentCompilation.newDocumentFiles,
-          handleFileDrop: documentCompilation.handleDocumentDrop,
-          handleFileDelete: documentCompilation.handleDocumentDelete,
-          handleSave: documentCompilation.handleUploadDocument,
-          loading,
-          titleTranslationKey: "documentation.fileUpload.compiledDocumentTitle"
-        }}
-      />
-
-      <TauronCommunicationStep 
-        documentation={documentation}
-        onMarkSent={tauronCommunication.handleMarkSent}
-        onMarkApproved={tauronCommunication.handleMarkApproved}
-        loading={loading}
-      />
-
-      <TermVerificationStep 
-        documentation={documentation}
-        personResponsible={termVerification.personResponsible}
-        isEditingPerson={termVerification.isEditingPerson}
-        onPersonEdit={() => termVerification.setIsEditingPerson(true)}
-        setPersonResponsible={termVerification.setPersonResponsible}
-        handlePersonChange={termVerification.handlePersonChange}
-        onApproveTerms={termVerification.handleApproveTerms}
-        onComplete={termVerification.handleComplete}
-        loading={loading}
-      />
-
-      <Remarks 
-        stepId="PREPARATION_OF_DOCUMENTATION" 
-        contractId={contractId} 
-        onRemarkChange={onRemarkChange}
-      />
-
-      <SnackbarAlert
-        open={snackbar.open}
-        handleClose={() => setSnackbar({ ...snackbar, open: false })}
-        message={snackbar.message}
-        severity={snackbar.severity}
-      />
+      {renderStepDetails()}
     </Box>
   );
 };

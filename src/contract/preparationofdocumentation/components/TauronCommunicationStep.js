@@ -7,13 +7,35 @@ const TauronCommunicationStep = ({
   documentation,
   onMarkSent,
   onMarkApproved,
-  loading
+  loading,
+  isDisabled
 }) => {
   const { t } = useTranslation();
   const mockSentDate = '2024-03-15'; // Data zmockowana
 
   return (
-    <Box className="main-content">
+    <Box 
+      className="main-content"
+      sx={{ 
+        opacity: isDisabled ? 0.5 : 1,
+        pointerEvents: isDisabled ? 'none' : 'auto',
+        position: 'relative'
+      }}
+    >
+      {isDisabled && (
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ 
+            position: 'absolute',
+            top: 8,
+            right: 16
+          }}
+        >
+          Najpierw skompletuj dokumentację
+        </Typography>
+      )}
+
       <h2 className="section-title">{t('documentation.tauronCommunication.title')}</h2>
       
       {/* Person responsible */}

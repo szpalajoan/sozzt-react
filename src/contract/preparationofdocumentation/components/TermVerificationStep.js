@@ -13,7 +13,8 @@ const TermVerificationStep = ({
   handlePersonChange,
   onApproveTerms,
   onComplete,
-  loading
+  loading,
+  isDisabled
 }) => {
   const { t } = useTranslation();
 
@@ -23,7 +24,28 @@ const TermVerificationStep = ({
   ];
 
   return (
-    <Box className="main-content">
+    <Box 
+      className="main-content"
+      sx={{ 
+        opacity: isDisabled ? 0.5 : 1,
+        pointerEvents: isDisabled ? 'none' : 'auto',
+        position: 'relative'
+      }}
+    >
+      {isDisabled && (
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ 
+            position: 'absolute',
+            top: 8,
+            right: 16
+          }}
+        >
+          Najpierw zakończ komunikację z Tauronem
+        </Typography>
+      )}
+
       <h2 className="section-title">{t('documentation.termVerification.title')}</h2>
       
       {/* Person selection */}

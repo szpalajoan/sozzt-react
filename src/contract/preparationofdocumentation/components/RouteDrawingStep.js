@@ -16,8 +16,31 @@ const RouteDrawingStep = ({
   drawnRouteProps,
   pdfProps
 }) => {
+  const isDisabled = !documentation.correctnessOfTheMap;
+
   return (
-    <Box className="main-content">
+    <Box 
+      className="main-content"
+      sx={{ 
+        opacity: isDisabled ? 0.5 : 1,
+        pointerEvents: isDisabled ? 'none' : 'auto',
+        position: 'relative'
+      }}
+    >
+      {isDisabled && (
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ 
+            position: 'absolute',
+            top: 8,
+            right: 16
+          }}
+        >
+          Najpierw zatwierdź mapę
+        </Typography>
+      )}
+      
       <h2 className="section-title">Rysowanie trasy</h2>
       
       {/* Person selection */}

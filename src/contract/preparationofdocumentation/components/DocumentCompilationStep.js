@@ -8,12 +8,34 @@ import { useTranslation } from 'react-i18next';
 const DocumentCompilationStep = ({
   documentation,
   documentProps,
-  loading
+  loading,
+  isDisabled
 }) => {
   const { t } = useTranslation();
 
   return (
-    <Box className="main-content">
+    <Box 
+      className="main-content"
+      sx={{ 
+        opacity: isDisabled ? 0.5 : 1,
+        pointerEvents: isDisabled ? 'none' : 'auto',
+        position: 'relative'
+      }}
+    >
+      {isDisabled && (
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ 
+            position: 'absolute',
+            top: 8,
+            right: 16
+          }}
+        >
+          Najpierw zweryfikuj zgody
+        </Typography>
+      )}
+
       <h2 className="section-title">{t('documentation.documentCompilation.title')}</h2>
       
       {/* Designer info */}
