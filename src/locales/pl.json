@@ -95,7 +95,10 @@
             "PERSONAL_VISIT" : "Osobiście odebrana",
             "EMAIL" : "Email",
             "POST" : "Poczta"
-        }
+        },
+        "complete": "Zakończ zbieranie zgód",
+        "approveSuccess": "Pomyślnie zakończono zbieranie zgód",
+        "approveError": "Wystąpił błąd podczas kończenia zbierania zgód"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",

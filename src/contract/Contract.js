@@ -73,7 +73,8 @@ const Contract = () => {
     const commonProps = {
       contractId,
       onRemarkChange: refetchRemarks,
-      remarks: remarks
+      remarks: remarks,
+      refetchContract
     };
 
     switch (selectedStep) {

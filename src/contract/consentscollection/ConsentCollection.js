@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Tabs, Tab } from '@mui/material';
+import { Box, Tabs, Tab, Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import PrivateConsents from './components/PrivateConsents';
 import PublicConsents from './components/PublicConsents';
 import { useConsents } from './hooks/useConsents';
 import useFetch from '../../useFetch';
+import { Check as CheckIcon } from '@mui/icons-material';
 
-const ConsentsCollection = ({ contractId }) => {
+const ConsentsCollection = ({ contractId, refetchContract }) => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState(0);
     const { 
@@ -20,7 +21,8 @@ const ConsentsCollection = ({ contractId }) => {
         invalidateConsent,
         invalidatePublicConsent,
         approveConsent,
-        uploadConsentFile
+        uploadConsentFile,
+        completeConsentsCollection
     } = useConsents(contractId);
 
     const { data: fetchedFiles, refetch: refetchFiles } = useFetch(
@@ -34,12 +36,55 @@ const ConsentsCollection = ({ contractId }) => {
         fetchConsents();
     }, [contractId]);
 
+    const canComplete = () => {
+        // Check if consents collection is already completed
+        if (consents?.completed) {
+            return false;
+        }
+        
+        const allPrivateConsentsApproved = consents?.privatePlotOwnerConsents?.every(
+            consent => consent.consentStatus === 'CONSENT_GIVEN'
+        );
+        const allPublicConsentsApproved = publicConsents?.every(
+            consent => consent.consentStatus === 'CONSENT_GIVEN'
+        );
+        return allPrivateConsentsApproved && allPublicConsentsApproved;
+    };
+
+    const handleComplete = async () => {
+        try {
+            await completeConsentsCollection();
+            if (refetchContract) {
+                refetchContract();
+            }
+        } catch (error) {
+            console.error('Error completing consents collection:', error);
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
-                <Tab label={t('consentsCollection.privateConsents')} />
-                <Tab label={t('consentsCollection.publicConsents')} />
-            </Tabs>
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center'
+            }}>
+                <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+                    <Tab label={t('consentsCollection.privateConsents')} />
+                    <Tab label={t('consentsCollection.publicConsents')} />
+                </Tabs>
+                {canComplete() && (
+                    <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<CheckIcon />}
+                        onClick={handleComplete}
+                        sx={{ ml: 2 }}
+                    >
+                        {t('consentsCollection.complete')}
+                    </Button>
+                )}
+            </Box>
 
             {activeTab === 0 && (
                 <PrivateConsents

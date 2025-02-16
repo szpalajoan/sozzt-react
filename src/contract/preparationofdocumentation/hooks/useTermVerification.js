@@ -47,6 +47,8 @@ export const useTermVerification = (documentation, setDocumentation, contractId,
   const handleComplete = async () => {
     try {
       await documentationApi.completeDocumentation(contractId, fetchData);
+      // Odśwież cały kontrakt po zakończeniu dokumentacji
+      window.location.reload();
       onSuccess('Dokumentacja została zakończona pomyślnie');
     } catch (error) {
       onError(error.message || 'Wystąpił błąd podczas kończenia dokumentacji');

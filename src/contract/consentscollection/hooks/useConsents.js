@@ -142,6 +142,18 @@ export const useConsents = (contractId) => {
         }
     };
 
+    const completeConsentsCollection = async () => {
+        try {
+            await fetchData(
+                `contracts/consents/${contractId}/complete`,
+                'PUT'
+            );
+        } catch (error) {
+            console.error('Error completing consents collection:', error);
+            throw error;
+        }
+    };
+
     return {
         consents,
         publicConsents,
@@ -153,6 +165,7 @@ export const useConsents = (contractId) => {
         invalidateConsent,
         invalidatePublicConsent,
         approveConsent,
-        uploadConsentFile
+        uploadConsentFile,
+        completeConsentsCollection
     };
 }; 
