@@ -10,7 +10,7 @@ import CompleteStepButton from '../../components/CompleteStepButton';
 import Remarks from '../../components/remarks/Remarks';
 
 const RoutePreparation = ({ contractId, onRemarkChange }) => {
-  const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/route-preparation/${contractId}`);
+  const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/project-purposes-map-preparation/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=GEODETIC_MAP`);
   
   const { data: contract } = useFetch(`contracts/${contractId}`); //tylko po to zeby pobrac status 
@@ -27,7 +27,7 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
 
   useEffect(() => {
     if (contract && contract.contractSteps) {
-      const routeStatus = contract.contractSteps.find(step => step.contractStepType === "ROUTE_PREPARATION");
+      const routeStatus = contract.contractSteps.find(step => step.contractStepType === "PROJECT_PURPOSES_MAP_PREPARATION");
       setShowFinalizeButton(routeStatus && routeStatus.contractStepStatus !== "DONE" && routePreparation && routePreparation.geodeticMapUploaded);
     }
   }, [contract, routePreparation]); 
@@ -50,7 +50,7 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
 
   const handleComplete = async () => {
     try {
-      await fetchData(`contracts/route-preparation/${contractId}/complete`, 'POST');
+      await fetchData(`contracts/project-purposes-map-preparation/${contractId}/complete`, 'POST');
 
       console.log("Przygotowanie mapy gotowe");
       navigate(0);

@@ -15,7 +15,7 @@
     "steps": {
         "PRELIMINARY_PLAN": "Wstępny plan",
         "TERRAIN_VISION": "Wizja w terenie",
-        "ROUTE_PREPARATION": "Przygotowanie mapy (geodeci)",
+        "PROJECT_PURPOSES_MAP_PREPARATION_NEED": "Przygotowanie mapy (geodeci)",
         "CONSENTS_COLLECTION": "Zebranie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień",
         "PREPARATION_OF_DOCUMENTATION" : "Przygotowanie dokumentacji"

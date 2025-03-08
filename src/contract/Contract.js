@@ -3,7 +3,7 @@ import './Contract.css';
 import Sidebar from './SideBar';
 import PreliminaryPlan from './preliminaryplan/PreliminaryPlan';
 import TerrainVision from './terrainVision/TerrainVision';
-import RoutePreparation from './routepreparation/RoutePreparation';
+import RoutePreparation from './routepreparation/ProjectPurposesMapPreparation';
 import ConsentsCollection from './consentscollection/ConsentCollection';
 import PreparationOfDocumentation from './preparationofdocumentation/PreparationOfDocumentation';
 import { useState, useEffect } from 'react';
@@ -84,7 +84,7 @@ const Contract = () => {
         return <PreliminaryPlan {...commonProps} />;
       case 'TERRAIN_VISION':
         return <TerrainVision {...commonProps} />;
-      case 'ROUTE_PREPARATION':
+      case 'PROJECT_PURPOSES_MAP_PREPARATION':
         return <RoutePreparation {...commonProps} />;
       case 'CONSENTS_COLLECTION':
         return <ConsentsCollection {...commonProps} />;

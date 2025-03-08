@@ -109,11 +109,11 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
   };
 
 
-  const handleConfirmMapChanges = async (routePreparationNeed) => {
+  const handleConfirmMapChanges = async (projectPurposesMapPreparationNeed) => {
     try {
-      await fetchData(`contracts/terrain-vision/${contractId}/route-preparation-need`, 'POST', { routePreparationNeed });
+      await fetchData(`contracts/terrain-vision/${contractId}/project-purposes-map-preparation-need`, 'POST', { projectPurposesMapPreparationNeed });
       setOpenSnackbar(true);
-      setErrorMessage(`Potwierdzono zmiany na mapie: ${routePreparationNeed}`);
+      setErrorMessage(`Potwierdzono zmiany na mapie: ${projectPurposesMapPreparationNeed}`);
       refetchTerrainVision();
     } catch (error) {
       console.error('Błąd podczas potwierdzania zmian na mapie:', error);
@@ -265,7 +265,7 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
 
         <Box className="main-content">
           <h2 className="section-title">Przygotowanie mapy przez geodetów</h2>
-          {terrainVisionData.routePreparationNeed === "NONE" ? (
+          {terrainVisionData.projectPurposesMapPreparationNeed === "NONE" ? (
             <Box sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap' }}>
               <Button
                 variant="contained"
@@ -287,7 +287,7 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
           ) : (
             <>
               <Typography variant="body1" sx={{ mb: 2 }}>
-                {terrainVisionData.routePreparationNeed === "NECESSARY"
+                {terrainVisionData.projectPurposesMapPreparationNeed === "NECESSARY"
                   ? "Kontrakt wymaga mapę geodetów."
                   : "Mapa nie wymaga geodetów."}
               </Typography>
@@ -296,7 +296,7 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleConfirmMapChanges(terrainVisionData.routePreparationNeed === "NECESSARY" ? "NOT_NEED" : "NECESSARY")}
+                    onClick={() => handleConfirmMapChanges(terrainVisionData.projectPurposesMapPreparationNeed === "NECESSARY" ? "NOT_NEED" : "NECESSARY")}
                     disabled={loading}
                   >
                     Zmień decyzję
@@ -307,7 +307,7 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
           )}
         </Box>
 
-        {terrainVisionData.allPhotosUploaded && terrainVisionData.routePreparationNeed !== "NONE" &&
+        {terrainVisionData.allPhotosUploaded && terrainVisionData.projectPurposesMapPreparationNeed !== "NONE" &&
           terrainVisionData.terrainVisionStatus == "IN_PROGRESS" && (
             <CompleteStepButton
               handleComplete={handleFinalizeTerrainVision}
