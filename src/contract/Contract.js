@@ -3,7 +3,7 @@ import './Contract.css';
 import Sidebar from './SideBar';
 import PreliminaryPlan from './preliminaryplan/PreliminaryPlan';
 import TerrainVision from './terrainVision/TerrainVision';
-import RoutePreparation from './routepreparation/ProjectPurposesMapPreparation';
+import ProjectPurposesMapPreparation from './projectpurposesmappreparation/ProjectPurposesMapPreparation';
 import ConsentsCollection from './consentscollection/ConsentCollection';
 import PreparationOfDocumentation from './preparationofdocumentation/PreparationOfDocumentation';
 import { useState, useEffect } from 'react';
@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import useDataFetching from '../useDataFetching';
 import { formatDateToInstant } from '../utils/dateUtils';
 import { Add as AddIcon } from '@mui/icons-material';
+import RoutePreparation from './routepreparation/RoutePreparation';
 
 const Contract = () => {
   const { contractId, step } = useParams();
@@ -85,6 +86,8 @@ const Contract = () => {
       case 'TERRAIN_VISION':
         return <TerrainVision {...commonProps} />;
       case 'PROJECT_PURPOSES_MAP_PREPARATION':
+        return <ProjectPurposesMapPreparation {...commonProps} />;
+      case 'ROUTE_PREPARATION':
         return <RoutePreparation {...commonProps} />;
       case 'CONSENTS_COLLECTION':
         return <ConsentsCollection {...commonProps} />;

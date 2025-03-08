@@ -15,7 +15,8 @@
     "steps": {
         "PRELIMINARY_PLAN": "Wstępny plan",
         "TERRAIN_VISION": "Wizja w terenie",
-        "PROJECT_PURPOSES_MAP_PREPARATION_NEED": "Przygotowanie mapy (geodeci)",
+        "PROJECT_PURPOSES_MAP_PREPARATION": "Przygotowanie mapy do celów projektowych",
+        "ROUTE_PREPARATION": "Przygotowanie trasy",
         "CONSENTS_COLLECTION": "Zebranie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień",
         "PREPARATION_OF_DOCUMENTATION" : "Przygotowanie dokumentacji"
@@ -120,10 +121,30 @@
         }
     },
     "routePreparation": {
-        "fileUpload": "Wgrane mapy",
-        "completeButton" : {
-            "title" : "Finalizacja wgrania mapy",
-            "allActionsCompleted": "Mapy zostały przesłane. Możesz teraz sfinalizować ten etap.",
+        "title": "Przygotowanie trasy",
+        "mapVerification": {
+            "title": "Weryfikacja mapy",
+            "button": "Zatwierdź poprawność mapy",
+            "approved": "Mapa została zatwierdzona",
+            "verificationDate": "Data zatwierdzenia"
+        },
+        "routeDrawing": {
+            "title": "Rysowanie trasy",
+            "personLabel": "Osoba odpowiedzialna za rysowanie trasy",
+            "assignPerson": "Przypisz osobę",
+            "fileUpload": {
+                "drawnRouteTitle": "Rozrysowana trasa",
+                "pdfTitle": "PDF z trasą i danymi"
+            },
+            "fileNames": {
+                "drawnRoute": "Rozrysowana trasa",
+                "pdfWithRoute": "PDF z trasą i danymi"
+            },
+            "filesUploaded": "Pliki zostały już wgrane. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze."
+        },
+        "completeButton": {
+            "title": "Finalizacja przygotowania trasy",
+            "allActionsCompleted": "Wszystkie elementy zostały przygotowane. Możesz teraz sfinalizować ten etap.",
             "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
         }
     },
@@ -202,5 +223,16 @@
         "pending": "{{count}} uwagi do wykonania",
         "pending_one": "1 uwaga do wykonania",
         "toComplete": "uwagi do wykonania"
+    },
+    "projectPurposesMapPreparation": {
+        "title": "Przygotowanie mapy do celów projektowych",
+        "fileUpload": {
+            "mapTitle": "Mapa do celów projektowych"
+        },
+        "completeButton": {
+            "title": "Finalizacja przygotowania mapy",
+            "allActionsCompleted": "Mapa została przesłana. Możesz teraz sfinalizować ten etap.",
+            "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
+        }
     }
 }

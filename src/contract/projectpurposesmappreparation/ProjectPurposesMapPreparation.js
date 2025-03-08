@@ -8,12 +8,15 @@ import useDataFetching from '../../useDataFetching';
 import { useNavigate } from 'react-router-dom';
 import CompleteStepButton from '../../components/CompleteStepButton';
 import Remarks from '../../components/remarks/Remarks';
+import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 
-const RoutePreparation = ({ contractId, onRemarkChange }) => {
-  const { data: routePreparation, isPending: isRoutePreparationPending, refetch: refetchRoutePreparation } = useFetch(`contracts/project-purposes-map-preparation/${contractId}`);
+const ProjectPurposesMapPreparation = ({ contractId, onRemarkChange }) => {
+  const { t } = useTranslation();
+  const { data: mapPreparation, isPending: isMapPreparationPending, refetch: refetchMapPreparation } = useFetch(`contracts/project-purposes-map-preparation/${contractId}`);
   const { data: fetchedFiles, isPending: isFilesPending, refetch: refetchFiles } = useFetch(`contracts/${contractId}/files?fileType=GEODETIC_MAP`);
   
-  const { data: contract } = useFetch(`contracts/${contractId}`); //tylko po to zeby pobrac status 
+  const { data: contract } = useFetch(`contracts/${contractId}`);
 
   const { fetchData } = useDataFetching();
   const navigate = useNavigate();
@@ -27,17 +30,17 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
 
   useEffect(() => {
     if (contract && contract.contractSteps) {
-      const routeStatus = contract.contractSteps.find(step => step.contractStepType === "PROJECT_PURPOSES_MAP_PREPARATION");
-      setShowFinalizeButton(routeStatus && routeStatus.contractStepStatus !== "DONE" && routePreparation && routePreparation.geodeticMapUploaded);
+      const mapStatus = contract.contractSteps.find(step => step.contractStepType === "PROJECT_PURPOSES_MAP_PREPARATION");
+      setShowFinalizeButton(mapStatus && mapStatus.contractStepStatus !== "DONE" && mapPreparation && mapPreparation.geodeticMapUploaded);
     }
-  }, [contract, routePreparation]); 
+  }, [contract, mapPreparation]); 
 
   const handleSave = async () => {
     setLoading(true);
     try {
       await deleteFiles(contractId, fetchData);
-      await uploadFiles(contractId, fetchData, 'geodetic-maps');
-      refetchRoutePreparation();
+      await uploadDocumentationFiles(contractId, fetchData, 'contracts/project-purposes-map-preparation/' + contractId + '/geodetic-maps');
+      refetchMapPreparation();
       refetchFiles();
       resetFiles();
 
@@ -50,14 +53,14 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
 
   const handleComplete = async () => {
     try {
-      await fetchData(`contracts/project-purposes-map-preparation/${contractId}/complete`, 'POST');
+      await fetchData(`contracts/project-purposes-map-preparation/${contractId}/complete`, 'PUT');
 
       console.log("Przygotowanie mapy gotowe");
       navigate(0);
 
     } catch (error) {
       console.log(error.message);
-      setErrorMessage(error.message || 'Wystąpił błąd podczas kompletowania przygotowania trasy.');
+      setErrorMessage(error.message || 'Wystąpił błąd podczas kompletowania przygotowania mapy.');
       setOpenSnackbar(true);
     }
   };
@@ -72,6 +75,7 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
     handleFileDrop,
     handleFileDelete,
     uploadFiles,
+    uploadDocumentationFiles,
     deleteFiles,
     setFiles,
     resetFiles
@@ -85,15 +89,15 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
     }
   }, [fetchedFiles]);
 
-  if (isRoutePreparationPending) return <div>Loading...</div>;
-  if (!routePreparation) return <div>Nie znaleziono wstępnego planu</div>;
+  if (isMapPreparationPending) return <div>{t('loading')}</div>;
+  if (!mapPreparation) return <div>Nie znaleziono przygotowania mapy</div>;
 
 
   return (
     <Box className="step-container">
 
       <Box className="main-content">
-        <h2 className="section-title">Prygotowanie mapy</h2>
+        <h2 className="section-title">Przygotowanie mapy do celów projektowych</h2>
 
         <FileUploadSection
           contractId={contractId}
@@ -101,14 +105,10 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
           newFiles={newFiles}
           handleFileDrop={handleFileDrop}
           handleFileDelete={handleFileDelete}
-          showSaveButton={false}
+          titleTranslationKey="fileUpload.scanTitle"
+          handleSave={handleSave}
+          loading={loading}
         />
-
-        <Box mt={3} display="flex" gap={2}>
-          <Button variant="contained" color="primary" onClick={handleSave} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Zapisz'}
-          </Button>
-        </Box>
       </Box>
 
 
@@ -116,14 +116,14 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
          <CompleteStepButton
           handleComplete={handleComplete}
           loading={loading}
-          titleKey="routePreparation.completeButton.title"
+          titleKey="completeStep.completeAndFinalize"
           descriptionKey="routePreparation.completeButton.allActionsCompleted"
           warningMessage="routePreparation.completeButton.warning"
         />
         )}
 
         <Remarks 
-          stepId="ROUTE_PREPARATION" 
+          stepId="PROJECT_PURPOSES_MAP_PREPARATION" 
           contractId={contractId} 
           onRemarkChange={onRemarkChange}
         />
@@ -138,4 +138,4 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
   );
 };
 
-export default RoutePreparation;
+export default ProjectPurposesMapPreparation;
