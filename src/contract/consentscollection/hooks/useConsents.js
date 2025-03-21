@@ -18,6 +18,16 @@ export const useConsents = (contractId) => {
         }
     };
 
+    const beginConsentsCollection = async () => {
+        try {
+            await fetchData(`contracts/consents/${contractId}/begin-consents-collection`, 'POST');
+            return true;
+        } catch (error) {
+            console.error('Error beginning consents collection:', error);
+            throw error;
+        }
+    };
+
     const addPrivateConsent = async (consentData) => {
         try {
             await fetchData(
@@ -158,6 +168,7 @@ export const useConsents = (contractId) => {
         consents,
         publicConsents,
         fetchConsents,
+        beginConsentsCollection,
         addPrivateConsent,
         addPublicConsent,
         updateConsentStatus,

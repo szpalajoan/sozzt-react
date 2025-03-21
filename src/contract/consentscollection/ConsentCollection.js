@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Tabs, Tab, Button } from '@mui/material';
+import { Box, Tabs, Tab, Button, Typography, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import PrivateConsents from './components/PrivateConsents';
 import PublicConsents from './components/PublicConsents';
 import { useConsents } from './hooks/useConsents';
 import useFetch from '../../useFetch';
 import { Check as CheckIcon } from '@mui/icons-material';
+import { PlayArrow as PlayArrowIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const ConsentsCollection = ({ contractId, refetchContract }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const { data: contract, isPending: isContractPending } = useFetch(`contracts/${contractId}`);
+    
     const { 
         consents, 
         publicConsents, 
         fetchConsents,
+        beginConsentsCollection,
         addPrivateConsent,
         addPublicConsent,
         updateConsentStatus,
@@ -33,8 +40,20 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
     );
 
     useEffect(() => {
-        fetchConsents();
-    }, [contractId]);
+        if (getStepStatus() === 'IN_PROGRESS') {
+            fetchConsents();
+        }
+    }, [contractId, contract]);
+
+    const getStepStatus = () => {
+        if (!contract || !contract.contractSteps) return null;
+        
+        const consentStep = contract.contractSteps.find(
+            step => step.contractStepType === 'CONSENTS_COLLECTION'
+        );
+        
+        return consentStep ? consentStep.contractStepStatus : null;
+    };
 
     const canComplete = () => {
         if (consents?.completed) {
@@ -50,7 +69,6 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         return allPrivateConsentsApproved && allPublicConsentsApproved;
     };
 
-
     const handleComplete = async () => {
         try {
             await completeConsentsCollection();
@@ -62,6 +80,63 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         }
     };
 
+    const handleBeginCollection = async () => {
+        setLoading(true);
+        try {
+            await beginConsentsCollection();
+            // Odświeżenie całej strony
+            window.location.reload();
+        } catch (error) {
+            console.error('Error beginning consents collection:', error);
+            setLoading(false);
+        }
+    };
+
+    if (isContractPending) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    // Jeśli krok ma status ON_HOLD, pokazujemy przycisk rozpoczynający
+    if (getStepStatus() === 'ON_HOLD') {
+        return (
+            <Box 
+                sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 3,
+                    p: 4,
+                    my: 4,
+                    border: '1px dashed #ccc',
+                    borderRadius: '8px'
+                }}
+            >
+                <Typography variant="h5" align="center">
+                    {t('consentsCollection.notStarted')}
+                </Typography>
+                <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+                    {t('consentsCollection.startDescription')}
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    startIcon={<PlayArrowIcon />}
+                    onClick={handleBeginCollection}
+                    disabled={loading}
+                >
+                    {loading ? <CircularProgress size={24} /> : t('consentsCollection.beginCollection')}
+                </Button>
+            </Box>
+        );
+    }
+
+    // Gdy krok ma status IN_PROGRESS, pokazujemy właściwy interfejs
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box sx={{ 

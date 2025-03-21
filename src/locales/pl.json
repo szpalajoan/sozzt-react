@@ -99,7 +99,12 @@
         },
         "complete": "Zakończ zbieranie zgód",
         "approveSuccess": "Pomyślnie zakończono zbieranie zgód",
-        "approveError": "Wystąpił błąd podczas kończenia zbierania zgód"
+        "approveError": "Wystąpił błąd podczas kończenia zbierania zgód",
+        "beginCollection": "Rozpocznij zbieranie zgód",
+        "notStarted": "Zbieranie zgód nie zostało jeszcze rozpoczęte",
+        "startDescription": "Aby rozpocząć zbieranie zgód od właścicieli działek, kliknij przycisk poniżej.",
+        "beginSuccess": "Pomyślnie rozpoczęto zbieranie zgód",
+        "beginError": "Wystąpił błąd podczas rozpoczynania zbierania zgód"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
