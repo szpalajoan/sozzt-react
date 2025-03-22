@@ -8,6 +8,7 @@ import useFetch from '../../useFetch';
 import { Check as CheckIcon } from '@mui/icons-material';
 import { PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import './ConsentCollection.css';
 
 const ConsentsCollection = ({ contractId, refetchContract }) => {
     const { t } = useTranslation();
@@ -40,7 +41,7 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
     );
 
     useEffect(() => {
-        if (getStepStatus() === 'IN_PROGRESS') {
+        if (getStepStatus() === 'IN_PROGRESS' || 'DONE') {
             fetchConsents();
         }
     }, [contractId, contract]);
@@ -67,6 +68,12 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
             consent => consent.consentStatus === 'CONSENT_GIVEN'
         );
         return allPrivateConsentsApproved && allPublicConsentsApproved;
+    };
+
+    const isRoutePreparationCompleted = () => {
+        return contract?.contractSteps?.some(
+            step => step.contractStepType === 'ROUTE_PREPARATION' && step.contractStepStatus === 'DONE'
+        );
     };
 
     const handleComplete = async () => {
@@ -148,7 +155,15 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
                     <Tab label={t('consentsCollection.privateConsents')} />
                     <Tab label={t('consentsCollection.publicConsents')} />
                 </Tabs>
-                {canComplete() && (
+                {!canComplete() ? (
+                    <Typography className="status-message">
+                        {t('consentsCollection.notAllConsentsApproved')}
+                    </Typography>
+                ) : !isRoutePreparationCompleted() ? (
+                    <Typography className="status-message">
+                        {t('consentsCollection.routePreparationRequired')}
+                    </Typography>
+                ) : (
                     <Button
                         variant="contained"
                         color="success"

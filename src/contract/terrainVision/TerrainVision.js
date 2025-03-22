@@ -277,7 +277,7 @@ const TerrainVision = ({ contractId, onRemarkChange }) => {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => handleConfirmMapChanges("NOT_NECESSARY")}
+                onClick={() => handleConfirmMapChanges("NOT_NEED")}
                 disabled={loading}
                 sx={{ backgroundColor: 'grey.500', color: 'white', '&:hover': { backgroundColor: 'grey.600' } }}
               >

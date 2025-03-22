@@ -28,8 +28,8 @@
         "CANCELLED": "Anulowana",
         "TO_DO": "Do zrobienia",
         "COMPLETED": "Zakończony",
-        "ON_HOLD": "Nieaktywny",
-        "NOT_ACTIVE": "Nieaktywny"
+        "ON_HOLD": "Oczukuje",
+        "NOT_ACTIVE": "Niewymagany"
     },
     "loading": "Ładowanie...",
     "preliminaryPlan": {
@@ -104,7 +104,9 @@
         "notStarted": "Zbieranie zgód nie zostało jeszcze rozpoczęte",
         "startDescription": "Aby rozpocząć zbieranie zgód od właścicieli działek, kliknij przycisk poniżej.",
         "beginSuccess": "Pomyślnie rozpoczęto zbieranie zgód",
-        "beginError": "Wystąpił błąd podczas rozpoczynania zbierania zgód"
+        "beginError": "Wystąpił błąd podczas rozpoczynania zbierania zgód",
+        "routePreparationRequired": "Do zakończenia potrzebna jest trasa",
+        "notAllConsentsApproved": "Nie wszystkie zgody są zaakceptowane"
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
@@ -159,6 +161,15 @@
             "drawnRouteTitle": "Rozrysowana trasa",
             "pdfTitle": "PDF z trasą i danymi",
             "compiledDocumentTitle": "'Sklejony' projekt"
+        },
+        "consentsVerification": {
+            "title": "Weryfikacja zgód",
+            "routePreparationNotFound": "Nie znaleziono kroku przygotowania trasy",
+            "routePreparationOnHold": "Przygotowanie trasy jest wstrzymane",
+            "routePreparationRequired": "Najpierw musi być zakończone przygotowanie trasy",
+            "routeDrawingRequired": "Najpierw dokończ rysowanie trasy",
+            "consentsVerified": "Zgody zostały zweryfikowane",
+            "approve": "Zatwierdź weryfikację zgód"
         },
         "documentCompilation": {
             "title": "Cała dokumentacja",

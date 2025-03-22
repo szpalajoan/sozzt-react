@@ -20,7 +20,7 @@ export const useConsents = (contractId) => {
 
     const beginConsentsCollection = async () => {
         try {
-            await fetchData(`contracts/consents/${contractId}/begin-consents-collection`, 'POST');
+            await fetchData(`contracts/${contractId}/begin-consents-collection`, 'POST');
             return true;
         } catch (error) {
             console.error('Error beginning consents collection:', error);
