@@ -10,11 +10,13 @@ import Remarks from '../../components/remarks/Remarks';
 import { useRoutePreparation } from './hooks/useRoutePreparation';
 import { useRouteDrawingPerson } from './hooks/useRouteDrawingPerson';
 import { useRouteFiles } from './hooks/useRouteFiles';
+import useFetch from "../../useFetch";
 
 const RoutePreparation = ({ contractId, onRemarkChange }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+  const { data: contract } = useFetch(`contracts/${contractId}`);
+
   const {
     routePreparation,
     setRoutePreparation,
@@ -49,7 +51,8 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
     fetchData,
     handleSuccess,
     handleError,
-    'drawnRoute'
+    'drawnRoute',
+    refetch
   );
 
   const pdfWithRouteFiles = useRouteFiles(
@@ -59,16 +62,24 @@ const RoutePreparation = ({ contractId, onRemarkChange }) => {
     fetchData,
     handleSuccess,
     handleError,
-    'pdfWithRoute'
+    'pdfWithRoute',
+    refetch
   );
 
   useEffect(() => {
-    if (routePreparation) {
+    if (routePreparation && contract) {
       const hasMapWithRoute = !!routePreparation.routeDrawing?.mapWithRouteFileId;
       const hasRouteWithData = !!routePreparation.routeDrawing?.routeWithDataFileId;
-      setShowCompleteButton(routePreparation.mapVerification?.correctnessOfTheMap && hasMapWithRoute && hasRouteWithData);
+      const isStepCompleted = contract.contractSteps?.find(step => step.contractStepType === "ROUTE_PREPARATION")?.contractStepStatus === "DONE";
+
+      setShowCompleteButton(
+        routePreparation.mapVerification?.correctnessOfTheMap && 
+        hasMapWithRoute && 
+        hasRouteWithData && 
+        !isStepCompleted
+      );
     }
-  }, [routePreparation]);
+  }, [routePreparation, contract]);
 
   const handleComplete = async () => {
     const success = await completeRoutePreparation();

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useFileHandler from '../../useFileHandler';
 import routePreparationApi from '../api/routePreparationApi';
 
-export const useRouteFiles = (routePreparation, setRoutePreparation, contractId, fetchData, onSuccess, onError, fileType) => {
+export const useRouteFiles = (routePreparation, setRoutePreparation, contractId, fetchData, onSuccess, onError, fileType, refetch) => {
   const [loading, setLoading] = useState(false);
 
   const {
@@ -25,29 +25,19 @@ export const useRouteFiles = (routePreparation, setRoutePreparation, contractId,
       const formData = new FormData();
       formData.append('file', newFiles[0]);
 
-      let response;
       if (fileType === 'drawnRoute') {
-        response = await routePreparationApi.uploadDrawnRoute(contractId, fetchData, formData);
-        setRoutePreparation(prev => ({
-          ...prev,
-          routeDrawing: {
-            ...prev.routeDrawing,
-            mapWithRouteFileId: response?.fileId
-          }
-        }));
+        await routePreparationApi.uploadDrawnRoute(contractId, fetchData, formData);
       } else if (fileType === 'pdfWithRoute') {
-        response = await routePreparationApi.uploadPdfWithRoute(contractId, fetchData, formData);
-        setRoutePreparation(prev => ({
-          ...prev,
-          routeDrawing: {
-            ...prev.routeDrawing,
-            routeWithDataFileId: response?.fileId
-          }
-        }));
+        await routePreparationApi.uploadPdfWithRoute(contractId, fetchData, formData);
       }
 
       resetFiles();
-      onSuccess('Plik został wgrany pomyślnie');
+      if (fileType === 'drawnRoute') {
+        onSuccess('Rysowana mapa została wgrana pomyślnie');
+      } else if (fileType === 'pdfWithRoute') {
+        onSuccess('Plik PDF został wgrany pomyślnie');
+      }
+      await refetch();
     } catch (error) {
       onError(error.message || 'Wystąpił błąd podczas wgrywania pliku');
     } finally {

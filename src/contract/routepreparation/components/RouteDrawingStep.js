@@ -21,19 +21,19 @@ const RouteDrawingStep = ({
   const { t } = useTranslation();
 
   return (
-    <Box 
+    <Box
       className="main-content"
-      sx={{ 
+      sx={{
         opacity: isDisabled ? 0.5 : 1,
         pointerEvents: isDisabled ? 'none' : 'auto',
         position: 'relative'
       }}
     >
       {isDisabled && (
-        <Typography 
-          variant="body2" 
+        <Typography
+          variant="body2"
           color="text.secondary"
-          sx={{ 
+          sx={{
             position: 'absolute',
             top: 8,
             right: 16
@@ -44,7 +44,7 @@ const RouteDrawingStep = ({
       )}
 
       <h2 className="section-title">{t('routePreparation.routeDrawing.title')}</h2>
-      
+
       {/* Person selection */}
       <Box sx={{ mb: 3 }}>
         {!isEditingPerson && routePreparation?.routeDrawing?.drawingBy ? (
@@ -86,30 +86,68 @@ const RouteDrawingStep = ({
 
       {/* Files upload sections or open folder button */}
       {routePreparation?.routeDrawing?.drawingBy && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          {(routePreparation.routeDrawing.mapWithRouteFileId || routePreparation.routeDrawing.routeWithDataFileId) ? (
-            <Box>
+        <Box>
+          {/* Drawn route section */}
+          {routePreparation.routeDrawing.mapWithRouteFileId && !routePreparation.routeDrawing.routeWithDataFileId && (
+            <Box sx={{ mb: 3 }}>
               <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
-                {t('routePreparation.routeDrawing.filesUploaded')}
+                {t('fileUpload.onlyDrawnMapUploaded')}
               </Typography>
-              <OpenFolderButton
-                folderPath="Projekty"
-                buttonText="Otwórz folder"
-              />
+              {!routePreparation.routeDrawing.routeWithDataFileId && (
+                <OpenFolderButton
+                  folderPath="Projekty"
+                  buttonText="Otwórz folder"
+                />
+              )}
             </Box>
-          ) : (
-            <>
+          )}
+
+          {!routePreparation.routeDrawing.mapWithRouteFileId && (
+            <Box sx={{ mb: 3 }}>
               <FileUploadSection
                 {...drawnRouteProps}
                 titleTranslationKey="routePreparation.routeDrawing.fileUpload.drawnRouteTitle"
               />
-              
+            </Box>
+          )}
+
+          {/* PDF section */}
+          {routePreparation.routeDrawing.routeWithDataFileId && !routePreparation.routeDrawing.mapWithRouteFileId && (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+                {t('fileUpload.onlyPdfUploaded')}
+              </Typography>
+              {!routePreparation.routeDrawing.mapWithRouteFileId && (
+                <OpenFolderButton
+                  folderPath="Projekty"
+                  buttonText="Otwórz folder"
+                />
+              )}
+            </Box>
+          )}
+
+          {!routePreparation.routeDrawing.routeWithDataFileId && (
+            <Box sx={{ mb: 3 }}>
               <FileUploadSection
                 {...pdfProps}
                 titleTranslationKey="routePreparation.routeDrawing.fileUpload.pdfTitle"
               />
-            </>
+            </Box>
           )}
+
+          {/* Show OpenFolderButton when both files are uploaded */}
+          {routePreparation.routeDrawing.mapWithRouteFileId &&
+            routePreparation.routeDrawing.routeWithDataFileId && (
+              <>
+                <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+                  {t('routePreparation.routeDrawing.filesUploaded')}
+                </Typography>
+                <OpenFolderButton
+                  folderPath="Projekty"
+                  buttonText="Otwórz folder z plikami"
+                />
+              </>
+            )}
         </Box>
       )}
     </Box>

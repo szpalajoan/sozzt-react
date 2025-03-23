@@ -110,7 +110,12 @@
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
-        "dragAndDropText": "Wybierz lub przeciągnij i upuść tutaj pliki"
+        "dragAndDropText": "Wybierz lub przeciągnij i upuść tutaj pliki",
+        "filesUploaded": "Pliki zostały już wgrane. Jeśli chcesz wprowadzić zmiany, zrób to bezpośrednio w folderze.",
+        "onlyPdfUploaded": "Wgrany został tylko plik PDF. Wgraj jeszcze rozrysowaną mapę.",
+        "onlyDrawnMapUploaded": "Wgrana została tylko rozrysowana mapa. Wgraj jeszcze plik PDF.",
+        "drawnMapUploaded": "Rozrysowana mapa została wgrana",
+        "pdfUploaded": "Plik PDF został wgrany"
     },
     "common" : {
         "upload": {
