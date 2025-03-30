@@ -19,7 +19,8 @@
         "ROUTE_PREPARATION": "Przygotowanie trasy",
         "CONSENTS_COLLECTION": "Zebranie porozumień",
         "AGREEMENT_COLLECTION": "Zebranie porozumień",
-        "PREPARATION_OF_DOCUMENTATION" : "Przygotowanie dokumentacji"
+        "PREPARATION_OF_DOCUMENTATION" : "Przygotowanie dokumentacji",
+        "LAND_EXTRACTS": "Wypisy"
     },
     "stepStatus": {
         "NEW": "Nowa",
@@ -255,5 +256,26 @@
             "allActionsCompleted": "Mapa została przesłana. Możesz teraz sfinalizować ten etap.",
             "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
         }
+    },
+    "landExtracts": {
+        "title": "Wypisy",
+        "personLabel": "Osoba odpowiedzialna za wypisy",
+        "assignPerson": "Przypisz osobę",
+        "requestSent": "Wysłano prośbę o wypisy",
+        "completeButton": {
+            "title": "Finalizacja wypisów",
+            "allActionsCompleted": "Wszystkie elementy zostały przygotowane. Możesz teraz sfinalizować ten etap.",
+            "warning": "Po zatwierdzeniu, ten etap zostanie przekazany do następnej osoby w procesie."
+        }
+    },
+    "success": {
+        "personAssigned": "Pomyślnie przypisano osobę",
+        "completed": "Pomyślnie zakończono etap"
+    },
+    "error": {
+        "fetching": "Wystąpił błąd podczas pobierania danych",
+        "assigningPerson": "Wystąpił błąd podczas przypisywania osoby",
+        "requestSent": "Wystąpił błąd podczas wysyłania prośby",
+        "completing": "Wystąpił błąd podczas kończenia etapu"
     }
 }

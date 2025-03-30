@@ -94,7 +94,7 @@ export const useConsents = (contractId) => {
         try {
             await fetchData(
                 `contracts/consents/${contractId}/private-plot-owner-consent/${consentId}/invalidate`,
-                'PUT',
+                'POST',
                 { reason }
             );
             await fetchConsents();
@@ -108,7 +108,7 @@ export const useConsents = (contractId) => {
         try {
             await fetchData(
                 `contracts/consents/${contractId}/public-plot-owner-consent/${consentId}/invalidate`,
-                'PUT',
+                'POST',
                 { reason }
             );
             await fetchConsents();
@@ -141,7 +141,7 @@ export const useConsents = (contractId) => {
                 ? `contracts/consents/${contractId}/private-plot-owner-consent/${consentId}/agreement`
                 : `contracts/consents/${contractId}/public-plot-owner-consent/${consentId}/agreement`;
             
-            await fetchData(endpoint, 'PUT', formData, {
+            await fetchData(endpoint, 'POST', formData, {
                 headers: {
                     'Content-Type': undefined
                 }
@@ -156,7 +156,7 @@ export const useConsents = (contractId) => {
         try {
             await fetchData(
                 `contracts/consents/${contractId}/complete`,
-                'PUT'
+                'POST'
             );
         } catch (error) {
             console.error('Error completing consents collection:', error);

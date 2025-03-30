@@ -6,6 +6,7 @@ import TerrainVision from './terrainVision/TerrainVision';
 import ProjectPurposesMapPreparation from './projectpurposesmappreparation/ProjectPurposesMapPreparation';
 import ConsentsCollection from './consentscollection/ConsentCollection';
 import PreparationOfDocumentation from './preparationofdocumentation/PreparationOfDocumentation';
+import LandExtracts from './landextracts/LandExtracts';
 import { useState, useEffect } from 'react';
 import Details from './details/Details';
 import useFetch from "../useFetch";
@@ -93,6 +94,8 @@ const Contract = () => {
         return <ConsentsCollection {...commonProps} />;
       case 'PREPARATION_OF_DOCUMENTATION':
         return <PreparationOfDocumentation {...commonProps} />;
+      case 'LAND_EXTRACTS':
+        return <LandExtracts {...commonProps} />;
       default:
         return <p>Jeszcze nie zrobione</p>;
     }
