@@ -1,11 +1,8 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import SnackbarAlert from '../../components/SnackbarAlert';
-import MapVerificationStep from './components/MapVerificationStep';
-import RouteDrawingStep from './components/RouteDrawingStep';
 import ConsentsVerificationStep from './components/ConsentsVerificationStep';
 import { useDocumentation } from './hooks/useDocumentation';
-import { useRouteDrawingPerson } from './hooks/useRouteDrawingPerson';
 import { useDocumentationFiles } from './hooks/useDocumentationFiles';
 import { useDocumentCompilation } from './hooks/useDocumentCompilation';
 import DocumentCompilationStep from './components/DocumentCompilationStep';
@@ -23,30 +20,12 @@ const PreparationOfDocumentation = ({ contractId, onRemarkChange }) => {
     isPending,
     snackbar,
     setSnackbar,
-    approveMap,
     completeConsentsVerification,
     fetchData
   } = useDocumentation(contractId);
 
   const handleSuccess = (message) => setSnackbar({ open: true, message, severity: 'success' });
   const handleError = (message) => setSnackbar({ open: true, message, severity: 'error' });
-
-  const routeDrawingPerson = useRouteDrawingPerson(
-    documentation, 
-    setDocumentation,
-    contractId, 
-    fetchData,
-    handleSuccess,
-    handleError
-  );
-
-  const drawnRouteFiles = useDocumentationFiles(
-    contractId,
-    'MAP_WITH_ROUTE',
-    setDocumentation,
-    handleSuccess,
-    handleError
-  );
 
   const pdfFiles = useDocumentationFiles(
     contractId,
@@ -89,34 +68,9 @@ const PreparationOfDocumentation = ({ contractId, onRemarkChange }) => {
 
     return (
       <>
-        <MapVerificationStep 
-          {...commonProps}
-          onApprove={approveMap}
-        />
-
-        <RouteDrawingStep 
-          {...commonProps}
-          personResponsible={routeDrawingPerson.personResponsible}
-          isEditingPerson={routeDrawingPerson.isEditingPerson}
-          onPersonEdit={() => routeDrawingPerson.setIsEditingPerson(true)}
-          setPersonResponsible={routeDrawingPerson.setPersonResponsible}
-          handlePersonResponsibleChange={routeDrawingPerson.handlePersonResponsibleChange}
-          drawnRouteProps={{
-            contractId,
-            ...drawnRouteFiles,
-            loading
-          }}
-          pdfProps={{
-            contractId,
-            ...pdfFiles,
-            loading
-          }}
-        />
-
         <ConsentsVerificationStep 
           {...commonProps}
           onComplete={completeConsentsVerification}
-          isDisabled={!documentation.correctnessOfTheMap || !documentation.routeDrawing?.routeWithDataFileId}
         />
 
         <DocumentCompilationStep 
