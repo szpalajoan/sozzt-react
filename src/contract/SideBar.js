@@ -52,6 +52,8 @@ const Sidebar = ({ contractId, setSelectedStep, contract, remarks }) => {
       'ROUTE_PREPARATION': 'ROUTE_PREPARATION',
       'CONSENTS_COLLECTION': 'CONSENTS_COLLECTION',
       'PREPARATION_OF_DOCUMENTATION': 'PREPARATION_OF_DOCUMENTATION',
+      'LAND_EXTRACTS': 'LAND_EXTRACTS',
+      'PROJECT_PURPOSES_MAP_PREPARATION': 'PROJECT_PURPOSES_MAP_PREPARATION',
     }[stepType] || 'GENERAL_CONTRACT';
     
     return remarks.filter(remark => 
