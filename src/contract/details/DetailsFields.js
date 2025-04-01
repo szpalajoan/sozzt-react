@@ -1,6 +1,4 @@
-
-
-const contractFields = (contractDetails, location) => [
+const contractFields = (contractDetails, location, contract) => [
   { label: "Numer umowy klienta", name: "contractNumber", value: contractDetails?.contractNumber || "", required: true },
   { label: "Nr roboczy", name: "workNumber", value: contractDetails?.workNumber || "", required: true },
   { label: "Nr stacji trafo i obwód", name: "transformerStationNumberWithCircuit", value: location?.transformerStationNumberWithCircuit || "" },
@@ -16,7 +14,13 @@ const contractFields = (contractDetails, location) => [
     value: contractDetails.orderDate ? contractDetails.orderDate.split('T')[0] : '', 
     type: "date"
   },
+  { 
+    label: "Wymagana zgoda ZUD", 
+    name: "zudConsentRequired", 
+    value: contract?.zudConsentRequired || false,
+    type: "checkbox",
+    readOnly: true
+  },
 ];
-
 
 export { contractFields } 

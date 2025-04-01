@@ -59,6 +59,7 @@ const Details = ({ contractId }) => {
         workNumber: contract.contractDetails.workNumber,
         customerContractNumber: contract.contractDetails.customerContractNumber,
         orderDate: contract.contractDetails.orderDate ? contract.contractDetails.orderDate.split('T')[0] : "",
+        zudConsentRequired: contract.zudConsentRequired
       });
     }
   }, [contract]);
@@ -75,7 +76,13 @@ const Details = ({ contractId }) => {
   const handleSave = async () => {
     console.log("handleSave", formState);
     const updatedContract = {
-      ...contract,
+      contractDetails: {
+        ...contractDetails,
+        contractNumber: formState.contractNumber || contractDetails.contractNumber,
+        workNumber: formState.workNumber || contractDetails.workNumber,
+        customerContractNumber: formState.customerContractNumber || contractDetails.customerContractNumber,
+        orderDate: formState.orderDate ? `${formState.orderDate}T00:00:00Z` : contractDetails.orderDate,
+      },
       location: {
         ...location,
         region: formState.region || location.region,
@@ -84,13 +91,7 @@ const Details = ({ contractId }) => {
         transformerStationNumberWithCircuit: formState.transformerStationNumberWithCircuit || location.transformerStationNumberWithCircuit,
         fieldNumber: formState.fieldNumber || location.fieldNumber,
       },
-      contractDetails: {
-        ...contractDetails,
-        contractNumber: formState.contractNumber || contractDetails.contractNumber,
-        workNumber: formState.workNumber || contractDetails.workNumber,
-        customerContractNumber: formState.customerContractNumber || contractDetails.customerContractNumber,
-        orderDate: formState.orderDate ? `${formState.orderDate}T00:00:00Z` : contractDetails.orderDate,
-      },
+      zudConsentRequired: formState.zudConsentRequired === true
     };
 
     setLoading(true);
@@ -136,7 +137,7 @@ const Details = ({ contractId }) => {
     setOpenSnackbar(false); 
   };
 
-  const fields = contractFields(contractDetails, location);
+  const fields = contractFields(contractDetails, location, contract);
 
   return (
     <Box className="main-content">

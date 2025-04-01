@@ -24,11 +24,14 @@ const AddContract = () => {
   } = useFileHandler();
 
   const handleInputChange = (e) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    console.log('Input change:', e.target.name, value);
+    setFormState({ ...formState, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form state before submit:', formState);
 
     const newContract = {
       invoiceNumber: formState.invoiceNumber || '',
@@ -44,9 +47,12 @@ const AddContract = () => {
         contractNumber: formState.contractNumber || '',
         workNumber: formState.workNumber || '',
         customerContractNumber: formState.customerContractNumber || '',
-        orderDate: formState.orderDate ? new Date(formState.orderDate).toISOString() : formState.orderDate,
-      }
+        orderDate: formState.orderDate ? new Date(formState.orderDate).toISOString() : formState.orderDate
+      },
+      zudConsentRequired: formState.zudConsentRequired === true
     };
+
+    console.log('Contract data being sent:', JSON.stringify(newContract, null, 2));
 
     try {
       const response = await fetchData('contracts/', 'POST', newContract);
