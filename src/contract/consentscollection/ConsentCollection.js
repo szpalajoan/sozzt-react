@@ -3,6 +3,7 @@ import { Box, Tabs, Tab, Button, Typography, CircularProgress } from '@mui/mater
 import { useTranslation } from 'react-i18next';
 import PrivateConsents from './components/PrivateConsents';
 import PublicConsents from './components/PublicConsents';
+import ZudConsent from './components/ZudConsent';
 import { useConsents } from './hooks/useConsents';
 import useFetch from '../../useFetch';
 import { Check as CheckIcon } from '@mui/icons-material';
@@ -19,7 +20,8 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
     
     const { 
         consents, 
-        publicConsents, 
+        publicConsents,
+        zudConsent,
         fetchConsents,
         beginConsentsCollection,
         addPrivateConsent,
@@ -30,7 +32,11 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         invalidatePublicConsent,
         approveConsent,
         uploadConsentFile,
-        completeConsentsCollection
+        completeConsentsCollection,
+        updateZudConsent,
+        markZudConsentAsSentByMail,
+        addZudConsentAgreement,
+        invalidateZudConsent
     } = useConsents(contractId);
 
     const { data: fetchedFiles, refetch: refetchFiles } = useFetch(
@@ -67,7 +73,8 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         const allPublicConsentsApproved = publicConsents?.every(
             consent => consent.consentStatus === 'CONSENT_GIVEN'
         );
-        return allPrivateConsentsApproved && allPublicConsentsApproved;
+        const zudConsentApproved = zudConsent?.consentStatus === 'CONSENT_GIVEN';
+        return allPrivateConsentsApproved && allPublicConsentsApproved && zudConsentApproved;
     };
 
     const isRoutePreparationCompleted = () => {
@@ -91,7 +98,6 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         setLoading(true);
         try {
             await beginConsentsCollection();
-            // Odświeżenie całej strony
             window.location.reload();
         } catch (error) {
             console.error('Error beginning consents collection:', error);
@@ -107,7 +113,6 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         );
     }
 
-    // Jeśli krok ma status ON_HOLD, pokazujemy przycisk rozpoczynający
     if (getStepStatus() === 'ON_HOLD') {
         return (
             <Box 
@@ -143,7 +148,6 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         );
     }
 
-    // Gdy krok ma status IN_PROGRESS, pokazujemy właściwy interfejs
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box sx={{ 
@@ -154,6 +158,7 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
                 <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
                     <Tab label={t('consentsCollection.privateConsents')} />
                     <Tab label={t('consentsCollection.publicConsents')} />
+                    <Tab label={t('consentsCollection.zudConsent')} />
                 </Tabs>
                 {!canComplete() ? (
                     <Typography className="status-message">
@@ -203,6 +208,17 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
                     onUploadFile={(id, file) => uploadConsentFile(id, file, 'public')}
                     refetchFiles={refetchPublicFiles}
                     fetchConsents={fetchConsents}
+                />
+            )}
+
+            {activeTab === 2 && (
+                <ZudConsent
+                    contractId={contractId}
+                    zudConsent={zudConsent}
+                    onUpdateZudConsent={updateZudConsent}
+                    onMarkAsSentByMail={markZudConsentAsSentByMail}
+                    onAddAgreement={addZudConsentAgreement}
+                    onInvalidate={invalidateZudConsent}
                 />
             )}
         </Box>

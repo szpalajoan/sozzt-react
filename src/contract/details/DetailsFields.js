@@ -18,8 +18,7 @@ const contractFields = (contractDetails, location, contract) => [
     label: "Wymagana zgoda ZUD", 
     name: "zudConsentRequired", 
     value: contract?.zudConsentRequired || false,
-    type: "checkbox",
-    readOnly: true
+    type: "checkbox"
   },
 ];
 

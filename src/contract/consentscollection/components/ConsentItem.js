@@ -10,6 +10,23 @@ import { Check, Close } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import FileLink from '../../../contract/FileLink';
 
+const getStatusColor = (status) => {
+    switch (status) {
+        case 'REQUIRED':
+            return 'warning';
+        case 'CONSENT_CREATED':
+            return 'info';
+        case 'SENT':
+            return 'primary';
+        case 'INVALIDATED':
+            return 'error';
+        case 'CONSENT_GIVEN':
+            return 'success';
+        default:
+            return 'default';
+    }
+};
+
 const ConsentItem = ({
     consent,
     files,
@@ -33,26 +50,19 @@ const ConsentItem = ({
             className="main-content"
             sx={{ flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 2 }}>
-                <h2 className="section-title" style={{ marginRight: '10px', marginBottom: 0 }}>
+            <Box sx={{ width: '100%', mb: 2 }}>
+                <h2 className="section-title">
                     {type === 'private' 
                         ? `${consent.plotNumber} - ${consent.ownerName}`
                         : `${consent.publicOwnerName} - ${consent.plotNumber}`
                     }
+                    <Chip
+                        label={t(`consentsCollection.${consent.consentStatus}`)}
+                        color={getStatusColor(consent.consentStatus)}
+                        size="small"
+                        sx={{ ml: 2, verticalAlign: 'middle' }}
+                    />
                 </h2>
-                <Chip
-                    label={t(`consentsCollection.${consent.consentStatus}`)}
-                    color={
-                        consent.consentStatus === 'CONSENT_CREATED' || consent.consentStatus === 'SENT'
-                            ? 'primary'
-                            : consent.consentStatus === 'INVALIDATED'
-                                ? 'error'
-                                : consent.consentStatus === 'CONSENT_GIVEN'
-                                    ? 'success'
-                                    : 'default'
-                    }
-                    sx={{ fontWeight: 'bold' }}
-                />
             </Box>
 
             <Typography>

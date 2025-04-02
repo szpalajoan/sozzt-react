@@ -77,6 +77,8 @@
         "CONSENT_CREATED": "Nowa",
         "CONSENT_GIVEN": "Odebrana",
         "INVALIDATED": "Odrzucona",
+        "REQUIRED": "Wymagana",
+        "SENT": "Wysłana",
         "approve": "Zatwierdź zgodę",
         "deliveryType": "Typ odebranej zgody",
         "deliveryTypeRequired": "Wybierz typ zgody",
@@ -86,6 +88,9 @@
         "statusComment" : "Powód odrzucenia zgody",
         "privateConsents" : "Prywatne zgody",
         "publicConsents" : "Publiczne zgody",
+        "zudConsent": "Zgoda ZUD",
+        "zudConsentStatus": "Status zgody ZUD",
+        "institutionName": "Nazwa instytucji",
         "mailingDate" : "Data wysyłki",
         "invalidationDate" : "Data odrzucenia zgody",
         "invalidationReason" : "Powód odrzucenia zgody",
@@ -96,7 +101,8 @@
         "deliveryTypes" : {
             "PERSONAL_VISIT" : "Osobiście odebrana",
             "EMAIL" : "Email",
-            "POST" : "Poczta"
+            "POST" : "Poczta",
+            "NOT_SPECIFIED": "Nie określono"
         },
         "complete": "Zakończ zbieranie zgód",
         "approveSuccess": "Pomyślnie zakończono zbieranie zgód",
@@ -107,7 +113,20 @@
         "beginSuccess": "Pomyślnie rozpoczęto zbieranie zgód",
         "beginError": "Wystąpił błąd podczas rozpoczynania zbierania zgód",
         "routePreparationRequired": "Do zakończenia potrzebna jest trasa",
-        "notAllConsentsApproved": "Nie wszystkie zgody są zaakceptowane"
+        "notAllConsentsApproved": "Nie wszystkie zgody są zaakceptowane",
+        "save": "Zapisz",
+        "markAsSentByMail": "Oznacz jako wysłane pocztą",
+        "uploadAgreement": "Wgraj skan zgody",
+        "consentCreateDate": "Data utworzenia zgody",
+        "deliveryTypeNotSpecified": "Nie określono",
+        "deliveryTypeEmail": "Email",
+        "deliveryTypePost": "Poczta",
+        "deliveryTypePersonalVisit": "Osobiście",
+        "selectCollector": "Wybierz zbieracza",
+        "invalidateConfirmation": "Czy na pewno chcesz odrzucić tę zgodę?",
+        "common": {
+            "cancel": "Anuluj"
+        }
     },
     "fileUpload": {
         "scanTitle": "Skany zlecenia",
