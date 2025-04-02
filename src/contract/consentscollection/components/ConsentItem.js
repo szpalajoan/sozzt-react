@@ -51,7 +51,7 @@ const ConsentItem = ({
             sx={{ flexDirection: 'column', alignItems: 'flex-start', padding: 2 }}
         >
             <Box sx={{ width: '100%', mb: 2 }}>
-                <h2 className="section-title">
+                <h2 className="section-title" style={{ marginRight: '10px', marginBottom: 0 }}>
                     {type === 'private' 
                         ? `${consent.plotNumber} - ${consent.ownerName}`
                         : `${consent.publicOwnerName} - ${consent.plotNumber}`
