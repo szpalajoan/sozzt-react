@@ -59,6 +59,7 @@ export const useDocumentation = (contractId) => {
     setSnackbar,
     approveMap,
     completeConsentsVerification,
-    fetchData
+    fetchData,
+    refetchDocumentation
   };
 }; 

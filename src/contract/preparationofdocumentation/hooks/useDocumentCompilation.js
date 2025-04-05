@@ -3,7 +3,7 @@ import useFileHandler from '../../useFileHandler';
 import useDataFetching from '../../../useDataFetching';
 import documentationApi from '../api/documentationApi';
 
-export const useDocumentCompilation = (documentation, setDocumentation, contractId, onSuccess, onError) => {
+export const useDocumentCompilation = (documentation, setDocumentation, contractId, onSuccess, onError, refetchDocumentation) => {
   const [designer, setDesigner] = useState('');
   const [isEditingDesigner, setIsEditingDesigner] = useState(false);
   const { fetchData } = useDataFetching();
@@ -45,17 +45,12 @@ export const useDocumentCompilation = (documentation, setDocumentation, contract
     try {
       const formData = new FormData();
       formData.append('file', newDocumentFiles[0]);
-      const response = await documentationApi.uploadCompiledDocument(contractId, fetchData, formData);
+      await documentationApi.uploadCompiledDocument(contractId, fetchData, formData);
       
-      setDocumentation(prev => ({
-        ...prev,
-        documentCompilation: {
-          ...prev.documentCompilation,
-          compiledDocumentId: response.fileId
-        }
-      }));
-      
+      // Reset the files and show success message
       resetDocumentFiles();
+      // Refresh documentation data to get updated compiledDocumentId
+      await refetchDocumentation();
       onSuccess('Dokument został wgrany pomyślnie');
     } catch (error) {
       onError(error.message || 'Wystąpił błąd podczas wgrywania dokumentu');

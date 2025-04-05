@@ -21,26 +21,20 @@ const PreparationOfDocumentation = ({ contractId, onRemarkChange }) => {
     snackbar,
     setSnackbar,
     completeConsentsVerification,
-    fetchData
+    fetchData,
+    refetchDocumentation
   } = useDocumentation(contractId);
 
   const handleSuccess = (message) => setSnackbar({ open: true, message, severity: 'success' });
   const handleError = (message) => setSnackbar({ open: true, message, severity: 'error' });
-
-  const pdfFiles = useDocumentationFiles(
-    contractId,
-    'PDF_WITH_ROUTE_AND_DATA',
-    setDocumentation,
-    handleSuccess,
-    handleError
-  );
 
   const documentCompilation = useDocumentCompilation(
     documentation,
     setDocumentation,
     contractId,
     handleSuccess,
-    handleError
+    handleError,
+    refetchDocumentation
   );
 
   const tauronCommunication = useTauronCommunication(
