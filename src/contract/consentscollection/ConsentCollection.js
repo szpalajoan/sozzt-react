@@ -73,7 +73,7 @@ const ConsentsCollection = ({ contractId, refetchContract }) => {
         const allPublicConsentsApproved = publicConsents?.every(
             consent => consent.consentStatus === 'CONSENT_GIVEN'
         );
-        const zudConsentApproved = zudConsent?.consentStatus === 'CONSENT_GIVEN';
+        const zudConsentApproved = zudConsent?.consentStatus === 'CONSENT_GIVEN' || zudConsent === null;
         return allPrivateConsentsApproved && allPublicConsentsApproved && zudConsentApproved;
     };
 
